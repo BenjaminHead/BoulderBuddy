@@ -10,7 +10,7 @@ import { FirebaseService } from "../../shared/services/firebase.service";
     templateUrl: "./pages/recover-password/recover-password.html",
     styleUrls: ["./pages/recover-password/recover-password-common.css", "./pages/recover-password/recover-password.css"]
 })
-export class LoginComponent {
+export class RecoverPasswordComponent {
     user: User;
     isLoggingIn = true;
 
@@ -45,6 +45,15 @@ export class LoginComponent {
                 },
                 () => alert("Unfortunately we were unable to create your account.")
             );
+    }
+    resetPassword() {
+        this.firebaseService.resetPassword(this.user.email).then(
+            () => {
+                alert("Email Sent");
+                this.router.navigate(["/login"])
+            },
+            () => alert("Invalid Email Address")
+        );
     }
     toggleDisplay() {
         this.isLoggingIn = !this.isLoggingIn;
