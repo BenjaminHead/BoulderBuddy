@@ -22,6 +22,7 @@
 		"nativescript-angular": "~5.2.0",
 		"nativescript-background-geolocation-lt": "^1.8.0",
 		"nativescript-geolocation": "^4.2.6",
+		"nativescript-google-maps-sdk": "^2.6.0",
 		"nativescript-plugin-firebase": "^5.2.0",
 		"nativescript-theme-core": "~1.0.4",
 		"reflect-metadata": "~0.1.8",

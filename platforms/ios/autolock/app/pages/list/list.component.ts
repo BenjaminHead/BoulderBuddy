@@ -13,9 +13,16 @@ import { FirebaseService } from "../../shared/services/firebase.service";
 export class ListComponent {
 
     tripInfo;
+    user;
 
     constructor(private router: Router,
-                private firebaseService: FirebaseService) {}
+                private firebaseService: FirebaseService) {
+        this.user = this.firebaseService.getUser();
+        this.tripInfo = {
+            odometer: 5,
+            tripTime: 10
+        }
+    }
 
     startTracking() {
         console.log("Function entered...");
@@ -40,7 +47,7 @@ export class ListComponent {
         BackgroundGeolocation.getLog(function(log){
            console.log(log);
         });
-        this.firebaseService.sendTripInfo(, tripInfo);
+        this.firebaseService.sendTripInfo(this.user, this.tripInfo);
     }
 
     stopTracking() {
