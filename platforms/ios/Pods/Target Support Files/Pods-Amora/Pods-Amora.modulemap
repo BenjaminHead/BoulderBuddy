@@ -1,6 +1,0 @@
-framework module Pods_Amora {
-  umbrella header "Pods-Amora-umbrella.h"
-
-  export *
-  module * { export * }
-}

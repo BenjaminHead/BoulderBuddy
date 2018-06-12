@@ -1,0 +1,34 @@
+<StackLayout>
+    <StackLayout>
+        <Label text="Travel Time"></Label>
+        <Label text="Trip"></Label>
+        <Label text="Week"></Label>
+        <Label text="Month"></Label>
+        <Label text="Distance Traveled"></Label>
+        <Label text="Trip"></Label>
+        <Label text="Week"></Label>
+        <Label text="Month"></Label>
+        <Label text="Average Speed"></Label>
+        <Label text="Trip"></Label>
+        <Label text="Week"></Label>
+        <Label text="Month"></Label>
+        <Label text="Points Earned"></Label>
+        <Label text="Trip"></Label>
+        <Label text="Week"></Label>
+        <Label text="Month"></Label>
+    </StackLayout>
+    <StackLayout>
+        <Label [text]="trip.travelTime"></Label>
+        <Label [text]="trip.distanceTraveled"></Label>
+        <Label [text]="trip.averageSpeed"></Label>
+        <Label *ngIf="trip.week" [text]="trip.travelTime"></Label>
+        <Label *ngIf="trip.week" [text]="trip.distanceTraveled"></Label>
+        <Label *ngIf="trip.week" [text]="trip.averageSpeed"></Label>
+        <Label *ngIf="trip.month" [text]="trip.travelTime"></Label>
+        <Label *ngIf="trip.month" [text]="trip.distanceTraveled"></Label>
+        <Label *ngIf="trip.month" [text]="trip.averageSpeed"></Label>
+    </StackLayout>
+    <Button class="submit-button" text="Share" (tap)="share()"></Button>
+    <Button class="submit-button" text="Your Rank" (tap)="yourRank()"></Button>
+    <Button class="submit-button" text="Redeem" (tap)="redeem()"></Button>
+</StackLayout>
