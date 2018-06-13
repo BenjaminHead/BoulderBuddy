@@ -13,8 +13,8 @@ export class AppComponent {
             let user = result;
             console.log("What's the result now?", user);
         });
-        // if(this.firebaseService.getUser()) {
-        //     router.navigate(["/login"]);
-        // }
+        if(this.firebaseService.getUser()) {
+            router.navigate(["/login"]);
+        }
     }
 }

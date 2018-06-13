@@ -8,6 +8,10 @@ import * as app from 'application';
 
 import { BackgroundFetch } from "nativescript-background-fetch";
 
+import * as platform from "platform";
+
+declare var GMSServices: any;
+
 if (app.ios) {
       class MyDelegate extends UIResponder implements UIApplicationDelegate {
         public static ObjCProtocols = [UIApplicationDelegate];
@@ -18,6 +22,10 @@ if (app.ios) {
       }
       app.ios.delegate = MyDelegate;
     }
+
+if (platform.isIOS) {
+    GMSServices.provideAPIKey("AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w");
+}
 
 firebase.init({
     persist: true

@@ -44,5 +44,10 @@ pod 'Firebase/Messaging'
  pod 'nativescript-background-fetch', :path => '../../node_modules/nativescript-background-fetch/platforms/ios'
  
  # End Podfile 
+# Begin Podfile - /Users/ben/Work/AutoLock/autolock/node_modules/nativescript-google-maps-sdk/platforms/ios/Podfile 
+ source 'https://github.com/CocoaPods/Specs.git'
+
+pod 'GoogleMaps' 
+ # End Podfile 
 
 end

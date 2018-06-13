@@ -9,7 +9,6 @@ export class FirebaseService implements OnInit {
 
 
     ngOnInit(): void {}
-
     login(email, password): any {
 
         return Firebase.login({

@@ -37,7 +37,7 @@ export class ListComponent {
         console.log("Begin tracking");
         BackgroundGeolocation.start();
         console.log("Now navigate to");
-        // this.router.navigate(["/blank"]);
+        this.router.navigate(["/blank"]);
     }
 
     logTrip() {

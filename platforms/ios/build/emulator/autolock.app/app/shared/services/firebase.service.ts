@@ -54,6 +54,16 @@ export class FirebaseService implements OnInit {
             })
     }
 
+    sendTripInfo(user, trip) {
+        return Firebase.setValue('/trips/' + user.id, trip)
+            .then((data) => {
+                return data.value;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     resetPassword(email) {
         return Firebase.resetPassword( {
             email: email
@@ -64,7 +74,6 @@ export class FirebaseService implements OnInit {
             console.log(error);
         })
     }
-
 
     getUser() {
         return Firebase.getCurrentUser()

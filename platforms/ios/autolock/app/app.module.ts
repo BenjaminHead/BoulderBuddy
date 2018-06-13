@@ -5,6 +5,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { FirebaseService } from "./shared/services/firebase.service";
 import { TripService } from "./shared/trip/trip.service";
+import { MapView } from "nativescript-google-maps-sdk";
 
 
 import { AppComponent } from "./app.component";
@@ -20,7 +21,8 @@ import { routes, navigatableComponents } from "./app.routing";
     ],
     providers: [
       FirebaseService,
-        TripService
+        TripService,
+        MapView
     ],
     declarations: [
         AppComponent,

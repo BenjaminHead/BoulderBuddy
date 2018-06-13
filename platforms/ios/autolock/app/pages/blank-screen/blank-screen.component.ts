@@ -30,6 +30,10 @@ export class BlankScreenComponent {
         setTimeout(function() {this.screenTouched = false;}, 10000);
     }
 
+    navigate() {
+        this.router.navigate(["/navigation"]);
+    }
+
     arrived() {
         this.router.navigate(["/list"]);
     }

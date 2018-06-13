@@ -11,6 +11,7 @@
     "nativescript-angular": true,
     "nativescript-background-geolocation-lt": true,
     "nativescript-geolocation": true,
+    "nativescript-google-maps-sdk": true,
     "nativescript-plugin-firebase": true,
     "nativescript-theme-core": true,
     "reflect-metadata": true,
