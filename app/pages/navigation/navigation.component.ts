@@ -43,24 +43,6 @@ export class NavigationComponent {
         this.stackLayout = page.getViewById("view");
     }
 
-    // onMapReady = (event) => {
-    //     // var mapsModule = require("nativescript-google-maps-sdk");
-    //     // var style = require("./map-style.json");
-    //     // this.mapView = args.object;
-    //     // this.mapView.latitude = 8.5125665;
-    //     // this.mapView.longitude = -81.3038948;
-    //     // this.mapView.zoom = 20;
-    //
-    //     //change map styling
-    //     // this.mapView.setStyle( style );
-    //     //this.mapView.setStyle( JSON.stringify(style) ); //tried this as well
-    //     //this.mapView.gMap.setStyle( JSON.stringify(style) ); //tried this as well
-    //
-    //     // var marker = new mapsModule.Marker();
-    //     // marker.position = mapsModule.Position.positionFromLatLng(28.3818941,-81.5768487);
-    //     // this.mapView.addMarker(marker);
-    // };
-
     onMapReady(event) {
         console.log('Map Ready');
 
@@ -69,9 +51,9 @@ export class NavigationComponent {
         console.log("Setting a marker...");
 
         var marker = new Marker();
-        marker.position = Position.positionFromLatLng(-33.86, 151.20);
-        marker.title = "Sydney";
-        marker.snippet = "Australia";
+        marker.position = Position.positionFromLatLng(40.4857792, -111.9423779);
+        marker.title = "Microexcel";
+        marker.snippet = "Orem";
         marker.userData = {index: 1};
         this.mapView.addMarker(marker);
     }
@@ -89,14 +71,5 @@ export class NavigationComponent {
     onCameraChanged(args) {
         console.log("Camera changed: " + JSON.stringify(args.camera), JSON.stringify(args.camera) === this.lastCamera);
         this.lastCamera = JSON.stringify(args.camera);
-    }
-
-    onTouch(){
-        this.screenTouched = true;
-        setTimeout(function() {this.screenTouched = false;}, 10000);
-    }
-
-    arrived() {
-        this.router.navigate(["/list"]);
     }
 }

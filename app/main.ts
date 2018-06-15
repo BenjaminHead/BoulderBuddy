@@ -27,6 +27,10 @@ if (platform.isIOS) {
     GMSServices.provideAPIKey("AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w");
 }
 
+if(app.ios) {
+    GMSServices.provideAPIKey("AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w");
+}
+
 firebase.init({
     persist: true
 })
