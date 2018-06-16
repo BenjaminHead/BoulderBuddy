@@ -1,0 +1,26 @@
+{
+  "name": "nativescript-background-geolocation-lt",
+  "version": "1.0.1",
+  "summary": "Background Geolocation for NativeScript",
+  "authors": "Chris Scott, Transistor Software",
+  "homepage": "https://github.com/transistorsoft/nativescript-background-geolocation-lt",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "libraries": [
+    "sqlite3",
+    "z"
+  ],
+  "vendored_frameworks": "TSLocationManager.framework",
+  "license": {
+    "type": "MIT"
+  },
+  "source": {
+    "path": "../../node_modules/nativescript-background-geolocation-lt/platforms/ios"
+  },
+  "dependencies": {
+    "CocoaLumberjack": [
+      "~> 3.0.0"
+    ]
+  }
+}

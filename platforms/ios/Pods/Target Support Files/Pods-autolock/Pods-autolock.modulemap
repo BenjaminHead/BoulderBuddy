@@ -1,0 +1,6 @@
+framework module Pods_autolock {
+  umbrella header "Pods-autolock-umbrella.h"
+
+  export *
+  module * { export * }
+}
