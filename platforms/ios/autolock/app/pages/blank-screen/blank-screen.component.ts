@@ -6,6 +6,9 @@ import { isAndroid, isIOS } from "tns-core-modules/platform";
 import { Page } from "tns-core-modules/ui/page";
 import { GestureTypes, GestureEventData } from "tns-core-modules/ui/gestures";
 import { Directions } from "nativescript-directions";
+import { MapView } from 'nativescript-google-maps-sdk';
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { Observable as RxObservable } from "rxjs";
 
 @Component({
     selector: "blank-screen",
@@ -20,11 +23,12 @@ export class BlankScreenComponent {
     directions = new Directions;
     toDestination;
     fromDestination;
+    tripData;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
                 private page: Page,
-                // private stackLayout: StackLayout
+                private http: HttpClient
     ) {
         this.stackLayout = page.getViewById("view");
         this.directions.available().then(avail => {
@@ -56,11 +60,20 @@ export class BlankScreenComponent {
         });
     }
 
+    getTripData(){
+        console.log("Get trip data called too?");
+        this.http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + this.fromDestination + '&destinations' + this.toDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w')
+            .subscribe(response => this.tripData = response);
+        return this.tripData;
+    }
+
     navigate() {
         this.router.navigate(["/navigation"]);
     }
 
     arrived() {
+        this.getTripData();
+        console.log("Trip data is...", this.tripData);
         this.router.navigate(["/list"]);
     }
 }
