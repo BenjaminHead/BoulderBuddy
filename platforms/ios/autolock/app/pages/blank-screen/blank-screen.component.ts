@@ -8,7 +8,12 @@ import { GestureTypes, GestureEventData } from "tns-core-modules/ui/gestures";
 import { Directions } from "nativescript-directions";
 import { MapView } from 'nativescript-google-maps-sdk';
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { Observable as RxObservable } from "rxjs";
+import { Http, Headers, Response } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import { TripService } from "../../shared/trip/trip.service";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
@@ -27,8 +32,9 @@ export class BlankScreenComponent {
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
+                private tripService: TripService,
                 private page: Page,
-                private http: HttpClient
+                private http: Http
     ) {
         this.stackLayout = page.getViewById("view");
         this.directions.available().then(avail => {
@@ -61,10 +67,8 @@ export class BlankScreenComponent {
     }
 
     getTripData(){
-        console.log("Get trip data called too?");
-        this.http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + this.fromDestination + '&destinations' + this.toDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w')
-            .subscribe(response => this.tripData = response);
-        return this.tripData;
+        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
+        this.tripService.showConfigResponse();
     }
 
     navigate() {
