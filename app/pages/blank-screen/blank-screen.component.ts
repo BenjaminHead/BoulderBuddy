@@ -68,7 +68,8 @@ export class BlankScreenComponent {
 
     getTripData(){
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripService.showConfigResponse();
+        this.tripData = this.tripService.showConfigResponse();
+        console.log("Trip data is now...", this.tripData);
     }
 
     navigate() {
@@ -77,7 +78,6 @@ export class BlankScreenComponent {
 
     arrived() {
         this.getTripData();
-        console.log("Trip data is...", this.tripData);
         this.router.navigate(["/list"]);
     }
 }

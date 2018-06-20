@@ -23,18 +23,13 @@ export class TripService {
 
     thisMonth() {}
 
-    // sendLocationData() {
-    //     this.params = {odometer: "5",
-    //     time: "5:0:3"};
-    //     this.http.open("POST", 'https://amora-2cc4c.firebaseio.com/trip' + this.params, true)
-    // }
-
     configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
-
 
     setConfigUrl(origin, destination) {
         console.log("Okay...", origin, destination);
-        this.configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + origin + '&destinations=' + destination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
+        let newOrigin = origin.split(' ').join('+');
+        let newDestination = destination.split(' ').join('+');
+        return this.configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + newOrigin + '&destinations=' + newDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
     }
 
     getConfig() {
@@ -49,26 +44,20 @@ export class TripService {
     }
 
     getConfigResponse(): Observable<HttpResponse<Object>> {
-        console.log('3');
+        console.log('3', this.configUrl);
         return this.http.get<Object>(
             this.configUrl, { observe: 'response' });
     }
 
     showConfigResponse() {
-        console.log('4');
+        console.log('4', this.configUrl);
         this.getConfigResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {
-                console.log("Is this even working?");
+                console.log("Is this even working?", resp.body);
                 // access the body directly, which is typed as `Config`.
                 this.config = { ... resp.body };
             });
-    }
-
-    getTripData(origin, destination) : Observable<Object> {
-        return this.http.get(
-            'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w'
-        ).map((response:Response)=> response.json()).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
     }
 
     getCommonHeaders() {
