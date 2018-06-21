@@ -66,9 +66,9 @@ export class BlankScreenComponent {
         });
     }
 
-    getTripData(){
+    async getTripData(){
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = this.tripService.showConfigResponse();
+        this.tripData = await this.tripService.showConfigResponse();
         console.log("Trip data is now...", this.tripData);
     }
 

@@ -5,17 +5,22 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
-
+import { FirebaseService} from "../services/firebase.service";
 import { Trip } from "./trip";
 import { Config } from "../config";
-import { FirebaseService } from "../services/firebase.service";
 
 @Injectable()
 export class TripService {
-    constructor(private http: HttpClient) {}
 
     params;
     config;
+    tripData;
+    user;
+
+    constructor(private http: HttpClient,
+                private firebaseService: FirebaseService) {
+        this.user = this.firebaseService.getUser();
+    }
 
     currentTrip() {}
 
@@ -57,6 +62,8 @@ export class TripService {
                 console.log("Is this even working?", resp.body);
                 // access the body directly, which is typed as `Config`.
                 this.config = { ... resp.body };
+                this.tripData = resp.body;
+                this.firebaseService.sendTripInfo(this.user, this.tripData)
             });
     }
 
