@@ -20,6 +20,7 @@ export class TripService {
     constructor(private http: HttpClient,
                 private firebaseService: FirebaseService) {
         this.user = this.firebaseService.getUser();
+        console.log("User is...", this.user);
     }
 
     currentTrip() {}
@@ -54,8 +55,8 @@ export class TripService {
             this.configUrl, { observe: 'response' });
     }
 
-    showConfigResponse() {
-        console.log('4', this.configUrl);
+    showConfigResponse(user) {
+        console.log('4', this.configUrl, user);
         this.getConfigResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {
@@ -63,7 +64,8 @@ export class TripService {
                 // access the body directly, which is typed as `Config`.
                 this.config = { ... resp.body };
                 this.tripData = resp.body;
-                this.firebaseService.sendTripInfo(this.user, this.tripData)
+                console.log("What the fuck happened to my user?", JSON.stringify(user));
+                this.firebaseService.sendTripInfo(user, this.tripData);
             });
     }
 

@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FirebaseService } from "../../shared/services/firebase.service";
 import { isAndroid, isIOS } from "tns-core-modules/platform";
 // import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
@@ -21,7 +21,7 @@ import "rxjs/add/operator/map";
     templateUrl: "./blank-screen.html",
     styleUrls: ["./blank-screen-common.css", "./blank-screen.css"]
 })
-export class BlankScreenComponent {
+export class BlankScreenComponent implements OnInit{
 
     screenTouched = false;
     stackLayout;
@@ -29,17 +29,29 @@ export class BlankScreenComponent {
     toDestination;
     fromDestination;
     tripData;
+    user;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
                 private tripService: TripService,
                 private page: Page,
-                private http: Http
+                private http: Http,
+                private route: ActivatedRoute
     ) {
         this.stackLayout = page.getViewById("view");
         this.directions.available().then(avail => {
             console.log(avail ? "Yes" : "No");
         });
+    }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.user = params['user'];
+            console.log("User is...", this.user);
+        });
+        if(!this.user){
+            this.user = this.firebaseService.getUser();
+        }
     }
 
     onTouch(){
@@ -66,9 +78,9 @@ export class BlankScreenComponent {
         });
     }
 
-    async getTripData(){
+    getTripData(){
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = await this.tripService.showConfigResponse();
+        this.tripData = this.tripService.showConfigResponse(this.user);
         console.log("Trip data is now...", this.tripData);
     }
 
