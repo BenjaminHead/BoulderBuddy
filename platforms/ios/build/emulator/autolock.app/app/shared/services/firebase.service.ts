@@ -7,6 +7,7 @@ import * as Firebase from 'nativescript-plugin-firebase';
 @Injectable()
 export class FirebaseService implements OnInit {
 
+    user;
 
     ngOnInit(): void {}
     login(email, password): any {
@@ -20,12 +21,23 @@ export class FirebaseService implements OnInit {
         })
             .then((result) => {
                 console.log("user logged in", email, password);
+                console.log("Alright, what's here?", result);
                 return result;
             })
             .catch((error) => {
                 return error;
             });
 
+    }
+
+    getAllUsers (){
+        return Firebase.getValue('/users/')
+            .then((data)=> {
+                return data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     logout() {
@@ -53,14 +65,25 @@ export class FirebaseService implements OnInit {
             })
     }
 
-    sendTripInfo(user, trip) {
-        return Firebase.setValue('/trips/' + user.id, trip)
+    sendTripInfo(trip) {
+        return Firebase.setValue('/trips/' + this.user.id, trip)
             .then((data) => {
+            console.log("Data sent", this.user.id);
                 return data.value;
             })
             .catch((error) => {
                 console.log(error);
             })
+    }
+
+    getTripInfo(user) {
+                return Firebase.getValue('/trips/' + user.id)
+                    .then((data) => {
+                        return data.value;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
     }
 
     resetPassword(email) {
@@ -79,6 +102,8 @@ export class FirebaseService implements OnInit {
             .then((user) => {
                 return Firebase.getValue('/users/' + user.uid)
                     .then((data) => {
+                    console.log("User returned", data.value);
+                    this.user = data.value;
                         return data.value;
                     })
                     .catch((error) => {

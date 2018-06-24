@@ -1,11 +1,19 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FirebaseService } from "../../shared/services/firebase.service";
 import { isAndroid, isIOS } from "tns-core-modules/platform";
 // import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 import { Page } from "tns-core-modules/ui/page";
 import { GestureTypes, GestureEventData } from "tns-core-modules/ui/gestures";
 import { Directions } from "nativescript-directions";
+import { MapView } from 'nativescript-google-maps-sdk';
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { Http, Headers, Response } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import { TripService } from "../../shared/trip/trip.service";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
@@ -13,23 +21,37 @@ import { Directions } from "nativescript-directions";
     templateUrl: "./blank-screen.html",
     styleUrls: ["./blank-screen-common.css", "./blank-screen.css"]
 })
-export class BlankScreenComponent {
+export class BlankScreenComponent implements OnInit{
 
     screenTouched = false;
     stackLayout;
     directions = new Directions;
     toDestination;
     fromDestination;
+    tripData;
+    user;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
+                private tripService: TripService,
                 private page: Page,
-                // private stackLayout: StackLayout
+                private http: Http,
+                private route: ActivatedRoute
     ) {
         this.stackLayout = page.getViewById("view");
         this.directions.available().then(avail => {
             console.log(avail ? "Yes" : "No");
         });
+    }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.user = params['user'];
+            console.log("User is...", this.user);
+        });
+        if(!this.user){
+            this.user = this.firebaseService.getUser();
+        }
     }
 
     onTouch(){
@@ -56,11 +78,18 @@ export class BlankScreenComponent {
         });
     }
 
+    getTripData(){
+        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
+        this.tripData = this.tripService.showConfigResponse(this.user);
+        console.log("Trip data is now...", this.tripData);
+    }
+
     navigate() {
         this.router.navigate(["/navigation"]);
     }
 
     arrived() {
+        this.getTripData();
         this.router.navigate(["/list"]);
     }
 }

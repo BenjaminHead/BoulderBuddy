@@ -2,7 +2,7 @@
   "_args": [
     [
       "nativescript-hook@0.2.3",
-      "/Users/ben/Work/AutoLock/autolock"
+      "/Users/abenabides/Desktop/Projects/Work/autolock"
     ]
   ],
   "_from": "nativescript-hook@0.2.3",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/nativescript-hook/-/nativescript-hook-0.2.3.tgz",
   "_spec": "0.2.3",
-  "_where": "/Users/ben/Work/AutoLock/autolock",
+  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
   "author": {
     "name": "NativeScript"
   },

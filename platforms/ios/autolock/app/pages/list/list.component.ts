@@ -61,7 +61,7 @@ export class ListComponent implements OnInit {
         BackgroundGeolocation.getLog(function(log){
            console.log(log);
         });
-        this.firebaseService.sendTripInfo(this.user, this.tripInfo);
+        this.firebaseService.sendTripInfo(this.tripInfo);
     }
 
     stopTracking() {

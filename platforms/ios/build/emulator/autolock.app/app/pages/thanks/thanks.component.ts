@@ -3,6 +3,7 @@ import {BackgroundGeolocation} from "nativescript-background-geolocation-lt";
 import { Router } from "@angular/router";
 import { Trip } from "../../shared/trip/trip";
 import { TripService } from "../../shared/trip/trip.service";
+import { FirebaseService } from "../../shared/services/firebase.service";
 
 @Component({
     selector: "thanks",
@@ -13,14 +14,21 @@ import { TripService } from "../../shared/trip/trip.service";
 export class ThanksComponent {
 
     trip: Trip;
+    user;
 
-    constructor(private router: Router) {
-        this.trip.travelTime = '';
-        this.trip.distanceTraveled = '';
-        this.trip.averageSpeed = '';
-        this.trip.pointsEarned = '';
-        this.trip.week = true;
-        this.trip.month = true;
+    constructor(private router: Router,
+                private firebaseService: FirebaseService) {
+        this.firebaseService.getUser().then((result) => function(){
+            this.user = result;
+            this.firebaseService.getTripInfo(this.user.id).then((result) => function(){
+                this.trip.travelTime = '';
+                this.trip.distanceTraveled = '';
+                this.trip.averageSpeed = '';
+                this.trip.pointsEarned = '';
+                this.trip.week = true;
+                this.trip.month = true;
+            });
+        });
     }
 
     share(){

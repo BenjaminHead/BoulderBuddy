@@ -30,6 +30,16 @@ export class FirebaseService implements OnInit {
 
     }
 
+    getAllUsers (){
+        return Firebase.getValue('/users/')
+            .then((data)=> {
+                return data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     logout() {
         Firebase.logout();
     }
@@ -55,10 +65,13 @@ export class FirebaseService implements OnInit {
             })
     }
 
-    sendTripInfo(user, trip) {
-        return Firebase.setValue('/trips/' + user.id, trip)
+    sendTripInfo(trip) {
+        this.getUser().then((result) => {
+            this.user = result;
+        });
+        return Firebase.setValue('/trips/' + this.user.uid, trip)
             .then((data) => {
-            console.log("Data sent", user.id);
+            console.log("Data sent", this.user.id);
                 return data.value;
             })
             .catch((error) => {
@@ -93,6 +106,7 @@ export class FirebaseService implements OnInit {
                 return Firebase.getValue('/users/' + user.uid)
                     .then((data) => {
                     console.log("User returned", data.value);
+                    this.user = data.value;
                         return data.value;
                     })
                     .catch((error) => {

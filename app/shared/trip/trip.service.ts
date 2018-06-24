@@ -38,6 +38,13 @@ export class TripService {
         return this.configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + newOrigin + '&destinations=' + newDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
     }
 
+    getUserInfoByEmail(){
+        this.firebaseService.getAllUsers().then((result)=> function(){
+            let users = result;
+            console.log("Users listed", users);
+        })
+    }
+
     getConfig() {
         console.log('1');
         return this.http.get<Object>(this.configUrl);
@@ -60,12 +67,10 @@ export class TripService {
         this.getConfigResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {
-                console.log("Is this even working?", resp.body);
                 // access the body directly, which is typed as `Config`.
                 this.config = { ... resp.body };
                 this.tripData = resp.body;
-                console.log("What the fuck happened to my user?", JSON.stringify(user));
-                this.firebaseService.sendTripInfo(user, this.tripData);
+                return this.firebaseService.sendTripInfo(this.tripData);
             });
     }
 

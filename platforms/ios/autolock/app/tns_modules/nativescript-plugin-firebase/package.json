@@ -2,7 +2,7 @@
   "_args": [
     [
       "nativescript-plugin-firebase@5.2.0",
-      "/Users/ben/Work/AutoLock/autolock"
+      "/Users/abenabides/Desktop/Projects/Work/autolock"
     ]
   ],
   "_from": "nativescript-plugin-firebase@5.2.0",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/nativescript-plugin-firebase/-/nativescript-plugin-firebase-5.2.0.tgz",
   "_spec": "5.2.0",
-  "_where": "/Users/ben/Work/AutoLock/autolock",
+  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
   "author": {
     "name": "Eddy Verbruggen",
     "email": "eddyverbruggen@gmail.com"

@@ -1,16 +1,16 @@
 use_frameworks!
 
 target "autolock" do
-# Begin Podfile - /Users/ben/Work/AutoLock/autolock/node_modules/nativescript-background-geolocation-lt/platforms/ios/Podfile 
+# Begin Podfile - /Users/abenabides/Desktop/Projects/Work/autolock/node_modules/nativescript-background-geolocation-lt/platforms/ios/Podfile 
  pod 'nativescript-background-geolocation-lt', :path => '../../node_modules/nativescript-background-geolocation-lt/platforms/ios'
  
  # End Podfile 
-# Begin Podfile - /Users/ben/Work/AutoLock/autolock/node_modules/nativescript-google-maps-sdk/platforms/ios/Podfile 
+# Begin Podfile - /Users/abenabides/Desktop/Projects/Work/autolock/node_modules/nativescript-google-maps-sdk/platforms/ios/Podfile 
  source 'https://github.com/CocoaPods/Specs.git'
 
 pod 'GoogleMaps' 
  # End Podfile 
-# Begin Podfile - /Users/ben/Work/AutoLock/autolock/node_modules/nativescript-plugin-firebase/platforms/ios/Podfile 
+# Begin Podfile - /Users/abenabides/Desktop/Projects/Work/autolock/node_modules/nativescript-plugin-firebase/platforms/ios/Podfile 
  pod 'Firebase', '~> 4.11.0' 
 pod 'Firebase/Auth'
 
@@ -45,7 +45,7 @@ pod 'Firebase/Messaging'
 # Uncomment if you want to enable Google Authentication
 #pod 'GoogleSignIn' 
  # End Podfile 
-# Begin Podfile - /Users/ben/Work/AutoLock/autolock/node_modules/nativescript-background-fetch/platforms/ios/Podfile 
+# Begin Podfile - /Users/abenabides/Desktop/Projects/Work/autolock/node_modules/nativescript-background-fetch/platforms/ios/Podfile 
  pod 'nativescript-background-fetch', :path => '../../node_modules/nativescript-background-fetch/platforms/ios'
  
  # End Podfile 

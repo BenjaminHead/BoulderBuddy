@@ -29,24 +29,23 @@ export class LoginComponent {
         }
     }
     login() {
-        console.log("User before function call", this.user);
-        this.firebaseService.getUser().then((result: any) => {
-            console.log("The signed in user is....", result);
-            this.user = result;
-        }).then(() => {
-            this.firebaseService.login(this.user.email, this.user.password)
-                .then(
-                    () =>
-                        this.router.navigate(["/list"], {queryParams: {
+        if(this.user === undefined || null) {
+            this.firebaseService.getUser().then((result: any) => {
+                this.user = result.value;
+            });
+        }
+        this.firebaseService.login(this.user.email, this.user.password)
+            .then(
+                () =>
+                    this.router.navigate(["/list"], {queryParams: {
                             'user': this.user
                         }
-                        }),
-                    (error) => alert("Unfortunately we could not find your account.")
-                );
-        });
+                    }),
+                (error) => alert("Unfortunately we could not find your account.")
+            );
 
     }
-    signUp() {
+    signUp(){
         this.firebaseService.register(this.user)
             .then(
                 () => {
