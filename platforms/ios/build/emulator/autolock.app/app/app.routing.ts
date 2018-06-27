@@ -22,7 +22,7 @@ export const routes = [
     { path: "partners", component: TourPartnersComponent },
     { path: "blank", component: BlankScreenComponent},
     { path: "blank/:user", component: BlankScreenComponent},
-    { path: "thanks", component: ThanksComponent },
+    { path: "thanks", component: ThanksComponent},
     { path: "navigation", component: NavigationComponent }
 ];
 

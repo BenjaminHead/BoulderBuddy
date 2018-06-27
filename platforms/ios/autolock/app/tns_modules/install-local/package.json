@@ -2,7 +2,7 @@
   "_args": [
     [
       "install-local@0.4.1",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
+      "/Users/ben/Work/AutoLock/autolock"
     ]
   ],
   "_from": "install-local@0.4.1",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/install-local/-/install-local-0.4.1.tgz",
   "_spec": "0.4.1",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "author": {
     "name": "Nico Jansen",
     "email": "jansennico@gmail.com"

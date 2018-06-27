@@ -2,7 +2,7 @@
   "_args": [
     [
       "@angular/compiler@5.2.9",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
+      "/Users/ben/Work/AutoLock/autolock"
     ]
   ],
   "_from": "@angular/compiler@5.2.9",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@angular/compiler/-/compiler-5.2.9.tgz",
   "_spec": "5.2.9",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "author": {
     "name": "angular"
   },

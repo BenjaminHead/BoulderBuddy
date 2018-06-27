@@ -21,12 +21,12 @@
         <Label [text]="trip.travelTime"></Label>
         <Label [text]="trip.distanceTraveled"></Label>
         <Label [text]="trip.averageSpeed"></Label>
-        <Label *ngIf="trip.week" [text]="trip.travelTime"></Label>
-        <Label *ngIf="trip.week" [text]="trip.distanceTraveled"></Label>
-        <Label *ngIf="trip.week" [text]="trip.averageSpeed"></Label>
-        <Label *ngIf="trip.month" [text]="trip.travelTime"></Label>
-        <Label *ngIf="trip.month" [text]="trip.distanceTraveled"></Label>
-        <Label *ngIf="trip.month" [text]="trip.averageSpeed"></Label>
+        <Label [text]="trip.week" [text]="trip.travelTime"></Label>
+        <Label [text]="trip.week" [text]="trip.distanceTraveled"></Label>
+        <Label [text]="trip.week" [text]="trip.averageSpeed"></Label>
+        <Label [text]="trip.month" [text]="trip.travelTime"></Label>
+        <Label [text]="trip.month" [text]="trip.distanceTraveled"></Label>
+        <Label [text]="trip.month" [text]="trip.averageSpeed"></Label>
     </StackLayout>
     <Button class="submit-button" text="Share" (tap)="share()"></Button>
     <Button class="submit-button" text="Your Rank" (tap)="yourRank()"></Button>

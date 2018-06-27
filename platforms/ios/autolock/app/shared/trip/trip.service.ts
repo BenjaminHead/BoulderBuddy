@@ -38,6 +38,10 @@ export class TripService {
         return this.configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + newOrigin + '&destinations=' + newDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
     }
 
+    // getTripByUser(){
+    //     this.firebaseService.getTripInfo();
+    // }
+
     getUserInfoByEmail(){
         this.firebaseService.getAllUsers().then((result)=> function(){
             let users = result;

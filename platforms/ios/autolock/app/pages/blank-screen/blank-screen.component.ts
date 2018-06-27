@@ -17,11 +17,10 @@ import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
-    moduleId: module.id,
-    templateUrl: "./blank-screen.html",
-    styleUrls: ["./blank-screen-common.css", "./blank-screen.css"]
+    templateUrl: "./pages/blank-screen/blank-screen.html",
+    styleUrls: ["./pages/blank-screen/blank-screen-common.css", "./pages/blank-screen/blank-screen.css"]
 })
-export class BlankScreenComponent implements OnInit{
+export class BlankScreenComponent implements OnInit {
 
     screenTouched = false;
     stackLayout;
@@ -45,13 +44,13 @@ export class BlankScreenComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.user = params['user'];
-            console.log("User is...", this.user);
-        });
-        if(!this.user){
-            this.user = this.firebaseService.getUser();
-        }
+        // this.route.queryParams.subscribe(params => {
+        //     this.user = params['user'];
+        //     console.log("User is...", this.user);
+        // });
+        // if(!this.user){
+        //     this.user = this.firebaseService.getUser();
+        // }
     }
 
     onTouch(){
@@ -78,18 +77,27 @@ export class BlankScreenComponent implements OnInit{
         });
     }
 
-    getTripData(){
-        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = this.tripService.showConfigResponse(this.user);
-        console.log("Trip data is now...", this.tripData);
-    }
+    // getTripData(){
+    //     this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
+    //     this.tripData = this.tripService.showConfigResponse(this.user);
+    //     console.log("Trip data is now...", this.tripData);
+    // }
 
     navigate() {
         this.router.navigate(["/navigation"]);
     }
 
     arrived() {
-        this.getTripData();
-        this.router.navigate(["/list"]);
+        this.firebaseService.getUser().then((result)=>function() {
+            this.user = result;
+            console.log("Is this returned result consistent with our model?",result);
+        });
+        this.firebaseService.getTripInfo(this.user).then((result)=>function(){
+            this.router.navigate(["/thanks"], {queryParams: {
+                'trip': result
+            }
+            });
+        });
+
     }
 }

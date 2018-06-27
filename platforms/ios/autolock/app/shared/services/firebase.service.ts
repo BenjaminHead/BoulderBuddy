@@ -66,23 +66,27 @@ export class FirebaseService implements OnInit {
     }
 
     sendTripInfo(trip) {
+        console.log("It has begun...");
         this.getUser().then((result) => {
             this.user = result;
         });
         return Firebase.setValue('/trips/' + this.user.uid, trip)
             .then((data) => {
-            console.log("Data sent", this.user.id);
-                return data.value;
+            console.log("Data sent", this.user.uid);
+                return data;
             })
             .catch((error) => {
+                console.log("Broken, fam");
                 console.log(error);
             })
     }
 
     getTripInfo(user) {
-                return Firebase.getValue('/trips/' + user.id)
+        console.log("Entered...");
+                return Firebase.getValue('/trips/' + user.uid)
                     .then((data) => {
-                        return data.value;
+                        console.log("Data received", user.uid);
+                        return data;
                     })
                     .catch((error) => {
                         console.log(error);
@@ -105,11 +109,12 @@ export class FirebaseService implements OnInit {
             .then((user) => {
                 return Firebase.getValue('/users/' + user.uid)
                     .then((data) => {
-                    console.log("User returned", data.value);
+                    console.log("User returned", data);
                     this.user = data.value;
                         return data.value;
                     })
                     .catch((error) => {
+                    console.log("Nope");
                         console.log(error);
                     })
             })

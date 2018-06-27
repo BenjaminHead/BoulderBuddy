@@ -66,22 +66,30 @@ export class FirebaseService implements OnInit {
     }
 
     sendTripInfo(trip) {
-        return Firebase.setValue('/trips/' + this.user.id, trip)
+        this.getUser().then((result) => {
+            this.user = result;
+        });
+        return Firebase.setValue('/trips/' + this.user.uid, trip)
             .then((data) => {
-            console.log("Data sent", this.user.id);
-                return data.value;
+            console.log("Data sent", this.user.uid);
+                return data;
             })
             .catch((error) => {
                 console.log(error);
             })
     }
 
-    getTripInfo(user) {
-                return Firebase.getValue('/trips/' + user.id)
+    getTripInfo() {
+        this.getUser().then((result) => {
+            this.user = result;
+        });
+                return Firebase.getValue('/trips/' + this.user.uid)
                     .then((data) => {
-                        return data.value;
+                        console.log("Where is this breaking?");
+                        return data;
                     })
                     .catch((error) => {
+                    console.log("Broken, fam");
                         console.log(error);
                     })
     }

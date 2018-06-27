@@ -2,7 +2,7 @@
   "_args": [
     [
       "async@0.1.22",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
+      "/Users/ben/Work/AutoLock/autolock"
     ]
   ],
   "_from": "async@0.1.22",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/async/-/async-0.1.22.tgz",
   "_spec": "0.1.22",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "author": {
     "name": "Caolan McMahon"
   },

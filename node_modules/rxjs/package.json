@@ -2,7 +2,7 @@
   "_args": [
     [
       "rxjs@5.5.9",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
+      "/Users/ben/Work/AutoLock/autolock"
     ]
   ],
   "_from": "rxjs@5.5.9",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.5.9.tgz",
   "_spec": "5.5.9",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "author": {
     "name": "Ben Lesh",
     "email": "ben@benlesh.com"

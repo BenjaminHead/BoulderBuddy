@@ -1,32 +1,28 @@
 {
-  "_args": [
-    [
-      "tns-platform-declarations@4.1.0",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
-    ]
-  ],
-  "_from": "tns-platform-declarations@4.1.0",
+  "_from": "tns-platform-declarations@^4.1.0",
   "_id": "tns-platform-declarations@4.1.0",
   "_inBundle": false,
   "_integrity": "sha512-9f/eBWeCCE7ibYkUyEfb5rm6U6HtNiwF9qpnCqgSQHW9f2FUnxhgBmHj03yCvKyWAouUckihLKxwG14Nf93Jmg==",
   "_location": "/tns-platform-declarations",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
+    "type": "range",
     "registry": true,
-    "raw": "tns-platform-declarations@4.1.0",
+    "raw": "tns-platform-declarations@^4.1.0",
     "name": "tns-platform-declarations",
     "escapedName": "tns-platform-declarations",
-    "rawSpec": "4.1.0",
+    "rawSpec": "^4.1.0",
     "saveSpec": null,
-    "fetchSpec": "4.1.0"
+    "fetchSpec": "^4.1.0"
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/tns-platform-declarations/-/tns-platform-declarations-4.1.0.tgz",
-  "_spec": "4.1.0",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_shasum": "58c6deca64e4715850be2a8897db58003fd06bf7",
+  "_spec": "tns-platform-declarations@^4.1.0",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "author": {
     "name": "Telerik",
     "email": "support@telerik.com",
@@ -35,6 +31,8 @@
   "bugs": {
     "url": "https://github.com/NativeScript/NativeScript/issues"
   },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "Platform-specific TypeScript declarations for NativeScript for accessing native objects",
   "devDependencies": {
     "typescript": "^2.6.1"

@@ -29,11 +29,9 @@ export class LoginComponent {
         }
     }
     login() {
-        console.log("User before function call", this.user);
         if(this.user === undefined || null) {
             this.firebaseService.getUser().then((result: any) => {
-                console.log("The signed in user is....", result);
-                this.user = result;
+                this.user = result.value;
             });
         }
         this.firebaseService.login(this.user.email, this.user.password)

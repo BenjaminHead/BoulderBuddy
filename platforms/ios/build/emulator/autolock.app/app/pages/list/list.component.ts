@@ -6,9 +6,8 @@ import { FirebaseService } from "../../shared/services/firebase.service";
 @Component({
     selector: "list",
     providers: [FirebaseService],
-    moduleId: module.id,
-    templateUrl: "./list.html",
-    styleUrls: ["./list-common.css", "./list.css"]
+    templateUrl: "./pages/list/list.html",
+    styleUrls: ["./pages/list/list-common.css", "./pages/list/list.css"]
 })
 export class ListComponent implements OnInit {
 

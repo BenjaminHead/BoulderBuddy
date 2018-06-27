@@ -2,7 +2,7 @@
   "_args": [
     [
       "tns-core-modules@3.4.1",
-      "/Users/abenabides/Desktop/Projects/Work/autolock"
+      "/Users/ben/Work/AutoLock/autolock"
     ]
   ],
   "_from": "tns-core-modules@3.4.1",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.4.1.tgz",
   "_spec": "3.4.1",
-  "_where": "/Users/abenabides/Desktop/Projects/Work/autolock",
+  "_where": "/Users/ben/Work/AutoLock/autolock",
   "dependencies": {
     "tns-core-modules-widgets": "3.4.0"
   },
