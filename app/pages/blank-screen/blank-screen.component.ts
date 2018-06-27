@@ -28,6 +28,7 @@ export class BlankScreenComponent implements OnInit {
     toDestination;
     fromDestination;
     tripData;
+    recentTrip;
     user;
 
     constructor(private router: Router,
@@ -77,26 +78,26 @@ export class BlankScreenComponent implements OnInit {
         });
     }
 
-    // getTripData(){
-    //     this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-    //     this.tripData = this.tripService.showConfigResponse(this.user);
-    //     console.log("Trip data is now...", this.tripData);
-    // }
+    sendTripData(){
+        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
+        this.tripData = this.tripService.showConfigResponse(this.user);
+    }
+
+    getTripData(){
+        return this.firebaseService.getTripInfo();
+    }
 
     navigate() {
         this.router.navigate(["/navigation"]);
     }
 
     arrived() {
-        this.firebaseService.getUser().then((result)=>function() {
-            this.user = result;
-            console.log("Is this returned result consistent with our model?",result);
-        });
-        this.firebaseService.getTripInfo(this.user).then((result)=>function(){
+        this.sendTripData();
+        this.recentTrip = this.getTripData();
+            console.log("Trip data is here...", JSON.stringify(this.recentTrip));
             this.router.navigate(["/thanks"], {queryParams: {
-                'trip': result
+                'trip': this.recentTrip
             }
-            });
         });
 
     }

@@ -35,7 +35,6 @@ export class ListComponent implements OnInit {
     }
 
     startTracking() {
-        console.log("Function entered...");
         BackgroundGeolocation.configure({
             url: 'https://amora-2cc4c.firebaseio.com/trip',
             httpRootProperty: '.',
@@ -44,9 +43,7 @@ export class ListComponent implements OnInit {
             preventSuspend: true,
             heartbeatInterval: 60
         });
-        console.log("Begin tracking");
         BackgroundGeolocation.start();
-        console.log("Now navigate to");
         this.router.navigate(["/blank"], {queryParams: {
             'user': this.user
         }

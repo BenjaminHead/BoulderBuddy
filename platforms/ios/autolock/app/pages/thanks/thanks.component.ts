@@ -11,29 +11,27 @@ import { FirebaseService } from "../../shared/services/firebase.service";
     templateUrl: "./pages/thanks/thanks.html",
     styleUrls: ["./pages/thanks/thanks-common.css", "./pages/thanks/thanks.css"]
 })
-export class ThanksComponent {
+export class ThanksComponent implements OnInit{
 
-    trip = {};
+    trip;
     user;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
                 private route: ActivatedRoute) {
-        //     .then((result) => function(){
-        //     console.log("trip object contains...", result);
-        //     this.trip.travelTime = '';
-        //     this.trip.distanceTraveled = '';
-        //     this.trip.averageSpeed = '';
-        //     this.trip.pointsEarned = '';
-        //     this.trip.week = true;
-        //     this.trip.month = true;
-        // });
+        this.trip = Trip;
     }
 
     ngOnInit (){
         this.route.queryParams.subscribe(params => {
-            this.trip = params['trip'];
-            console.log("User is...", this.trip);
+            let recentTrip = params['trip'];
+            console.log("Recent trip data is...", recentTrip);
+            this.trip.travelTime = '';
+            this.trip.distanceTraveled = '';
+            this.trip.averageSpeed = '';
+            this.trip.pointsEarned = '';
+            this.trip.week = true;
+            this.trip.month = true;
         });
     }
 
