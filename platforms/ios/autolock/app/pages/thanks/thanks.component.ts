@@ -23,15 +23,23 @@ export class ThanksComponent implements OnInit{
     }
 
     ngOnInit (){
-        this.route.queryParams.subscribe(params => {
-            let recentTrip = params['trip'];
-            console.log("Recent trip data is...", recentTrip);
-            this.trip.travelTime = '';
-            this.trip.distanceTraveled = '';
-            this.trip.averageSpeed = '';
-            this.trip.pointsEarned = '';
-            this.trip.week = true;
-            this.trip.month = true;
+        this.getTripData();
+        // this.route.queryParams.subscribe(params => {
+        //     let recentTrip = params['trip'];
+        //     console.log("Recent trip data is...", JSON.stringify(recentTrip));
+        //     this.trip.travelTime = '';
+        //     this.trip.distanceTraveled = '';
+        //     this.trip.averageSpeed = '';
+        //     this.trip.pointsEarned = '';
+        //     this.trip.week = true;
+        //     this.trip.month = true;
+        // });
+    }
+
+    getTripData(){
+        this.firebaseService.getTripInfo().then((result)=>{
+            console.log("Get trip data result...", result);
+            return result;
         });
     }
 

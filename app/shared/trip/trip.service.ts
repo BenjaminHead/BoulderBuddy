@@ -20,7 +20,6 @@ export class TripService {
     constructor(private http: HttpClient,
                 private firebaseService: FirebaseService) {
         this.user = this.firebaseService.getUser();
-        console.log("User is...", this.user);
     }
 
     currentTrip() {}
@@ -66,8 +65,8 @@ export class TripService {
             this.configUrl, { observe: 'response' });
     }
 
-    showConfigResponse(user) {
-        console.log('4', this.configUrl, user);
+    showConfigResponse() {
+        console.log('4', this.configUrl);
         this.getConfigResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {

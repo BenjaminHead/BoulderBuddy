@@ -16,13 +16,13 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="thanks.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/pages/thanks/thanks.component.ts">
+          <file leaf-file-name="firebase.service.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="27" column="62" lean-forward="false" selection-start-line="27" selection-start-column="62" selection-end-line="27" selection-end-column="62" />
+                <state relative-caret-position="750">
+                  <caret line="103" column="21" lean-forward="false" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
                   <folding>
-                    <element signature="e#0#50#0" expanded="true" />
+                    <element signature="e#0#58#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -31,7 +31,7 @@
           <file leaf-file-name="login.component.ts" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/pages/login/login.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="720">
+                <state relative-caret-position="780">
                   <caret line="52" column="41" lean-forward="false" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
                   <folding>
                     <element signature="e#0#42#0" expanded="true" />
@@ -44,8 +44,8 @@
           <file leaf-file-name="blank-screen.component.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/pages/blank-screen/blank-screen.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="767">
-                  <caret line="96" column="81" lean-forward="true" selection-start-line="96" selection-start-column="81" selection-end-line="96" selection-end-column="81" />
+                <state relative-caret-position="692">
+                  <caret line="82" column="31" lean-forward="false" selection-start-line="82" selection-start-column="31" selection-end-line="82" selection-end-column="31" />
                   <folding>
                     <element signature="e#0#50#0" expanded="true" />
                     <element signature="e#320#368#0" expanded="true" />
@@ -64,23 +64,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="firebase.service.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="415">
-                  <caret line="86" column="37" lean-forward="false" selection-start-line="86" selection-start-column="37" selection-end-line="86" selection-end-column="37" />
-                  <folding>
-                    <element signature="e#0#58#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="user.ts" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/shared/user/user.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state relative-caret-position="90">
+                  <caret line="6" column="16" lean-forward="false" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
                   <folding />
                 </state>
               </provider>
@@ -111,8 +99,8 @@
           <file leaf-file-name="trip.service.ts" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/shared/trip/trip.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="905">
-                  <caret line="76" column="50" lean-forward="false" selection-start-line="76" selection-start-column="50" selection-end-line="76" selection-end-column="50" />
+                <state relative-caret-position="931">
+                  <caret line="75" column="51" lean-forward="false" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="51" />
                   <folding>
                     <element signature="e#0#43#0" expanded="true" />
                   </folding>
@@ -124,6 +112,28 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="trip.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/shared/trip/trip.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="60">
+                  <caret line="4" column="22" lean-forward="false" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="thanks.component.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/pages/thanks/thanks.component.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="555">
+                  <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#0#50#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="thanks.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/pages/thanks/thanks.html">
               <provider selected="true" editor-type-id="text-editor">
@@ -134,11 +144,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="blank-screen.component.ts" pinned="false" current-in-tab="false">
+          <file leaf-file-name="blank-screen.component.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/pages/blank-screen/blank-screen.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="125">
-                  <caret line="48" column="42" lean-forward="false" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="42" />
+                <state relative-caret-position="406">
+                  <caret line="61" column="0" lean-forward="true" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#50#0" expanded="true" />
                     <element signature="e#320#368#0" expanded="true" />
@@ -168,16 +178,6 @@
                     <element signature="e#0#42#0" expanded="true" />
                     <marker date="1529945847093" expanded="true" signature="964:974" ph="{...}" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="trip.ts" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/shared/trip/trip.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="90">
-                  <caret line="6" column="19" lean-forward="false" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
-                  <folding />
                 </state>
               </provider>
             </entry>
@@ -240,13 +240,15 @@
         <option value="$PROJECT_DIR$/main.ts" />
         <option value="$PROJECT_DIR$/pages/login/login.component.ts" />
         <option value="$PROJECT_DIR$/pages/blank-screen/blank-screen.html" />
-        <option value="$PROJECT_DIR$/shared/trip/trip.service.ts" />
         <option value="$PROJECT_DIR$/app.routing.ts" />
         <option value="$PROJECT_DIR$/pages/list/list.component.ts" />
-        <option value="$PROJECT_DIR$/shared/services/firebase.service.ts" />
         <option value="$PROJECT_DIR$/pages/thanks/thanks.html" />
-        <option value="$PROJECT_DIR$/pages/thanks/thanks.component.ts" />
+        <option value="$PROJECT_DIR$/shared/user/user.ts" />
+        <option value="$PROJECT_DIR$/shared/trip/trip.service.ts" />
         <option value="$PROJECT_DIR$/pages/blank-screen/blank-screen.component.ts" />
+        <option value="$PROJECT_DIR$/pages/thanks/thanks.component.ts" />
+        <option value="$PROJECT_DIR$/shared/trip/trip.ts" />
+        <option value="$PROJECT_DIR$/shared/services/firebase.service.ts" />
       </list>
     </option>
   </component>
@@ -400,6 +402,13 @@
             <path>
               <item name="app" type="b2602c69:ProjectViewProjectNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="shared" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
+              <item name="user.ts" type="620a8d5e:NestingTreeNode" />
+            </path>
+            <path>
+              <item name="app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="app.component.ts" type="620a8d5e:NestingTreeNode" />
             </path>
             <path>
@@ -459,12 +468,12 @@
       <updated>1529540764434</updated>
       <workItem from="1529540765575" duration="3468000" />
       <workItem from="1529689921329" duration="36639000" />
-      <workItem from="1530047140833" duration="22639000" />
+      <workItem from="1530047140833" duration="61433000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62746000" />
+    <option name="totallyTimeSpent" value="101540000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1177" extended-state="6" />
@@ -524,7 +533,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -600,7 +611,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="57" />
-          <folding />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -699,18 +712,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shared/user/user.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.routing.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="56" lean-forward="false" selection-start-line="25" selection-start-column="56" selection-end-line="25" selection-end-column="56" />
+        <state relative-caret-position="405">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#0#63#0" expanded="true" />
           </folding>
@@ -737,41 +742,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/login/login.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="52" column="41" lean-forward="false" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-            <marker date="1529945847093" expanded="true" signature="964:974" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shared/trip/trip.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="905">
-          <caret line="76" column="50" lean-forward="false" selection-start-line="76" selection-start-column="50" selection-end-line="76" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pages/list/list.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="86" column="37" lean-forward="false" selection-start-line="86" selection-start-column="37" selection-end-line="86" selection-end-column="37" />
+        <state relative-caret-position="0">
+          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
           <folding>
-            <element signature="e#0#58#0" expanded="true" />
+            <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -784,28 +760,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shared/trip/trip.ts">
+    <entry file="file://$PROJECT_DIR$/shared/user/user.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="19" lean-forward="false" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+          <caret line="6" column="16" lean-forward="false" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/login/login.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="52" column="41" lean-forward="false" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+            <marker date="1529945847093" expanded="true" signature="964:974" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/trip/trip.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="22" lean-forward="false" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pages/thanks/thanks.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="62" lean-forward="false" selection-start-line="27" selection-start-column="62" selection-end-line="27" selection-end-column="62" />
+        <state relative-caret-position="555">
+          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/shared/trip/trip.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="931">
+          <caret line="75" column="51" lean-forward="false" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="750">
+          <caret line="103" column="21" lean-forward="false" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pages/blank-screen/blank-screen.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="767">
-          <caret line="96" column="81" lean-forward="true" selection-start-line="96" selection-start-column="81" selection-end-line="96" selection-end-column="81" />
+        <state relative-caret-position="406">
+          <caret line="61" column="0" lean-forward="true" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
             <element signature="e#320#368#0" expanded="true" />

@@ -1,5 +1,6 @@
 import { Injectable, Input, OnInit } from "@angular/core";
 import * as Firebase from 'nativescript-plugin-firebase';
+import { Trip } from "../trip/trip";
 // import { Goal } from '../models/goal.model';
 // import { Daily } from '../models/daily.model';
 
@@ -8,6 +9,13 @@ import * as Firebase from 'nativescript-plugin-firebase';
 export class FirebaseService implements OnInit {
 
     user;
+    tripTemplate = {
+        travelTime: '',
+        distanceTraveled: '',
+        averageSpeed: '',
+        pointsEarned: '',
+        date: new Date
+    };
 
     ngOnInit(): void {}
     login(email, password): any {
@@ -48,9 +56,9 @@ export class FirebaseService implements OnInit {
         return Firebase.createUser({
             email: user.email,
             password: user.password
-          })
+        })
             .then((result: any) => {
-            console.log("user registered", user);
+                console.log("user registered", user);
                 user.uid = result.key;
                 return Firebase.setValue('/users/' + result.key, user)
                     .then((data) => {
@@ -66,10 +74,22 @@ export class FirebaseService implements OnInit {
     }
 
     sendTripInfo(trip) {
+        console.log("Called at all?");
         this.getUser().then((result) => {
-            this.user = result;
+            console.log("What the hell...", result);
+            if (result.key) {
+                this.user.uid = result.key;
+            } else {
+                this.user = result;
+            }
+            console.log("Here is the trip", JSON.stringify(trip.rows[0].elements[0].duration.text));
+            console.log("What the fuck is undefined about this!? I gave it a fucking value!?", this.tripTemplate);
+            this.tripTemplate.travelTime = JSON.stringify(trip.rows[0].elements[0].duration.text);
+            this.tripTemplate.distanceTraveled = JSON.stringify(trip.rows[0].elements[0].distance.text);
+            this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
+            this.tripTemplate.date = new Date;
         });
-        return Firebase.setValue('/trips/' + this.user.uid, trip)
+        return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
             .then((data) => {
                 return data;
             })
@@ -79,18 +99,21 @@ export class FirebaseService implements OnInit {
     }
 
     getTripInfo() {
-        console.log("Entered...");
         this.getUser().then((result) => {
-            this.user = result;
+            if (result.key) {
+                this.user.uid = result.key;
+            } else {
+                this.user = result;
+            }
         });
-                return Firebase.getValue('/trips/' + this.user.uid)
-                    .then((data) => {
-                        console.log(JSON.stringify(data));
-                        return JSON.stringify(data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+        return Firebase.getValue('/trips/' + this.user.uid)
+            .then((data) => {
+                console.log(JSON.stringify(data));
+                return JSON.stringify(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     resetPassword(email) {
@@ -109,12 +132,12 @@ export class FirebaseService implements OnInit {
             .then((user) => {
                 return Firebase.getValue('/users/' + user.uid)
                     .then((data) => {
-                    console.log("User returned", data);
-                    this.user = data.value;
+                        console.log("User returned", data);
+                        this.user = data.value;
                         return data.value;
                     })
                     .catch((error) => {
-                    console.log("Nope");
+                        console.log("Nope");
                         console.log(error);
                     })
             })

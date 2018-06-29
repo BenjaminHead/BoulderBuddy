@@ -17,6 +17,7 @@ import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
+    providers: [FirebaseService],
     templateUrl: "./pages/blank-screen/blank-screen.html",
     styleUrls: ["./pages/blank-screen/blank-screen-common.css", "./pages/blank-screen/blank-screen.css"]
 })
@@ -80,11 +81,7 @@ export class BlankScreenComponent implements OnInit {
 
     sendTripData(){
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = this.tripService.showConfigResponse(this.user);
-    }
-
-    getTripData(){
-        return this.firebaseService.getTripInfo();
+        this.tripData = this.tripService.showConfigResponse();
     }
 
     navigate() {
@@ -93,12 +90,6 @@ export class BlankScreenComponent implements OnInit {
 
     arrived() {
         this.sendTripData();
-        this.recentTrip = this.getTripData();
-            console.log("Trip data is here...", JSON.stringify(this.recentTrip));
-            this.router.navigate(["/thanks"], {queryParams: {
-                'trip': this.recentTrip
-            }
-        });
-
+        this.router.navigate(["/thanks"]);
     }
 }
