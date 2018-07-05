@@ -128,6 +128,7 @@ export class FirebaseService implements OnInit {
     }
 
     getUser() {
+        console.log("Where is this stopping?");
         return Firebase.getCurrentUser()
             .then((user) => {
                 return Firebase.getValue('/users/' + user.uid)
