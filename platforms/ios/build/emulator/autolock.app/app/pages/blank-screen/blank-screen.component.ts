@@ -17,6 +17,7 @@ import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
+    providers: [FirebaseService],
     templateUrl: "./pages/blank-screen/blank-screen.html",
     styleUrls: ["./pages/blank-screen/blank-screen-common.css", "./pages/blank-screen/blank-screen.css"]
 })
@@ -28,6 +29,7 @@ export class BlankScreenComponent implements OnInit {
     toDestination;
     fromDestination;
     tripData;
+    recentTrip;
     user;
 
     constructor(private router: Router,
@@ -77,10 +79,9 @@ export class BlankScreenComponent implements OnInit {
         });
     }
 
-    getTripData(){
+    sendTripData(){
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = this.tripService.showConfigResponse(this.user);
-        console.log("Trip data is now...", this.tripData);
+        this.tripData = this.tripService.showConfigResponse();
     }
 
     navigate() {
@@ -88,7 +89,7 @@ export class BlankScreenComponent implements OnInit {
     }
 
     arrived() {
-        console.log("Why the fuck did this stop working?");
+        this.sendTripData();
         this.router.navigate(["/thanks"]);
     }
 }

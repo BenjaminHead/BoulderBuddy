@@ -32,7 +32,8 @@ if(app.ios) {
 }
 
 firebase.init({
-    persist: true
+    persist: true,
+    iOSEmulatorFlush: true
 })
     .then(instance => {
         console.log('firebase.init done');

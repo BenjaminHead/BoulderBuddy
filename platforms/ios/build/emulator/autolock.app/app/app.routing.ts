@@ -23,6 +23,7 @@ export const routes = [
     { path: "blank", component: BlankScreenComponent},
     { path: "blank/:user", component: BlankScreenComponent},
     { path: "thanks", component: ThanksComponent},
+    { path: "thanks/:trip", component: ThanksComponent},
     { path: "navigation", component: NavigationComponent }
 ];
 

@@ -57,7 +57,6 @@ export class BlankScreenComponent implements OnInit {
 
     onTouch(){
         this.screenTouched = true;
-        setTimeout(function() {this.screenTouched = false;}, 10000);
     }
 
     getDirections() {

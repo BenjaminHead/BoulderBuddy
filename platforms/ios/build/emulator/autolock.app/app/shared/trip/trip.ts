@@ -1,8 +1,7 @@
 export class Trip {
-    travelTime: string;
-    distanceTraveled: string; //location.odometer
-    averageSpeed: string;
-    pointsEarned: string;
-    week: boolean;
-    month: boolean;
+    travelTime: any;
+    distanceTraveled: any; //location.odometer
+    averageSpeed: any;
+    pointsEarned: any;
+    date: Date;
 }

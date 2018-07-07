@@ -20,7 +20,6 @@ export class TripService {
     constructor(private http: HttpClient,
                 private firebaseService: FirebaseService) {
         this.user = this.firebaseService.getUser();
-        console.log("User is...", this.user);
     }
 
     currentTrip() {}
@@ -38,9 +37,9 @@ export class TripService {
         return this.configUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + newOrigin + '&destinations=' + newDestination + '&key=AIzaSyBLZLJiTixIpZTY1AqMZFNCJuzctJT0D7w';
     }
 
-    getTripByUser(){
-        this.firebaseService.getTripInfo();
-    }
+    // getTripByUser(){
+    //     this.firebaseService.getTripInfo();
+    // }
 
     getUserInfoByEmail(){
         this.firebaseService.getAllUsers().then((result)=> function(){
@@ -66,8 +65,8 @@ export class TripService {
             this.configUrl, { observe: 'response' });
     }
 
-    showConfigResponse(user) {
-        console.log('4', this.configUrl, user);
+    showConfigResponse() {
+        console.log('4', this.configUrl);
         this.getConfigResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {

@@ -1,9 +1,9 @@
 {
-	"time": "Thu Jul 05 2018 16:40:05 GMT-0600 (MDT)",
+	"time": "Fri Jul 06 2018 17:23:33 GMT-0600 (MDT)",
 	"nativePlatformStatus": "3",
 	"bundle": false,
 	"release": false,
 	"changesRequireBuild": false,
 	"projectFileHash": "c5c79816c1be5e295185db1e3fe99c811ee44fa25b91c8dc9d148646ffe980ac",
-	"changesRequireBuildTime": "Tue Jun 26 2018 15:16:13 GMT-0600 (MDT)"
+	"changesRequireBuildTime": "Fri Jul 06 2018 10:49:01 GMT-0600 (MDT)"
 }

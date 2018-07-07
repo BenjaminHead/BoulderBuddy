@@ -87,6 +87,7 @@
 		FAF9368DEB1E4E77A2B9A2E9 /* selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6F9464DE3EB4254846F7A81 /* selected@2x.png */; };
 		FD0DE0C693444064A24FE743 /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F75B521D0154488937B1167 /* Icon-60@3x.png */; };
 		FF50308E75D343229E746AFB /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 6385465E6827430B88C7E7A8 /* Icon-Small-50.png */; };
+		430C65CC59394AE79127BB97 /* amora.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E0C3FBAD8467499388ABBA4B /* amora.entitlements */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -191,6 +192,7 @@
 		FABE89CAE71D421BB02E8481 /* checked_white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checked_white@3x.png"; path = "autolock/Resources/checked_white@3x.png"; sourceTree = "<group>"; };
 		FEA5E1A1A3234C75B281906B /* unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "unchecked@2x.png"; path = "autolock/Resources/unchecked@2x.png"; sourceTree = "<group>"; };
 		FF3C2D22F8024383AB6433F8 /* nonselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nonselected@2x.png"; path = "autolock/Resources/nonselected@2x.png"; sourceTree = "<group>"; };
+		E0C3FBAD8467499388ABBA4B /* amora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = amora.entitlements; path = "autolock/Resources/amora.entitlements"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -345,6 +347,7 @@
 				91E2677A11D14309A005D753 /* unchecked_white.png */,
 				C5723C1BE0904E51A5ADCD90 /* unchecked_white@2x.png */,
 				6E5449E631C14A1A92AC564E /* unchecked_white@3x.png */,
+				E0C3FBAD8467499388ABBA4B /* amora.entitlements */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				4C804091F3D146C88EBA4FB7 /* unchecked_white.png in Resources */,
 				4CE20BBD8F9342FBB532B11C /* unchecked_white@2x.png in Resources */,
 				14E0EC4D6F0C4D43870B5A42 /* unchecked_white@3x.png in Resources */,
+				430C65CC59394AE79127BB97 /* amora.entitlements in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
