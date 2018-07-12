@@ -8,6 +8,7 @@ import { GestureTypes, GestureEventData } from "tns-core-modules/ui/gestures";
 import { Directions } from "nativescript-directions";
 import { MapView } from 'nativescript-google-maps-sdk';
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
 import { Http, Headers, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { TripService } from "../../shared/trip/trip.service";
@@ -32,6 +33,8 @@ export class BlankScreenComponent implements OnInit {
     recentTrip;
     user;
 
+    coords = false;
+
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
                 private tripService: TripService,
@@ -45,18 +48,33 @@ export class BlankScreenComponent implements OnInit {
         });
     }
 
+    locOnLock: any;
+    locOnArrival: any;
+    latLong;
+
     ngOnInit() {
-        // this.route.queryParams.subscribe(params => {
-        //     this.user = params['user'];
-        //     console.log("User is...", this.user);
-        // });
-        // if(!this.user){
-        //     this.user = this.firebaseService.getUser();
-        // }
+        this.setLatLong().then((result)=>{
+            this.locOnLock = result;
+            console.log("Location on lock", this.locOnLock);
+        });
     }
 
     onTouch(){
         this.screenTouched = true;
+    }
+
+    setLatLong() {
+        this.latLong = getCurrentLocation({desiredAccuracy: 3}).then(function(loc){
+            if (loc) {
+                let lat = JSON.stringify(loc.latitude);
+                let long = JSON.stringify(loc.longitude);
+                let locOnLock = lat + ',' + long;
+                return locOnLock;
+            }
+        }, function(e){
+            console.log("Error: " + e.message);
+        });
+        return this.latLong;
     }
 
     getDirections() {
@@ -79,7 +97,18 @@ export class BlankScreenComponent implements OnInit {
     }
 
     sendTripData(){
-        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
+        console.log("intial values for send trip data", this.fromDestination, this.toDestination);
+        if(!this.fromDestination){
+            this.coords = true;
+            this.fromDestination = this.locOnLock;
+        }
+        if(!this.toDestination){
+            this.coords = true;
+            this.toDestination = this.locOnArrival;
+        }
+        console.log("Origin and destination in blank screen component", this.fromDestination, this.toDestination);
+        this.tripService.setConfigUrl(this.fromDestination, this.toDestination, this.coords);
+        // this.tripService.setFirebaseTripUrl();
         this.tripData = this.tripService.showConfigResponse();
     }
 
@@ -88,7 +117,15 @@ export class BlankScreenComponent implements OnInit {
     }
 
     arrived() {
-        this.sendTripData();
+        if(!this.fromDestination || this.fromDestination === '') {
+            this.setLatLong().then((result)=>{
+                this.locOnArrival = result;
+                console.log("Location on arrival", result);
+                this.sendTripData();
+            });
+        } else {
+            this.sendTripData();
+        }
         this.router.navigate(["/thanks"]);
     }
 }

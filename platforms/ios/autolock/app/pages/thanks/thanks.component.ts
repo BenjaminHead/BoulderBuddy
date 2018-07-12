@@ -13,35 +13,34 @@ import { FirebaseService } from "../../shared/services/firebase.service";
 })
 export class ThanksComponent implements OnInit{
 
-    trip;
+    trip = {
+        destination: '',
+        origin: '',
+        travelTime: '',
+        distanceTraveled: '',
+        averageSpeed: '',
+        pointsEarned: '',
+        date: ''
+    };
     user;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
+                private tripService: TripService,
                 private route: ActivatedRoute) {
-        this.trip = Trip;
     }
 
     ngOnInit (){
-        this.getTripData();
-        // this.route.queryParams.subscribe(params => {
-        //     let recentTrip = params['trip'];
-        //     console.log("Recent trip data is...", JSON.stringify(recentTrip));
-        //     this.trip.travelTime = '';
-        //     this.trip.distanceTraveled = '';
-        //     this.trip.averageSpeed = '';
-        //     this.trip.pointsEarned = '';
-        //     this.trip.week = true;
-        //     this.trip.month = true;
-        // });
+        this.tripService.showFirebaseTripResponse();
+        this.firebaseService.getTripInfo();
     }
 
-    getTripData(){
-        this.firebaseService.getTripInfo().then((result)=>{
-            console.log("Get trip data result...", result);
-            return result;
-        });
-    }
+    // getTripData(){
+    //     this.firebaseService.getTripInfo().then((result)=>{
+    //         console.log("Get trip data result...", result);
+    //         return result;
+    //     });
+    // }
 
     share(){
         this.router.navigate([""]);
