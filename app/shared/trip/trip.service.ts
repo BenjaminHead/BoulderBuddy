@@ -17,6 +17,7 @@ export class TripService {
     config;
     tripData;
     user;
+    latestTrip;
 
     constructor(private http: HttpClient,
                 private firebaseService: FirebaseService) {
@@ -91,7 +92,7 @@ export class TripService {
     }
 
     showFirebaseTripResponse() {
-        this.getFirebaseTripResponse()
+        this.latestTrip = this.getFirebaseTripResponse()
         // resp is of type `HttpResponse<Config>`
             .subscribe(resp => {
                 // access the body directly, which is typed as `Config`.
@@ -101,6 +102,8 @@ export class TripService {
                 console.log("trip retrieved from firebase", this.firebaseUrl, JSON.stringify(resp.body));
                 return JSON.stringify(resp.body);
             });
+        console.log("what is this returning?", this.latestTrip);
+        return this.latestTrip;
     }
 
     getConfig() {

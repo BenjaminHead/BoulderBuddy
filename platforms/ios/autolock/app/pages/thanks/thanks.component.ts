@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Trip } from "../../shared/trip/trip";
 import { TripService } from "../../shared/trip/trip.service";
 import { FirebaseService } from "../../shared/services/firebase.service";
+import 'rxjs/add/operator/toPromise';
 
 @Component({
     selector: "thanks",
@@ -31,7 +32,8 @@ export class ThanksComponent implements OnInit{
     }
 
     ngOnInit (){
-        this.tripService.showFirebaseTripResponse();
+        let latestTrip = this.tripService.showFirebaseTripResponse();
+        console.log("Trip on thanks page", latestTrip);
         this.firebaseService.getTripInfo();
     }
 

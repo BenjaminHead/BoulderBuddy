@@ -97,7 +97,6 @@ export class BlankScreenComponent implements OnInit {
     }
 
     sendTripData(){
-        console.log("intial values for send trip data", this.fromDestination, this.toDestination);
         if(!this.fromDestination){
             this.coords = true;
             this.fromDestination = this.locOnLock;
@@ -106,7 +105,6 @@ export class BlankScreenComponent implements OnInit {
             this.coords = true;
             this.toDestination = this.locOnArrival;
         }
-        console.log("Origin and destination in blank screen component", this.fromDestination, this.toDestination);
         this.tripService.setConfigUrl(this.fromDestination, this.toDestination, this.coords);
         // this.tripService.setFirebaseTripUrl();
         this.tripData = this.tripService.showConfigResponse();
