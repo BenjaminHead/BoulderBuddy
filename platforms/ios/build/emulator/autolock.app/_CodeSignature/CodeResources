@@ -82,11 +82,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		aTQZzdT9wP9ufjqL81Tj5eJ0DTs=
+		69o7bcE29k+QjhE3ZxTG2avipuY=
 		</data>
 		<key>Frameworks/CocoaLumberjack.framework/CocoaLumberjack</key>
 		<data>
-		RgzikTD1AExXztTaQmeUhnECRvQ=
+		vzLUcd+57l7wM45GvZPUvRxfSZc=
 		</data>
 		<key>Frameworks/CocoaLumberjack.framework/Info.plist</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>Frameworks/GTMSessionFetcher.framework/GTMSessionFetcher</key>
 		<data>
-		5C0D/n4cZa2tZYURtC9nT7ATuPU=
+		RnCS0sH2c3vFAN3Ia/y6TtRkEB4=
 		</data>
 		<key>Frameworks/GTMSessionFetcher.framework/Info.plist</key>
 		<data>
@@ -110,7 +110,7 @@
 		</data>
 		<key>Frameworks/GoogleToolboxForMac.framework/GoogleToolboxForMac</key>
 		<data>
-		HVFk4Mx/3lIyA4g/2hNtL0Sp8qs=
+		96a8zi0jniJNA6SN15WVIfCP4pM=
 		</data>
 		<key>Frameworks/GoogleToolboxForMac.framework/Info.plist</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Frameworks/Protobuf.framework/Protobuf</key>
 		<data>
-		PUCXHS0ITM1elPhRsTC0fOJ0mFU=
+		uQyFcQrK3p9doav4P6NX6lzhOqA=
 		</data>
 		<key>Frameworks/Protobuf.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>Frameworks/leveldb.framework/leveldb</key>
 		<data>
-		ErGr85ODG/ZxARHaGw4icQ0J5L4=
+		Lo5zpiI2TFVjkRiP801Jwh8tMgk=
 		</data>
 		<key>Frameworks/nanopb.framework/Info.plist</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>Frameworks/nanopb.framework/nanopb</key>
 		<data>
-		VefdprJBkBolWqpjcD5uA+bOQA0=
+		/uyw8utdEAiwAUz8Qw484vksQn4=
 		</data>
 		<key>GoogleMaps.bundle/GMSCacheStorage.momd/Storage.mom</key>
 		<data>
@@ -932,7 +932,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		z2XjHK0Vm5rKjepbQNdUc4Wo5Ko=
+		AE6Rn3dcaDTLqQEBR1Lq8lHzV+A=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -1000,7 +1000,7 @@
 		</data>
 		<key>LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		jZa4l7A3UkJBLAO3x+8d/lYQ0/U=
+		Xy4iJvocjKcCmjb5pq6WV1dAgJo=
 		</data>
 		<key>LaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -1008,7 +1008,7 @@
 		</data>
 		<key>LaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		q7Rtq/6ZlsgXSr5607psB2Hmq/0=
+		HZj/mk+7h5iy6kiP69dTmwRQp2c=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -1025,6 +1025,30 @@
 		<key>add@3x.png</key>
 		<data>
 		Ke0gyL4y/o6wvOL5EYrki2LFA6I=
+		</data>
+		<key>amora.entitlements</key>
+		<data>
+		IqXQfWuwsZHKokko7rtvQB3qUCM=
+		</data>
+		<key>app/.idea/app.iml</key>
+		<data>
+		QkDavcdGo2uuilbu7ASjo/xZ2EI=
+		</data>
+		<key>app/.idea/misc.xml</key>
+		<data>
+		KDPiMPyUx0MRsIcJTZhFLYyLiC0=
+		</data>
+		<key>app/.idea/modules.xml</key>
+		<data>
+		3NtAmyYKW9dF78QNstD++AXMPk0=
+		</data>
+		<key>app/.idea/vcs.xml</key>
+		<data>
+		vDNd2sM5gS8dq9wn10TuDMlb3+Q=
+		</data>
+		<key>app/.idea/workspace.xml</key>
+		<data>
+		SmJewiDt45VTzjfxKUz6YHqiO5U=
 		</data>
 		<key>app/README.md</key>
 		<data>
@@ -1044,27 +1068,27 @@
 		</data>
 		<key>app/app.module.js</key>
 		<data>
-		WRiVKOBUtZSQkaG61+wUH7sK3J4=
+		kH3aaqLnXs+79xwJ0w4mSG9GE9Y=
 		</data>
 		<key>app/app.module.ts</key>
 		<data>
-		aTiqiGxpkSNleSGvj9tyRAWj/4w=
+		me1rVy8H44i0K0KakTTVgUknwnw=
 		</data>
 		<key>app/app.routing.js</key>
 		<data>
-		kjFXvM4lp7cUti3LdGQzL1SPfOw=
+		gN/MOagUbYm87/eINEOS83RDFSU=
 		</data>
 		<key>app/app.routing.ts</key>
 		<data>
-		MQ86C705cJCf9Q6JKwWifc4Q08Q=
+		UNLBAAie32o5X9X5pqA7BSPqnpM=
 		</data>
 		<key>app/main.js</key>
 		<data>
-		xiQqploFWRLy3u9AaiEdgKJtaZE=
+		Df20DA28lenwPZ/3OVy+6pO9/k8=
 		</data>
 		<key>app/main.ts</key>
 		<data>
-		T4bXYICe6WHKlN604K7w7fWdJck=
+		od8kIGgq9eDEJsLHGo4EWettYys=
 		</data>
 		<key>app/package.json</key>
 		<data>
@@ -1072,15 +1096,15 @@
 		</data>
 		<key>app/pages/blank-screen/blank-screen-common.css</key>
 		<data>
-		tIbuaWfR7UKES3PKJk5WwJ2W6Pw=
+		sNrKMGGBKXh4V+aBOA2Mv6EPCyo=
 		</data>
 		<key>app/pages/blank-screen/blank-screen.component.js</key>
 		<data>
-		XIALBHWUiqNM1PKHiHqCnITPGBE=
+		IVD8smHOP3ma6qaFCL8S9FkWPSE=
 		</data>
 		<key>app/pages/blank-screen/blank-screen.component.ts</key>
 		<data>
-		KZu+nM6ThKFJdpunf2aS8rSd//c=
+		9oMU48NwGmXRxNPcGogZNHbN0XI=
 		</data>
 		<key>app/pages/blank-screen/blank-screen.css</key>
 		<data>
@@ -1088,7 +1112,7 @@
 		</data>
 		<key>app/pages/blank-screen/blank-screen.html</key>
 		<data>
-		IB4tvULvzK/BsNBtxCaJyqbdhCE=
+		GpiOm2iCQTCGDD3zz+UHD5xvFAs=
 		</data>
 		<key>app/pages/intro/intro-common.css</key>
 		<data>
@@ -1116,11 +1140,11 @@
 		</data>
 		<key>app/pages/list/list.component.js</key>
 		<data>
-		AsR6clwu/v1trgtgYbsSWC/jxJk=
+		DsmT7EO0aEoVYi73xkJOzF0hoRI=
 		</data>
 		<key>app/pages/list/list.component.ts</key>
 		<data>
-		ggQA5R5Cmjhm0GAnQQ5gebtAO10=
+		6KOd0jPTiDDEuVrtSz9EY++SXog=
 		</data>
 		<key>app/pages/list/list.css</key>
 		<data>
@@ -1136,11 +1160,11 @@
 		</data>
 		<key>app/pages/login/login.component.js</key>
 		<data>
-		XK4iu62cx0zd7mDD1S7EOppQITQ=
+		Y8ozFwU08o+fkXlmcgqw8S8InlY=
 		</data>
 		<key>app/pages/login/login.component.ts</key>
 		<data>
-		oyZI/zFOWGE3pesn2UrVgCTjKy8=
+		AnZN+XA3UZJQ1r+UglmI/4TPZIE=
 		</data>
 		<key>app/pages/login/login.css</key>
 		<data>
@@ -1196,11 +1220,11 @@
 		</data>
 		<key>app/pages/thanks/thanks.component.js</key>
 		<data>
-		+YKPl6p3B5T2n3Fh05kJj86Qhs4=
+		CTitdhW6OPV3G9+kLbDYGUMwqIE=
 		</data>
 		<key>app/pages/thanks/thanks.component.ts</key>
 		<data>
-		5cVYTZwZYBq4/ccpqJWYKstukAc=
+		HmL115DwBz0KSGNRQp/WW/5HTfE=
 		</data>
 		<key>app/pages/thanks/thanks.css</key>
 		<data>
@@ -1208,7 +1232,7 @@
 		</data>
 		<key>app/pages/thanks/thanks.html</key>
 		<data>
-		IV0oUxIHoBMUx7po8oNgOw2KAjU=
+		+cuECXt8JXk/XjrCI52k/hxk2JI=
 		</data>
 		<key>app/pages/tour/tour-common.css</key>
 		<data>
@@ -1292,31 +1316,31 @@
 		</data>
 		<key>app/shared/services/firebase.service.js</key>
 		<data>
-		5gNbmKH26MHzRD6w7nycltWi5+0=
+		VqnDFeGHG0T1YC4LzhHfLz3KixA=
 		</data>
 		<key>app/shared/services/firebase.service.ts</key>
 		<data>
-		fSpQWhnEnRJ+B0P1QYrDo2ov+P0=
+		5ExNmf3XIozmALwK1NwyOuYoXKs=
 		</data>
 		<key>app/shared/trip/trip.js</key>
 		<data>
-		3iddTrIIXpn+oQvwgh0oCjygF/A=
+		k7Dsqhr9371Ss7y4iN4TbWoDhwY=
 		</data>
 		<key>app/shared/trip/trip.service.js</key>
 		<data>
-		DKuCrLxVSU4p4e3HBqPptAOe+EI=
+		g7d4hgQ73VKeT1ebhdXPkKQfLHg=
 		</data>
 		<key>app/shared/trip/trip.service.ts</key>
 		<data>
-		ColgU/MVd3SHGXESfi47RqfW9iw=
+		xgclHUHDhv57rMpim0zWjcAYyU4=
 		</data>
 		<key>app/shared/trip/trip.ts</key>
 		<data>
-		CBQ8XL5br6buJy7Vfgz5OcnWt9k=
+		GLr4mXMHjLuUcUfBmzawnaH+1sc=
 		</data>
 		<key>app/shared/user/user.js</key>
 		<data>
-		cVMCsDbJrOOvQIIrXNkkWaB0lmA=
+		z/EsX5qvoYXul+0ExGZGzBEixm4=
 		</data>
 		<key>app/shared/user/user.service.js</key>
 		<data>
@@ -1328,7 +1352,7 @@
 		</data>
 		<key>app/shared/user/user.ts</key>
 		<data>
-		ZTJ5hUEO65gD/QzX/C5eDKMHizs=
+		+a53Rp7HYqAH98fYPs+I9gZpK/c=
 		</data>
 		<key>app/tns_modules/@angular/animations/README.md</key>
 		<data>
@@ -39876,7 +39900,7 @@
 		</data>
 		<key>app/tns_modules/tns-platform-declarations/package.json</key>
 		<data>
-		84q0S66GPEYVT75xx2givZVAnpA=
+		OSL5e15H5Ef5qplh6iETHhy0QdM=
 		</data>
 		<key>app/tns_modules/tslib/.gitattributes</key>
 		<data>
@@ -40843,22 +40867,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aTQZzdT9wP9ufjqL81Tj5eJ0DTs=
+			69o7bcE29k+QjhE3ZxTG2avipuY=
 			</data>
 			<key>hash2</key>
 			<data>
-			fPj2sNrEUWHpSX5e4uPyV2AB6qA3XdUA5GKjcE1na74=
+			lqBUUiFqk76JDitR72+ts4O+nMMRj0umcdeXQl5TTd4=
 			</data>
 		</dict>
 		<key>Frameworks/CocoaLumberjack.framework/CocoaLumberjack</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			RgzikTD1AExXztTaQmeUhnECRvQ=
+			vzLUcd+57l7wM45GvZPUvRxfSZc=
 			</data>
 			<key>hash2</key>
 			<data>
-			Js9O1XyeEDmSUBiq4UtnCxg/Y9iHGEc4QXCbJB2Rjz4=
+			Og3jEY7GKyYOww7UY9uAWfj1YTi/RzCfzkCv2tUGEE0=
 			</data>
 		</dict>
 		<key>Frameworks/CocoaLumberjack.framework/Info.plist</key>
@@ -40887,11 +40911,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5C0D/n4cZa2tZYURtC9nT7ATuPU=
+			RnCS0sH2c3vFAN3Ia/y6TtRkEB4=
 			</data>
 			<key>hash2</key>
 			<data>
-			7cPi2AAQHLj8DKsN4h2mpwkeNDXu5zbz4V6e26pWRD8=
+			JgsfUYYMSwWOVq/4STqylZRa98xwo2M7omk2gzEiMYM=
 			</data>
 		</dict>
 		<key>Frameworks/GTMSessionFetcher.framework/Info.plist</key>
@@ -40920,11 +40944,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HVFk4Mx/3lIyA4g/2hNtL0Sp8qs=
+			96a8zi0jniJNA6SN15WVIfCP4pM=
 			</data>
 			<key>hash2</key>
 			<data>
-			cpAq+I4d9uex60QPqWmMjRg+MHE4u87r32YtcVUnAP8=
+			mZc6z1stwM018NJS+RqWd2WgAXis4HREXaT8mstsxYY=
 			</data>
 		</dict>
 		<key>Frameworks/GoogleToolboxForMac.framework/Info.plist</key>
@@ -40997,11 +41021,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			PUCXHS0ITM1elPhRsTC0fOJ0mFU=
+			uQyFcQrK3p9doav4P6NX6lzhOqA=
 			</data>
 			<key>hash2</key>
 			<data>
-			B1ztjmrPuOkduXjUgA60vMzvKLcLPltLS8xBEUXPbso=
+			CFg5KaEgs8BtTugiHruKxgwBzeNDwoEqpLmLMhKuugI=
 			</data>
 		</dict>
 		<key>Frameworks/Protobuf.framework/_CodeSignature/CodeResources</key>
@@ -41074,11 +41098,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ErGr85ODG/ZxARHaGw4icQ0J5L4=
+			Lo5zpiI2TFVjkRiP801Jwh8tMgk=
 			</data>
 			<key>hash2</key>
 			<data>
-			lcNL9rmBGQG+GFyY1eI7xEgs2pQjfsGsCjGa+tENjII=
+			uVl9StvvKvC+5WxqH9YZQmBi0nMbZrUFO2CBLu7q5Pk=
 			</data>
 		</dict>
 		<key>Frameworks/nanopb.framework/Info.plist</key>
@@ -41107,11 +41131,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			VefdprJBkBolWqpjcD5uA+bOQA0=
+			/uyw8utdEAiwAUz8Qw484vksQn4=
 			</data>
 			<key>hash2</key>
 			<data>
-			Wp49EjOf1ejCQTHA7Kc0lehfI19zTq0b8XsjzKsLfHw=
+			qxqzh2cLR6OdgiUXIAHrEiW6NP99jEKURW7Khn6shMU=
 			</data>
 		</dict>
 		<key>GoogleMaps.bundle/GMSCacheStorage.momd/Storage.mom</key>
@@ -42816,11 +42840,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			jZa4l7A3UkJBLAO3x+8d/lYQ0/U=
+			Xy4iJvocjKcCmjb5pq6WV1dAgJo=
 			</data>
 			<key>hash2</key>
 			<data>
-			vVNi0XMK4nbvR4LNRMHPS4Boe4u59bGqFVI7k3D/66M=
+			mAtbkY/vNxrmSRccl/fNQNFcq6K1T6j0msxvledyjqM=
 			</data>
 		</dict>
 		<key>LaunchScreen.storyboardc/Info.plist</key>
@@ -42838,11 +42862,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			q7Rtq/6ZlsgXSr5607psB2Hmq/0=
+			HZj/mk+7h5iy6kiP69dTmwRQp2c=
 			</data>
 			<key>hash2</key>
 			<data>
-			koNxjMc9Zn9E0AC+xs8oB4ifvDocivITmYEHGa1cWjo=
+			HYfhPi3OM3x79gf9t99poB2ptFGoLIUAAYStLgNHH/E=
 			</data>
 		</dict>
 		<key>add.png</key>
@@ -42876,6 +42900,72 @@
 			<key>hash2</key>
 			<data>
 			Doj8EwxHt/K+n1AYks8KhTcpCMeckniVNotnR7mRBFo=
+			</data>
+		</dict>
+		<key>amora.entitlements</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			IqXQfWuwsZHKokko7rtvQB3qUCM=
+			</data>
+			<key>hash2</key>
+			<data>
+			/CYj4+kVr/5m6CLHZGOQmUg5N6b3LPbKeLlIUlqCMOU=
+			</data>
+		</dict>
+		<key>app/.idea/app.iml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			QkDavcdGo2uuilbu7ASjo/xZ2EI=
+			</data>
+			<key>hash2</key>
+			<data>
+			A1/Y+pCmiYS5xq4rNVmewwwEW+ZhiCq4v2OL7fpg4iE=
+			</data>
+		</dict>
+		<key>app/.idea/misc.xml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KDPiMPyUx0MRsIcJTZhFLYyLiC0=
+			</data>
+			<key>hash2</key>
+			<data>
+			4Da8r4zgtRhxZs6pFYII66y9LOHV8cBP3yneJNQb+T8=
+			</data>
+		</dict>
+		<key>app/.idea/modules.xml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3NtAmyYKW9dF78QNstD++AXMPk0=
+			</data>
+			<key>hash2</key>
+			<data>
+			jCRlgfV836d1bA4ITywuawOIs6BOaOkofkBBgXNxlZ4=
+			</data>
+		</dict>
+		<key>app/.idea/vcs.xml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			vDNd2sM5gS8dq9wn10TuDMlb3+Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			O8wFS4CbsYHex/Lm2V0RLLneLBf0RGTSmfDslUPoeP0=
+			</data>
+		</dict>
+		<key>app/.idea/workspace.xml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			SmJewiDt45VTzjfxKUz6YHqiO5U=
+			</data>
+			<key>hash2</key>
+			<data>
+			1wFTBzdXyZwfTxr8gcr26hNYoLCHph4oVwNoq6NAwKg=
 			</data>
 		</dict>
 		<key>app/README.md</key>
@@ -42926,66 +43016,66 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			WRiVKOBUtZSQkaG61+wUH7sK3J4=
+			kH3aaqLnXs+79xwJ0w4mSG9GE9Y=
 			</data>
 			<key>hash2</key>
 			<data>
-			k6dOeHYB0ydSUJMp0B/BfDkQ+/GeOH9vX3ib4akDtM8=
+			iWB29+Z9SWZLvW5/4t/DtoX6gMHGXyy2TuF7RODORB4=
 			</data>
 		</dict>
 		<key>app/app.module.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			aTiqiGxpkSNleSGvj9tyRAWj/4w=
+			me1rVy8H44i0K0KakTTVgUknwnw=
 			</data>
 			<key>hash2</key>
 			<data>
-			g//iX1xsHW7lvWmR8/dH6XfW82vr4Lc+ilLT9JGy8pE=
+			he3j47mGVFpMqU1IKif59ZEGMB4xwJ3BLFYXCtW8VYI=
 			</data>
 		</dict>
 		<key>app/app.routing.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			kjFXvM4lp7cUti3LdGQzL1SPfOw=
+			gN/MOagUbYm87/eINEOS83RDFSU=
 			</data>
 			<key>hash2</key>
 			<data>
-			mPKbgfGIGGHqHxFcbkICWWo/BALeOI5aVevsyxQmWzU=
+			3BS0beZFl2impetfZWRMGNqxNN3suY4XEHdoco6Uzg8=
 			</data>
 		</dict>
 		<key>app/app.routing.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			MQ86C705cJCf9Q6JKwWifc4Q08Q=
+			UNLBAAie32o5X9X5pqA7BSPqnpM=
 			</data>
 			<key>hash2</key>
 			<data>
-			QsQbNpLRomEK+EzBQU98qdO5fNmjABgFKToJLvsNrs4=
+			BxYhkTPK/c522fSRzv36XiDk8KUqgN8gO0nofQMvSys=
 			</data>
 		</dict>
 		<key>app/main.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			xiQqploFWRLy3u9AaiEdgKJtaZE=
+			Df20DA28lenwPZ/3OVy+6pO9/k8=
 			</data>
 			<key>hash2</key>
 			<data>
-			DXLlV27EaIxjZsvZxVwX/moCsevZoY+0kLEq96VVDyI=
+			gWUodKstw85lC1EBCzP4p9mZ+kCLr8oBJFaGNLQ8uu0=
 			</data>
 		</dict>
 		<key>app/main.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			T4bXYICe6WHKlN604K7w7fWdJck=
+			od8kIGgq9eDEJsLHGo4EWettYys=
 			</data>
 			<key>hash2</key>
 			<data>
-			vSqC5UK9nSKWZf1nlLBPvN5wVAM2KqUTV6aNK8gCp90=
+			FzV+stM+G9RBEYJ2eaj/d8YcgExn4rVWxyOZ+k4/mb4=
 			</data>
 		</dict>
 		<key>app/package.json</key>
@@ -43003,33 +43093,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			tIbuaWfR7UKES3PKJk5WwJ2W6Pw=
+			sNrKMGGBKXh4V+aBOA2Mv6EPCyo=
 			</data>
 			<key>hash2</key>
 			<data>
-			Z7hEVJFqdUIu0D4tjESQ3yFFLMeXY7qDA2YjD0PvpGM=
+			3Al2Z9PLn5sa/Ck0HF8+QxSNGlHZsDMBRZI/O83vbME=
 			</data>
 		</dict>
 		<key>app/pages/blank-screen/blank-screen.component.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			XIALBHWUiqNM1PKHiHqCnITPGBE=
+			IVD8smHOP3ma6qaFCL8S9FkWPSE=
 			</data>
 			<key>hash2</key>
 			<data>
-			8hX04z+kbfPzg/Yh2LBaJ9DX9K6biFS0dft3C0/lYFg=
+			vwTtkOAYlX3Blh2fhptF1o1ox4yINZj5PspyQ6xehcQ=
 			</data>
 		</dict>
 		<key>app/pages/blank-screen/blank-screen.component.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			KZu+nM6ThKFJdpunf2aS8rSd//c=
+			9oMU48NwGmXRxNPcGogZNHbN0XI=
 			</data>
 			<key>hash2</key>
 			<data>
-			DmSa3VpA1oSBk48RTiDU+fcML/z7gp97RS6T7T3aOJ8=
+			GkfS/82pwfdxDbibUIg5+DMUvGxc+5TIBtHWuoSZXNU=
 			</data>
 		</dict>
 		<key>app/pages/blank-screen/blank-screen.css</key>
@@ -43047,11 +43137,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IB4tvULvzK/BsNBtxCaJyqbdhCE=
+			GpiOm2iCQTCGDD3zz+UHD5xvFAs=
 			</data>
 			<key>hash2</key>
 			<data>
-			9WWIruqS8cNwVHJquNpxGWJmvQdL+D97s23xJvhzCCk=
+			i9mUp0liTqSbW/UH7pQTmnDo7oyBdXp5ZMm19xkT66M=
 			</data>
 		</dict>
 		<key>app/pages/intro/intro-common.css</key>
@@ -43124,22 +43214,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			AsR6clwu/v1trgtgYbsSWC/jxJk=
+			DsmT7EO0aEoVYi73xkJOzF0hoRI=
 			</data>
 			<key>hash2</key>
 			<data>
-			kHhUSwQInqIwnE7u9fc1ZPhfCpKHvTpt8erNs8zGeRg=
+			WfVgnb32+JbQIB9tFi4EtZSmkLJ7kFpIaHLngQDR8l4=
 			</data>
 		</dict>
 		<key>app/pages/list/list.component.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ggQA5R5Cmjhm0GAnQQ5gebtAO10=
+			6KOd0jPTiDDEuVrtSz9EY++SXog=
 			</data>
 			<key>hash2</key>
 			<data>
-			pxrZVBxJl/7EqwMPyGOvxNungVwucyklF1mCCpEauF8=
+			ntvgKBNW2FIuPjuHoV3Ps4cvVzvIOkveM2Gc2MroB70=
 			</data>
 		</dict>
 		<key>app/pages/list/list.css</key>
@@ -43179,22 +43269,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XK4iu62cx0zd7mDD1S7EOppQITQ=
+			Y8ozFwU08o+fkXlmcgqw8S8InlY=
 			</data>
 			<key>hash2</key>
 			<data>
-			Nw77Io3cYSBSKAlePx9wqRDz6UzeOaxaJf4onw5fR2g=
+			tqZ5jlQfPQEDMKdA8eHiodoBvnYn63Rk70L+KV2iUnc=
 			</data>
 		</dict>
 		<key>app/pages/login/login.component.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			oyZI/zFOWGE3pesn2UrVgCTjKy8=
+			AnZN+XA3UZJQ1r+UglmI/4TPZIE=
 			</data>
 			<key>hash2</key>
 			<data>
-			jHwucGhvuyyg0qS8DgT+0XsZimMexX+BTO0ZLM3L3t0=
+			7fjcfHEfHDEVfAiZNA0NWgRO8mJRPImtXELhKUlPRGI=
 			</data>
 		</dict>
 		<key>app/pages/login/login.css</key>
@@ -43344,22 +43434,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+YKPl6p3B5T2n3Fh05kJj86Qhs4=
+			CTitdhW6OPV3G9+kLbDYGUMwqIE=
 			</data>
 			<key>hash2</key>
 			<data>
-			VzP8aXbUlDdQVR7ip23cRDHT9v5E197FOoIklr/lKs0=
+			8gL3WLzfH4su8kLfEizSataD8wogdKqSgTr8Ye7kbOM=
 			</data>
 		</dict>
 		<key>app/pages/thanks/thanks.component.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			5cVYTZwZYBq4/ccpqJWYKstukAc=
+			HmL115DwBz0KSGNRQp/WW/5HTfE=
 			</data>
 			<key>hash2</key>
 			<data>
-			xOt26AtZYWkxDLREfms2jDMpG1s/7ZLAVZk4RmhRZas=
+			P8jUZPVElnjbiD+FkTJR/z3psV/qMspfntdXm9gps8g=
 			</data>
 		</dict>
 		<key>app/pages/thanks/thanks.css</key>
@@ -43377,11 +43467,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IV0oUxIHoBMUx7po8oNgOw2KAjU=
+			+cuECXt8JXk/XjrCI52k/hxk2JI=
 			</data>
 			<key>hash2</key>
 			<data>
-			Issg8h2d/FrUzzWcYCDEqq4CuVSREhCFBWgjBYDFnXs=
+			uv2r1i62KujqHQls7n4hSny8m6H/WE4lB3HPDC08woo=
 			</data>
 		</dict>
 		<key>app/pages/tour/tour-common.css</key>
@@ -43608,77 +43698,77 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5gNbmKH26MHzRD6w7nycltWi5+0=
+			VqnDFeGHG0T1YC4LzhHfLz3KixA=
 			</data>
 			<key>hash2</key>
 			<data>
-			I85ZiItf2UYvRKhAilUMFrQjUbVRW2TJyJY/YGtXYto=
+			h+bWy7LXHHhHZu2bij8yiOfvfX1fHqpP2GiNTNWjmuc=
 			</data>
 		</dict>
 		<key>app/shared/services/firebase.service.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			fSpQWhnEnRJ+B0P1QYrDo2ov+P0=
+			5ExNmf3XIozmALwK1NwyOuYoXKs=
 			</data>
 			<key>hash2</key>
 			<data>
-			qtccrcgP/R+YsVt9koCdiUIE4hFBxcC+cgVvZY0bJ1Y=
+			rmLCzugaMRECgwUxnl731KwMNjiBCtmHpauY4j0R/eQ=
 			</data>
 		</dict>
 		<key>app/shared/trip/trip.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			3iddTrIIXpn+oQvwgh0oCjygF/A=
+			k7Dsqhr9371Ss7y4iN4TbWoDhwY=
 			</data>
 			<key>hash2</key>
 			<data>
-			iwFVU4h4UM4UA1CUFiUTxdmul5pObPXUlGwu2w9Se6o=
+			RQXkuKIqF3rmXvAk0YPN1eNR2nW5/UHl6m4UJeNALaE=
 			</data>
 		</dict>
 		<key>app/shared/trip/trip.service.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			DKuCrLxVSU4p4e3HBqPptAOe+EI=
+			g7d4hgQ73VKeT1ebhdXPkKQfLHg=
 			</data>
 			<key>hash2</key>
 			<data>
-			5cvVF+Tjjzy8txGPJ41FLTaWd9rMtIi8CICkKN5/38g=
+			qMGDc7dNnj8KYrPLKWOTWH2pDa+R22uuFnt7rDsQWk8=
 			</data>
 		</dict>
 		<key>app/shared/trip/trip.service.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ColgU/MVd3SHGXESfi47RqfW9iw=
+			xgclHUHDhv57rMpim0zWjcAYyU4=
 			</data>
 			<key>hash2</key>
 			<data>
-			bpuES3X33tZ8bdJkTSPnf6PPuOI1oFGDb4JzV8Ojc7w=
+			JAMZADJEl1Ld41Wzy3JQalfOq6PxYSaDKxLqYqQWy78=
 			</data>
 		</dict>
 		<key>app/shared/trip/trip.ts</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			CBQ8XL5br6buJy7Vfgz5OcnWt9k=
+			GLr4mXMHjLuUcUfBmzawnaH+1sc=
 			</data>
 			<key>hash2</key>
 			<data>
-			NQXhO3JyOihzK6h2S1+r2ThJu1ABZvtRHfQOuZPcVX8=
+			sekSpZLdH8mwqs/f39zeuW4WiNM0TWhfksBE1d53ZIU=
 			</data>
 		</dict>
 		<key>app/shared/user/user.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			cVMCsDbJrOOvQIIrXNkkWaB0lmA=
+			z/EsX5qvoYXul+0ExGZGzBEixm4=
 			</data>
 			<key>hash2</key>
 			<data>
-			AtfouvBCd/CbEVfFDJRB9t9setmfy1+5A7a+FGTUiHk=
+			nHH/ilf9NvYmZVncp/U2SDvUCPljmGzDiiYd1lG94d8=
 			</data>
 		</dict>
 		<key>app/shared/user/user.service.js</key>
@@ -43707,11 +43797,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ZTJ5hUEO65gD/QzX/C5eDKMHizs=
+			+a53Rp7HYqAH98fYPs+I9gZpK/c=
 			</data>
 			<key>hash2</key>
 			<data>
-			fdvUXhQoFmBUIPHKywK+KuAJDVo5cmiZYf0PMhaPoYY=
+			eYu26ex2r/mYXh8hAXT6uCsxLeC+JXms+wrRTVPKyzA=
 			</data>
 		</dict>
 		<key>app/tns_modules/@angular/animations/README.md</key>
@@ -149714,11 +149804,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			84q0S66GPEYVT75xx2givZVAnpA=
+			OSL5e15H5Ef5qplh6iETHhy0QdM=
 			</data>
 			<key>hash2</key>
 			<data>
-			bZMbjl9m6DUqysdSQBxtEjXyBc2/X9EW930kaiNNpbc=
+			/vlVmgjF5ssUaNx3ZFY3OTG9ECFkzZWZ5yD3jy0hVZg=
 			</data>
 		</dict>
 		<key>app/tns_modules/tslib/.gitattributes</key>

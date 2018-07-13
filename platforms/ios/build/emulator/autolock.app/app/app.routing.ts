@@ -13,6 +13,7 @@ import { NavigationComponent } from "./pages/navigation/navigation.component";
 export const routes = [
     { path: "login", component: LoginComponent },
     { path: "list", component: ListComponent },
+    { path: "list/:user", component: ListComponent },
     { path: "recover-password", component: RecoverPasswordComponent },
     { path: "", component: IntroComponent },
     { path: "tour", component: TourComponent },
@@ -20,7 +21,9 @@ export const routes = [
     { path: "earn", component: TourEarnComponent },
     { path: "partners", component: TourPartnersComponent },
     { path: "blank", component: BlankScreenComponent},
-    { path: "thanks", component: ThanksComponent },
+    { path: "blank/:user", component: BlankScreenComponent},
+    { path: "thanks", component: ThanksComponent},
+    { path: "thanks/:trip", component: ThanksComponent},
     { path: "navigation", component: NavigationComponent }
 ];
 

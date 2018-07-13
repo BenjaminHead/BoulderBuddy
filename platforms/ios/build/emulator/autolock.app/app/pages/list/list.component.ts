@@ -1,22 +1,22 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {BackgroundGeolocation} from "nativescript-background-geolocation-lt";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FirebaseService } from "../../shared/services/firebase.service";
 
 @Component({
     selector: "list",
     providers: [FirebaseService],
-    moduleId: module.id,
-    templateUrl: "./list.html",
-    styleUrls: ["./list-common.css", "./list.css"]
+    templateUrl: "./pages/list/list.html",
+    styleUrls: ["./pages/list/list-common.css", "./pages/list/list.css"]
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
 
     tripInfo;
     user;
 
     constructor(private router: Router,
-                private firebaseService: FirebaseService) {
+                private firebaseService: FirebaseService,
+                private route: ActivatedRoute) {
         this.user = this.firebaseService.getUser();
         this.tripInfo = {
             odometer: 5,
@@ -24,8 +24,17 @@ export class ListComponent {
         }
     }
 
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.user = params['user'];
+            console.log("User is...", this.user);
+        });
+        if(!this.user){
+            this.user = this.firebaseService.getUser();
+        }
+    }
+
     startTracking() {
-        console.log("Function entered...");
         BackgroundGeolocation.configure({
             url: 'https://amora-2cc4c.firebaseio.com/trip',
             httpRootProperty: '.',
@@ -34,10 +43,11 @@ export class ListComponent {
             preventSuspend: true,
             heartbeatInterval: 60
         });
-        console.log("Begin tracking");
         BackgroundGeolocation.start();
-        console.log("Now navigate to");
-        this.router.navigate(["/blank"]);
+        this.router.navigate(["/blank"], {queryParams: {
+            'user': this.user
+        }
+        });
     }
 
     logTrip() {
@@ -47,7 +57,7 @@ export class ListComponent {
         BackgroundGeolocation.getLog(function(log){
            console.log(log);
         });
-        this.firebaseService.sendTripInfo(this.user, this.tripInfo);
+        this.firebaseService.sendTripInfo(this.tripInfo);
     }
 
     stopTracking() {

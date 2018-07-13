@@ -6,9 +6,9 @@ Environment  LANG=en_US.US-ASCII PATH=/Applications/Xcode.app/Contents/Developer
 BuilderIdent ProcessPCH\ /Users/ben/Work/AutoLock/autolock/platforms/ios/build/sharedpch/autolock-Prefix-aogkixtmimuqjieyiroilwrnqiiv/autolock-Prefix.pch.pch\ autolock/autolock-Prefix.pch\ normal\ x86_64\ objective-c\ com.apple.compilers.llvm.clang.1_0.compiler
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/SDKSettings.plist 0 1524870429 935 33204
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/System/Library/CoreServices/SystemVersion.plist 0 1526096759 489 33188
-InputFile    /Users/ben/Work/AutoLock/autolock/platforms/ios/autolock/autolock-Prefix.pch 0 1529102352 236 33188
+InputFile    /Users/ben/Work/AutoLock/autolock/platforms/ios/autolock/autolock-Prefix.pch 0 1530046764 236 33188
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/SDKSettings.plist 0 1524870429 935 33204
-InputFile    /Users/ben/Work/AutoLock/autolock/platforms/ios/autolock/autolock-Prefix.pch 0 1529102352 236 33188
+InputFile    /Users/ben/Work/AutoLock/autolock/platforms/ios/autolock/autolock-Prefix.pch 0 1530046764 236 33188
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/usr/include/Availability.h 0 1524874776 18071 33188
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/usr/include/AvailabilityInternal.h 0 1524875273 4091671 33188
 InputFile    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator11.4.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h 0 1503719296 8222 33188

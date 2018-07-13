@@ -8,6 +8,7 @@ import { GestureTypes, GestureEventData } from "tns-core-modules/ui/gestures";
 import { Directions } from "nativescript-directions";
 import { MapView } from 'nativescript-google-maps-sdk';
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
 import { Http, Headers, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { TripService } from "../../shared/trip/trip.service";
@@ -17,11 +18,11 @@ import "rxjs/add/operator/map";
 
 @Component({
     selector: "blank-screen",
-    moduleId: module.id,
-    templateUrl: "./blank-screen.html",
-    styleUrls: ["./blank-screen-common.css", "./blank-screen.css"]
+    providers: [FirebaseService],
+    templateUrl: "./pages/blank-screen/blank-screen.html",
+    styleUrls: ["./pages/blank-screen/blank-screen-common.css", "./pages/blank-screen/blank-screen.css"]
 })
-export class BlankScreenComponent implements OnInit{
+export class BlankScreenComponent implements OnInit {
 
     screenTouched = false;
     stackLayout;
@@ -29,7 +30,10 @@ export class BlankScreenComponent implements OnInit{
     toDestination;
     fromDestination;
     tripData;
+    recentTrip;
     user;
+
+    coords = false;
 
     constructor(private router: Router,
                 private firebaseService: FirebaseService,
@@ -44,19 +48,33 @@ export class BlankScreenComponent implements OnInit{
         });
     }
 
+    locOnLock: any;
+    locOnArrival: any;
+    latLong;
+
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.user = params['user'];
-            console.log("User is...", this.user);
+        this.setLatLong().then((result)=>{
+            this.locOnLock = result;
+            console.log("Location on lock", this.locOnLock);
         });
-        if(!this.user){
-            this.user = this.firebaseService.getUser();
-        }
     }
 
     onTouch(){
         this.screenTouched = true;
-        setTimeout(function() {this.screenTouched = false;}, 10000);
+    }
+
+    setLatLong() {
+        this.latLong = getCurrentLocation({desiredAccuracy: 3}).then(function(loc){
+            if (loc) {
+                let lat = JSON.stringify(loc.latitude);
+                let long = JSON.stringify(loc.longitude);
+                let locOnLock = lat + ',' + long;
+                return locOnLock;
+            }
+        }, function(e){
+            console.log("Error: " + e.message);
+        });
+        return this.latLong;
     }
 
     getDirections() {
@@ -78,10 +96,18 @@ export class BlankScreenComponent implements OnInit{
         });
     }
 
-    getTripData(){
-        this.tripService.setConfigUrl(this.fromDestination, this.toDestination);
-        this.tripData = this.tripService.showConfigResponse(this.user);
-        console.log("Trip data is now...", this.tripData);
+    sendTripData(){
+        if(!this.fromDestination){
+            this.coords = true;
+            this.fromDestination = this.locOnLock;
+        }
+        if(!this.toDestination){
+            this.coords = true;
+            this.toDestination = this.locOnArrival;
+        }
+        this.tripService.setConfigUrl(this.fromDestination, this.toDestination, this.coords);
+        // this.tripService.setFirebaseTripUrl();
+        this.tripData = this.tripService.showConfigResponse();
     }
 
     navigate() {
@@ -89,7 +115,15 @@ export class BlankScreenComponent implements OnInit{
     }
 
     arrived() {
-        this.getTripData();
-        this.router.navigate(["/list"]);
+        if(!this.fromDestination || this.fromDestination === '') {
+            this.setLatLong().then((result)=>{
+                this.locOnArrival = result;
+                console.log("Location on arrival", result);
+                this.sendTripData();
+            });
+        } else {
+            this.sendTripData();
+        }
+        this.router.navigate(["/thanks"]);
     }
 }
