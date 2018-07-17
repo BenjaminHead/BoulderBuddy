@@ -52,6 +52,7 @@ export class TripService {
 
     setFirebaseTripUrl() {
         this.firebaseService.getUserKey().then((uid)=> {
+            console.log("UID is...", uid);
             this.firebaseUrl = 'https://amora-2cc4c.firebaseio.com/trips' + '/' + uid;
             console.log("URL is...", this.firebaseUrl);
             return this.firebaseUrl;

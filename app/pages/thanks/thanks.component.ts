@@ -23,6 +23,7 @@ export class ThanksComponent implements OnInit{
         pointsEarned: '',
         date: ''
     };
+    trips;
     user;
 
     constructor(private router: Router,
@@ -32,17 +33,35 @@ export class ThanksComponent implements OnInit{
     }
 
     ngOnInit (){
-        let latestTrip = this.tripService.showFirebaseTripResponse();
-        console.log("Trip on thanks page", latestTrip);
-        this.firebaseService.getTripInfo();
+        this.firebaseService.getTripInfo().then((result)=> {
+            console.log("Thanks page has received...", result);
+            console.log(Object.keys(result));
+            for (let key in result) {
+                // skip loop if the property is from prototype
+                if (!result.hasOwnProperty(key)) continue;
+                let obj = result[key];
+                console.log(obj);
+                let today = new Date;
+                let now = today.toString();
+                if(obj.date === now) {
+                    this.trip.destination = obj.destination;
+                    this.trip.origin = obj.origin;
+                    this.trip.travelTime = obj.travelTime;
+                    this.trip.distanceTraveled = obj.distanceTraveled;
+                    this.trip.averageSpeed = obj.distanceTraveled;
+                    this.trip.pointsEarned = obj.pointsEarned;
+                    this.trip.date = obj.date;
+                }
+                // for (let trip in obj) {
+                //     // skip loop if the property is from prototype
+                //     if(!obj.hasOwnProperty(trip)) continue;
+                //
+                //     // your code
+                //     console.log(trip + " = " + obj[trip]);
+                // }
+            }
+        });
     }
-
-    // getTripData(){
-    //     this.firebaseService.getTripInfo().then((result)=>{
-    //         console.log("Get trip data result...", result);
-    //         return result;
-    //     });
-    // }
 
     share(){
         this.router.navigate([""]);

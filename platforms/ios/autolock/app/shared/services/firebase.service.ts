@@ -110,16 +110,18 @@ export class FirebaseService implements OnInit {
     }
 
     getTripInfo() {
-        this.getUserKey().then((result) => {
+        return this.getUserKey().then((result) => {
                 this.user.uid = result;
             return Firebase.getValue('/trips/' + this.user.uid)
                 .then((data) => {
-                    return data;
+                console.log("This is the data returned", data.value);
+                    return data.value;
                 })
                 .catch((error) => {
                     console.log(error);
                 })
         });
+
 
         // return Firebase.getValue('/trips/' + this.user.uid)
         //     .then((data) => {
