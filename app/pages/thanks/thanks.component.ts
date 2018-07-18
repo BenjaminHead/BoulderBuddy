@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Trip } from "../../shared/trip/trip";
 import { TripService } from "../../shared/trip/trip.service";
 import { FirebaseService } from "../../shared/services/firebase.service";
+import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -41,7 +42,7 @@ export class ThanksComponent implements OnInit{
                 if (!result.hasOwnProperty(key)) continue;
                 let obj = result[key];
                 console.log(obj);
-                let today = new Date;
+                let today = moment().format("YYYY-MM-DD");
                 let now = today.toString();
                 if(obj.date === now) {
                     this.trip.destination = obj.destination;

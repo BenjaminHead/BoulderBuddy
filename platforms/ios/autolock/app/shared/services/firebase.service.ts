@@ -2,6 +2,7 @@ import { Injectable, Input, OnInit } from "@angular/core";
 import * as Firebase from 'nativescript-plugin-firebase';
 import { Trip } from "../trip/trip";
 import { TripService } from "../trip/trip.service";
+import * as moment from 'moment';
 // import { Goal } from '../models/goal.model';
 // import { Daily } from '../models/daily.model';
 
@@ -97,8 +98,9 @@ export class FirebaseService implements OnInit {
             if (trip.rows[0].elements[0].status != "NOT_FOUND") {
                 this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
             }
-            let newDate = new Date;
+            let newDate = moment().format("YYYY-MM-DD");
             this.tripTemplate.date = newDate.toString();
+            console.log("Moment date", this.tripTemplate.date);
             return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
                 .then((data) => {
                     return data;
