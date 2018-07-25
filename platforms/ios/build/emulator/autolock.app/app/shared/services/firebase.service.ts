@@ -18,7 +18,8 @@ export class FirebaseService implements OnInit {
         distanceTraveled: '',
         averageSpeed: '',
         pointsEarned: '',
-        date: ''
+        date: '',
+        uid: ''
     };
 
     // constructor(private tripService: TripService){}
@@ -98,9 +99,10 @@ export class FirebaseService implements OnInit {
             if (trip.rows[0].elements[0].status != "NOT_FOUND") {
                 this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
             }
-            let newDate = moment("MM-DD-YY");
-            console.log("Moment formatting properly?", newDate);
+            let newDate = moment().format("YYYY-MM-DD");
             this.tripTemplate.date = newDate.toString();
+            this.tripTemplate.uid = this.user.uid;
+            console.log("Moment date", this.tripTemplate.date);
             return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
                 .then((data) => {
                     return data;

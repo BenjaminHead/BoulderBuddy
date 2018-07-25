@@ -59,9 +59,20 @@ export class TripService {
         });
     }
 
-    // getTripByUser(){
-    //     this.firebaseService.getTripInfo();
-    // }
+    getPointsFromTripDB (){
+        let points = 0;
+        this.firebaseService.getPointsFromTrips().then((result: any)=>{
+                console.log("Length is...", result.length);
+            let sum = 0;
+                for (let i = 0; i < result.length; i++) {
+                    sum += Number(result[i]);
+                    console.log("sum is...", sum);
+                }
+            console.log("sum after loop is...", sum);
+            this.firebaseService.sendPointsFromTrips(sum);
+            return sum;
+        })
+    }
 
     getUserInfoByEmail(){
         this.firebaseService.getAllUsers().then((result)=> function(){
