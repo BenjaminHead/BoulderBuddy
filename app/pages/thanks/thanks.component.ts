@@ -94,7 +94,7 @@ export class ThanksComponent implements OnInit{
     }
 
     redeem(){
-        this.router.navigate([""]);
+        this.router.navigate(["/redeem-partners"], );
     }
 
 }

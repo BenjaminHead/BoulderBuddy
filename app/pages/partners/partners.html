@@ -1,0 +1,21 @@
+<StackLayout height="100%">
+<StackLayout height="75%">
+    <ScrollView orientation="vertical">
+        <GridLayout rows="*">
+    <ListView [items]="localPartners" class="list-group">
+        <ng-template let-partners="item" let-i="index" let-odd="odd" let-even="even">
+            <StackLayout>
+                <Label width="100%" [text]="partners.name" (tap)="redeem(partners.name)"></Label>
+            </StackLayout>
+        </ng-template>
+    </ListView>
+        </GridLayout>
+    </ScrollView>
+</StackLayout>
+    <!--<StackLayout height="25%" justifyContent="space-around">-->
+        <!--<Button></Button>-->
+    <!--<Button class="submit-button" text="Share" (tap)="share()"></Button>-->
+    <!--<Button class="submit-button" text="Your Rank" (tap)="yourRank()"></Button>-->
+    <!--<Button class="submit-button" text="Redeem" (tap)="redeem()"></Button>-->
+    <!--</StackLayout>-->
+</StackLayout>

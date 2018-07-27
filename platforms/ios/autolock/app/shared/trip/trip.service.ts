@@ -61,7 +61,7 @@ export class TripService {
 
     getPointsFromTripDB (){
         let points = 0;
-        this.firebaseService.getPointsFromTrips().then((result: any)=>{
+        return this.firebaseService.getPointsFromTrips().then((result: any)=>{
                 console.log("Length is...", result.length);
             let sum = 0;
                 for (let i = 0; i < result.length; i++) {

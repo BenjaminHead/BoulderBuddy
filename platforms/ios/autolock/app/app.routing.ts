@@ -9,6 +9,8 @@ import {TourPartnersComponent} from "./pages/tour/tour-partners.component";
 import {BlankScreenComponent} from "./pages/blank-screen/blank-screen.component";
 import {ThanksComponent} from "./pages/thanks/thanks.component";
 import { NavigationComponent } from "./pages/navigation/navigation.component";
+import { RedeemComponent } from "./pages/redeem/redeem.component";
+import { PartnersComponent } from "./pages/partners/partners.component";
 
 export const routes = [
     { path: "login", component: LoginComponent },
@@ -24,7 +26,10 @@ export const routes = [
     { path: "blank/:user", component: BlankScreenComponent},
     { path: "thanks", component: ThanksComponent},
     { path: "thanks/:trip", component: ThanksComponent},
-    { path: "navigation", component: NavigationComponent }
+    { path: "navigation", component: NavigationComponent },
+    { path: "redeem", component: RedeemComponent },
+    { path: "redeem-partners", component: PartnersComponent },
+    { path: "redeem-partners/:partner", component: PartnersComponent }
 ];
 
 export const navigatableComponents = [
@@ -38,5 +43,7 @@ export const navigatableComponents = [
     TourPartnersComponent,
     BlankScreenComponent,
     ThanksComponent,
-    NavigationComponent
+    NavigationComponent,
+    RedeemComponent,
+    PartnersComponent
 ];

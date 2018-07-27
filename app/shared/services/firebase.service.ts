@@ -113,6 +113,23 @@ export class FirebaseService implements OnInit {
         });
     }
 
+    redeemPoints(points) {
+        this.getUserKey().then((result) => {
+            this.user.uid = result;
+            let newDate = moment().format("YYYY-MM-DD");
+            this.tripTemplate.date = newDate.toString();
+            this.tripTemplate.uid = this.user.uid;
+            this.tripTemplate.pointsEarned = points;
+            return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        });
+    }
+
     getPointsFromTrips() {
         return this.getUserKey().then((result) => {
             let points = [];
