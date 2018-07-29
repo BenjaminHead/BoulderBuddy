@@ -1,34 +1,52 @@
-<StackLayout>
-    <StackLayout>
-        <Label text="Travel Time"></Label>
-        <Label text="Trip"></Label>
-        <Label text="Week"></Label>
-        <Label text="Month"></Label>
-        <Label text="Distance Traveled"></Label>
-        <Label text="Trip"></Label>
-        <Label text="Week"></Label>
-        <Label text="Month"></Label>
-        <Label text="Average Speed"></Label>
-        <Label text="Trip"></Label>
-        <Label text="Week"></Label>
-        <Label text="Month"></Label>
-        <Label text="Points Earned"></Label>
-        <Label text="Trip"></Label>
-        <Label text="Week"></Label>
-        <Label text="Month"></Label>
-    </StackLayout>
-    <StackLayout>
-        <Label [text]="trip.travelTime"></Label>
-        <Label [text]="trip.distanceTraveled"></Label>
-        <Label [text]="trip.averageSpeed"></Label>
-        <Label [text]="trip.week" [text]="trip.travelTime"></Label>
-        <Label [text]="trip.week" [text]="trip.distanceTraveled"></Label>
-        <Label [text]="trip.week" [text]="trip.averageSpeed"></Label>
-        <Label [text]="trip.month" [text]="trip.travelTime"></Label>
-        <Label [text]="trip.month" [text]="trip.distanceTraveled"></Label>
-        <Label [text]="trip.month" [text]="trip.averageSpeed"></Label>
-    </StackLayout>
+<StackLayout height="100%">
+<StackLayout height="75%">
+    <ScrollView orientation="vertical">
+    <ListView [items]="trips" class="list-group">
+        <ng-template let-trip="item" let-i="index" let-odd="odd" let-even="even">
+            <GridLayout columns="auto" rows="auto" justifyContent="space-around" class="list-group-item">
+                <Label width="100%" text="Travel Time"></Label>
+                <Label width="100%" [text]="trip.travelTime"></Label>
+                <Label width="100%" text="Distance Traveled"></Label>
+                <Label width="100%" [text]="trip.distanceTraveled"></Label>
+                <Label width="100%" text="Points Earned"></Label>
+                <Label width="100%" [text]="trip.pointsEarned"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+    </ScrollView>
+    <!--<StackLayout>-->
+        <!--<Label text="Travel Time"></Label>-->
+        <!--<Label text="Trip"></Label>-->
+        <!--<Label text="Week"></Label>-->
+        <!--<Label text="Month"></Label>-->
+        <!--<Label text="Distance Traveled"></Label>-->
+        <!--<Label text="Trip"></Label>-->
+        <!--<Label text="Week"></Label>-->
+        <!--<Label text="Month"></Label>-->
+        <!--<Label text="Average Speed"></Label>-->
+        <!--<Label text="Trip"></Label>-->
+        <!--<Label text="Week"></Label>-->
+        <!--<Label text="Month"></Label>-->
+        <!--<Label text="Points Earned"></Label>-->
+        <!--<Label text="Trip"></Label>-->
+        <!--<Label text="Week"></Label>-->
+        <!--<Label text="Month"></Label>-->
+    <!--</StackLayout>-->
+    <!--<StackLayout>-->
+        <!--<Label [text]="trip.travelTime"></Label>-->
+        <!--<Label [text]="trip.distanceTraveled"></Label>-->
+        <!--<Label [text]="trip.averageSpeed"></Label>-->
+        <!--<Label [text]="trip.week" [text]="trip.travelTime"></Label>-->
+        <!--<Label [text]="trip.week" [text]="trip.distanceTraveled"></Label>-->
+        <!--<Label [text]="trip.week" [text]="trip.averageSpeed"></Label>-->
+        <!--<Label [text]="trip.month" [text]="trip.travelTime"></Label>-->
+        <!--<Label [text]="trip.month" [text]="trip.distanceTraveled"></Label>-->
+        <!--<Label [text]="trip.month" [text]="trip.averageSpeed"></Label>-->
+    <!--</StackLayout>-->
+    <StackLayout height="25%" justifyContent="space-around">
     <Button class="submit-button" text="Share" (tap)="share()"></Button>
     <Button class="submit-button" text="Your Rank" (tap)="yourRank()"></Button>
     <Button class="submit-button" text="Redeem" (tap)="redeem()"></Button>
+    </StackLayout>
+</StackLayout>
 </StackLayout>

@@ -1,6 +1,8 @@
 import { Injectable, Input, OnInit } from "@angular/core";
 import * as Firebase from 'nativescript-plugin-firebase';
 import { Trip } from "../trip/trip";
+import { TripService } from "../trip/trip.service";
+import * as moment from 'moment';
 // import { Goal } from '../models/goal.model';
 // import { Daily } from '../models/daily.model';
 
@@ -10,12 +12,17 @@ export class FirebaseService implements OnInit {
 
     user;
     tripTemplate = {
+        destination: '',
+        origin: '',
         travelTime: '',
         distanceTraveled: '',
         averageSpeed: '',
         pointsEarned: '',
-        date: new Date
+        date: '',
+        uid: ''
     };
+
+    // constructor(private tripService: TripService){}
 
     ngOnInit(): void {}
     login(email, password): any {
@@ -29,7 +36,7 @@ export class FirebaseService implements OnInit {
         })
             .then((result) => {
                 console.log("user logged in", email, password);
-                console.log("Alright, what's here?", result);
+                console.log("Result of login", result, Firebase);
                 return result;
             })
             .catch((error) => {
@@ -74,46 +81,61 @@ export class FirebaseService implements OnInit {
     }
 
     sendTripInfo(trip) {
-        console.log("Called at all?");
-        this.getUser().then((result) => {
-            console.log("What the hell...", result);
-            if (result.key) {
-                this.user.uid = result.key;
-            } else {
-                this.user = result;
+        this.getUserKey().then((result) => {
+            this.user.uid = result;
+            console.log("Here's the trip", trip);
+            if (trip.destination_addresses) {
+                this.tripTemplate.destination = trip.destination_addresses;
             }
-            console.log("Here is the trip", JSON.stringify(trip.rows[0].elements[0].duration.text));
-            console.log("What the fuck is undefined about this!? I gave it a fucking value!?", this.tripTemplate);
-            this.tripTemplate.travelTime = JSON.stringify(trip.rows[0].elements[0].duration.text);
-            this.tripTemplate.distanceTraveled = JSON.stringify(trip.rows[0].elements[0].distance.text);
-            this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
-            this.tripTemplate.date = new Date;
+            if (trip.origin_addresses) {
+                this.tripTemplate.origin = trip.origin_addresses;
+            }
+            if (trip.rows[0].elements[0].status != "NOT_FOUND") {
+                this.tripTemplate.travelTime = trip.rows[0].elements[0].duration.text;
+            }
+            if (trip.rows[0].elements[0].status != "NOT_FOUND") {
+                this.tripTemplate.distanceTraveled = trip.rows[0].elements[0].distance.text;
+            }
+            if (trip.rows[0].elements[0].status != "NOT_FOUND") {
+                this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
+            }
+            let newDate = moment().format("YYYY-MM-DD");
+            this.tripTemplate.date = newDate.toString();
+            this.tripTemplate.uid = this.user.uid;
+            console.log("Moment date", this.tripTemplate.date);
+            return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         });
-        return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
-            .then((data) => {
-                return data;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
     }
 
     getTripInfo() {
-        this.getUser().then((result) => {
-            if (result.key) {
-                this.user.uid = result.key;
-            } else {
-                this.user = result;
-            }
+        return this.getUserKey().then((result) => {
+                this.user.uid = result;
+            return Firebase.getValue('/trips/' + this.user.uid)
+                .then((data) => {
+                console.log("This is the data returned", data.value);
+                    return data.value;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         });
-        return Firebase.getValue('/trips/' + this.user.uid)
-            .then((data) => {
-                console.log(JSON.stringify(data));
-                return JSON.stringify(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+
+
+        // return Firebase.getValue('/trips/' + this.user.uid)
+        //     .then((data) => {
+        //     console.log("Got...");
+        //         console.log(JSON.stringify(data));
+        //         return JSON.stringify(data);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     })
     }
 
     resetPassword(email) {
@@ -128,14 +150,34 @@ export class FirebaseService implements OnInit {
     }
 
     getUser() {
-        console.log("Where is this stopping?");
         return Firebase.getCurrentUser()
             .then((user) => {
                 return Firebase.getValue('/users/' + user.uid)
                     .then((data) => {
-                        console.log("User returned", data);
-                        this.user = data.value;
                         return data.value;
+                    })
+                    .catch((error) => {
+                        console.log("Nope");
+                        console.log(error);
+                    })
+            })
+            .catch((error) => {
+                console.log("Trouble in paradise: " + error)
+            });
+    }
+
+    getUserKey() {
+        return Firebase.getCurrentUser()
+            .then((user) => {
+                return Firebase.getValue('/users/' + user.uid)
+                    .then((data) => {
+                        if(data.value === undefined) {
+                            this.user.uid = data.key;
+                            return data.key;
+                        } else {
+                            this.user = data.value;
+                            return data.key;
+                        }
                     })
                     .catch((error) => {
                         console.log("Nope");

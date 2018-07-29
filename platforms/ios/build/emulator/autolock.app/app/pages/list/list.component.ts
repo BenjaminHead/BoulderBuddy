@@ -25,18 +25,12 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.user = params['user'];
-            console.log("User is...", this.user);
-        });
-        if(!this.user){
-            this.user = this.firebaseService.getUser();
-        }
+        //
     }
 
     startTracking() {
         BackgroundGeolocation.configure({
-            url: 'https://amora-2cc4c.firebaseio.com/trip',
+            url: 'https://amora-2cc4c.firebaseio.com/trips',
             httpRootProperty: '.',
             desiredAccuracy: 0,
             distanceFilter: 5,
@@ -44,10 +38,7 @@ export class ListComponent implements OnInit {
             heartbeatInterval: 60
         });
         BackgroundGeolocation.start();
-        this.router.navigate(["/blank"], {queryParams: {
-            'user': this.user
-        }
-        });
+        this.router.navigate(["/blank"]);
     }
 
     logTrip() {

@@ -2,6 +2,7 @@ import { Injectable, Input, OnInit } from "@angular/core";
 import * as Firebase from 'nativescript-plugin-firebase';
 import { Trip } from "../trip/trip";
 import { TripService } from "../trip/trip.service";
+import * as moment from 'moment';
 // import { Goal } from '../models/goal.model';
 // import { Daily } from '../models/daily.model';
 
@@ -17,7 +18,8 @@ export class FirebaseService implements OnInit {
         distanceTraveled: '',
         averageSpeed: '',
         pointsEarned: '',
-        date: ''
+        date: '',
+        uid: ''
     };
 
     // constructor(private tripService: TripService){}
@@ -97,8 +99,10 @@ export class FirebaseService implements OnInit {
             if (trip.rows[0].elements[0].status != "NOT_FOUND") {
                 this.tripTemplate.pointsEarned = JSON.stringify(trip.rows[0].elements[0].duration.value);
             }
-            let newDate = new Date;
+            let newDate = moment().format("YYYY-MM-DD");
             this.tripTemplate.date = newDate.toString();
+            this.tripTemplate.uid = this.user.uid;
+            console.log("Moment date", this.tripTemplate.date);
             return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
                 .then((data) => {
                     return data;
@@ -109,10 +113,14 @@ export class FirebaseService implements OnInit {
         });
     }
 
-    getTripInfo() {
+    redeemPoints(points) {
         this.getUserKey().then((result) => {
-                this.user.uid = result;
-            return Firebase.getValue('/trips/' + this.user.uid)
+            this.user.uid = result;
+            let newDate = moment().format("YYYY-MM-DD");
+            this.tripTemplate.date = newDate.toString();
+            this.tripTemplate.uid = this.user.uid;
+            this.tripTemplate.pointsEarned = points;
+            return Firebase.push('/trips/' + this.user.uid, this.tripTemplate)
                 .then((data) => {
                     return data;
                 })
@@ -120,6 +128,56 @@ export class FirebaseService implements OnInit {
                     console.log(error);
                 })
         });
+    }
+
+    getPointsFromTrips() {
+        return this.getUserKey().then((result) => {
+            let points = [];
+            this.user.uid = result;
+            return Firebase.getValue('/trips/' + this.user.uid)
+                .then((data) => {
+                    let trips = data.value;
+                    for (let key in trips) {
+                        // skip loop if the property is from prototype
+                        if (!trips.hasOwnProperty(key)) continue;
+                        let obj = trips[key];
+                        points.push(obj.pointsEarned);
+                    }
+                    console.log("This is the point value returned", points);
+                    return points;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        });
+    }
+
+    sendPointsFromTrips(points) {
+        return this.getUserKey().then((result) => {
+            this.user.uid = result;
+            return Firebase.setValue('/points/' + this.user.uid, points)
+                .then((data) => {
+                return data;
+            })
+                .catch((error) => {
+                    console.log(error);
+                })
+        });
+    }
+
+    getTripInfo() {
+        return this.getUserKey().then((result) => {
+                this.user.uid = result;
+            return Firebase.getValue('/trips/' + this.user.uid)
+                .then((data) => {
+                console.log("This is the data returned", data.value);
+                    return data.value;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        });
+
 
         // return Firebase.getValue('/trips/' + this.user.uid)
         //     .then((data) => {

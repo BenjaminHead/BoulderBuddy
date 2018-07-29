@@ -52,15 +52,27 @@ export class TripService {
 
     setFirebaseTripUrl() {
         this.firebaseService.getUserKey().then((uid)=> {
+            console.log("UID is...", uid);
             this.firebaseUrl = 'https://amora-2cc4c.firebaseio.com/trips' + '/' + uid;
             console.log("URL is...", this.firebaseUrl);
             return this.firebaseUrl;
         });
     }
 
-    // getTripByUser(){
-    //     this.firebaseService.getTripInfo();
-    // }
+    getPointsFromTripDB (){
+        let points = 0;
+        return this.firebaseService.getPointsFromTrips().then((result: any)=>{
+                console.log("Length is...", result.length);
+            let sum = 0;
+                for (let i = 0; i < result.length; i++) {
+                    sum += Number(result[i]);
+                    console.log("sum is...", sum);
+                }
+            console.log("sum after loop is...", sum);
+            this.firebaseService.sendPointsFromTrips(sum);
+            return sum;
+        })
+    }
 
     getUserInfoByEmail(){
         this.firebaseService.getAllUsers().then((result)=> function(){
