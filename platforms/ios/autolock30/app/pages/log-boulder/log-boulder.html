@@ -1,0 +1,24 @@
+<StackLayout height="100%" id="view">
+    <TextField style="color: black" hint="Area" [(ngModel)]="area"></TextField>
+    <TextField style="color: black" hint="Boulder name" [(ngModel)]="boulder.name"></TextField>
+    <TextField style="color: black" hint="Location" [(ngModel)]="location"></TextField>
+    <Button class="submit-button" text="Get Location" (tap)="getLocation()"></Button>
+    <TextField hint="Grade" [(ngModel)]="problem.grade"></TextField>
+    <TextField hint="Name" [(ngModel)]="problem.name"></TextField>
+    <Button class="submit-button" text="Add Problem" (tap)="addProblem()"></Button>
+    <Button class="submit-button" text="Submit Boulder" class="submit-button" (tap)="logBoulder()"></Button>
+    <StackLauout *ngIf="recentlyAdded">
+        <Label text="Recently Added"></Label>
+        <Label [text]="recentlyAdded"></Label>
+    </StackLauout>
+    <!--<GridLayout rows="*">-->
+        <!--<ListView [items]="boulder" class="list-group">-->
+            <!--<ng-template let-trip="item" let-i="index" let-odd="odd" let-even="even">-->
+                <!--<StackLayout>-->
+                    <!--<Label width="100%" text="Problems"></Label>-->
+                    <!--<Label width="100%" [text]="boulder.problems"></Label>-->
+                <!--</StackLayout>-->
+            <!--</ng-template>-->
+        <!--</ListView>-->
+    <!--</GridLayout>-->
+</StackLayout>

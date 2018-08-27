@@ -1,0 +1,18 @@
+<StackLayout height="100%" id="view">
+    <TextField style="color: black" hint="location" [(ngModel)]="location"></TextField>
+    <Button class="submit-button" text="Get Location" (tap)="getLocation()"></Button>
+    <TextField hint="Grade" [(ngModel)]="problem.grade"></TextField>
+    <TextField hint="Name" [(ngModel)]="problem.name"></TextField>
+    <Button class="submit-button" text="Add Problem" (tap)="addProblem()"></Button>
+    <Button class="submit-button" text="Submit Boulder" class="submit-button" (tap)="logBoulder()"></Button>
+    <GridLayout rows="*">
+        <ListView [items]="boulder" class="list-group">
+            <ng-template let-trip="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout>
+                    <Label width="100%" text="Problems"></Label>
+                    <Label width="100%" [text]="boulder.problems"></Label>
+                </StackLayout>
+            </ng-template>
+        </ListView>
+    </GridLayout>
+</StackLayout>

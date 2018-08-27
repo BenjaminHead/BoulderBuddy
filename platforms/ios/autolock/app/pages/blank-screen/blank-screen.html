@@ -1,7 +1,0 @@
-<StackLayout height="100%" id="view" (tap)="onTouch()">
-    <Button *ngIf="screenTouched" class="submit-button" text="Arrived at destination" class="submit-button" (tap)="arrived()"></Button>
-    <Button *ngIf="screenTouched" class="submit-button" text="Navigate" class="submit-button" (tap)="navigate()"></Button>
-    <TextField *ngIf="screenTouched" style="color: black" hint="from:" [(ngModel)]="fromDestination"></TextField>
-    <TextField *ngIf="screenTouched" style="color: black" hint="to:" [(ngModel)]="toDestination"></TextField>
-    <Button *ngIf="screenTouched" class="submit-button" text="Get Directions" class="submit-button" (tap)="getDirections()"></Button>
-</StackLayout>
