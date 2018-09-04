@@ -1,9 +1,14 @@
 "use strict";
+/**
+ * This is the firebase.js (web) compatible API.
+ * Use 'const firebase = require("nativescript-plugin-firebase/app")'
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 var firebase = require("../firebase");
 var auth_1 = require("./auth");
 var database_1 = require("./database");
 var firestore_1 = require("./firestore");
+var storage_1 = require("./storage");
 function initializeApp(options, name) {
     return firebase.init(options);
 }
@@ -41,3 +46,14 @@ function firestore(app) {
     return firestoreCache;
 }
 exports.firestore = firestore;
+var storageCache;
+function storage(app) {
+    if (app) {
+        console.log("The 'app' param is ignored at the moment.");
+    }
+    if (!storageCache) {
+        storageCache = new storage_1.storage.Storage();
+    }
+    return storageCache;
+}
+exports.storage = storage;

@@ -1,17 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var dialogs_1 = require("tns-core-modules/ui/dialogs");
-var applicationSettings = require("tns-core-modules/application-settings");
+var application_settings_1 = require("tns-core-modules/application-settings");
+var analytics = require("./analytics/analytics");
+var storage = require("./storage/storage");
+var mlkit = require("./mlkit");
+// note that this implementation is overridden for iOS
+var FieldValue = /** @class */ (function () {
+    function FieldValue() {
+        this.serverTimestamp = function () { return "SERVER_TIMESTAMP"; };
+    }
+    return FieldValue;
+}());
+exports.FieldValue = FieldValue;
+var GeoPoint = /** @class */ (function () {
+    function GeoPoint(latitude, longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    return GeoPoint;
+}());
+exports.GeoPoint = GeoPoint;
 exports.firebase = {
     initialized: false,
     instance: null,
-    storage: null,
     firebaseRemoteConfig: null,
     authStateListeners: [],
     _receivedNotificationCallback: null,
     _dynamicLinkCallback: null,
-    analytics: {},
-    firestore: {},
+    analytics: analytics,
+    storage: storage,
+    mlkit: mlkit,
+    firestore: {
+        FieldValue: {
+            serverTimestamp: function () { return "SERVER_TIMESTAMP"; }
+        },
+        GeoPoint: function (latitude, longitude) { return new GeoPoint(latitude, longitude); }
+    },
     invites: {
         MATCH_TYPE: {
             WEAK: 0,
@@ -103,10 +128,10 @@ exports.firebase = {
         });
     },
     rememberEmailForEmailLinkLogin: function (email) {
-        applicationSettings.setString("FirebasePlugin.EmailLinkLogin", email);
+        application_settings_1.setString("FirebasePlugin.EmailLinkLogin", email);
     },
     getRememberedEmailForEmailLinkLogin: function () {
-        return applicationSettings.getString("FirebasePlugin.EmailLinkLogin");
+        return application_settings_1.getString("FirebasePlugin.EmailLinkLogin");
     },
     strongTypeify: function (value) {
         if (value === "true") {
@@ -131,6 +156,7 @@ exports.firebase = {
             onUserResponse(promptResult.text);
         });
     },
+    // for backward compatibility, because plugin version 4.0.0 moved the params to per-logintype objects
     moveLoginOptionsToObjects: function (loginOptions) {
         if (loginOptions.email) {
             console.log("Please update your code: the 'email' property is deprecated and now expected at 'passwordOptions.email'");
@@ -179,17 +205,17 @@ exports.firebase = {
         }
     },
     merge: function (obj1, obj2) {
-        var result = {};
-        for (var i in obj1) {
+        var result = {}; // return result
+        for (var i in obj1) { // for every property in obj1
             if ((i in obj2) && (typeof obj1[i] === "object") && (i !== null)) {
-                result[i] = exports.firebase.merge(obj1[i], obj2[i]);
+                result[i] = exports.firebase.merge(obj1[i], obj2[i]); // if it's an object, merge
             }
             else {
-                result[i] = obj1[i];
+                result[i] = obj1[i]; // add it to result
             }
         }
-        for (var i in obj2) {
-            if (i in result) {
+        for (var i in obj2) { // add the remaining properties from object 2
+            if (i in result) { // conflict
                 continue;
             }
             result[i] = obj2[i];
@@ -197,7 +223,7 @@ exports.firebase = {
         return result;
     }
 };
-var DocumentSnapshot = (function () {
+var DocumentSnapshot = /** @class */ (function () {
     function DocumentSnapshot(id, exists, documentData) {
         this.id = id;
         this.exists = exists;
@@ -206,7 +232,11 @@ var DocumentSnapshot = (function () {
     return DocumentSnapshot;
 }());
 exports.DocumentSnapshot = DocumentSnapshot;
-var QuerySnapshot = (function () {
+function isDocumentReference(object) {
+    return object && object.discriminator === "docRef";
+}
+exports.isDocumentReference = isDocumentReference;
+var QuerySnapshot = /** @class */ (function () {
     function QuerySnapshot() {
     }
     QuerySnapshot.prototype.forEach = function (callback, thisArg) {

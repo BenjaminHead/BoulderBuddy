@@ -33,7 +33,7 @@ if(app.ios) {
 
 firebase.init({
     persist: true,
-    url: 'https://amora-2cc4c.firebaseio.com/'
+    url: 'https://boulderbuddy-62d91.firebaseio.com/'
 })
     .then(instance => {
         console.log('firebase.init done');

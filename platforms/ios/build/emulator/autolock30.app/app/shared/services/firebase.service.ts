@@ -81,7 +81,12 @@ export class FirebaseService implements OnInit {
     }
 
     sendBoulderInfo(boulder, area){
-        return Firebase.update('/boulders/' + area, boulder);
+        return Firebase.update('/boulders/' + area + '/' + boulder.name, boulder)
+            .then((result)=>{
+                return result;
+            }).catch((error)=>{
+                console.log(error);
+            })
     }
 
     sendTripInfo(trip) {

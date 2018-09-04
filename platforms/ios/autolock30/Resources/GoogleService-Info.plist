@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>330634973318-mnrodvb44gf3j5gdpkgp39addvm2up8f.apps.googleusercontent.com</string>
+	<string>753671754103-iap8run04htabc6sc7gdphtvaed6u73c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.330634973318-mnrodvb44gf3j5gdpkgp39addvm2up8f</string>
+	<string>com.googleusercontent.apps.753671754103-iap8run04htabc6sc7gdphtvaed6u73c</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDiXdGRXgjXy68dFr4qflH2soE9G2CwfDU</string>
+	<string>AIzaSyBZpt02cjEvipnB5glDekajhPCsAWNSXJc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>330634973318</string>
+	<string>753671754103</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.amora</string>
+	<string>com.boulderbuddy</string>
 	<key>PROJECT_ID</key>
-	<string>amora-2cc4c</string>
+	<string>boulderbuddy-62d91</string>
 	<key>STORAGE_BUCKET</key>
-	<string>amora-2cc4c.appspot.com</string>
+	<string>boulderbuddy-62d91.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:330634973318:ios:76056fcb23073682</string>
+	<string>1:753671754103:ios:520f3054119250ab</string>
 	<key>DATABASE_URL</key>
-	<string>https://amora-2cc4c.firebaseio.com</string>
+	<string>https://boulderbuddy-62d91.firebaseio.com</string>
 </dict>
 </plist>

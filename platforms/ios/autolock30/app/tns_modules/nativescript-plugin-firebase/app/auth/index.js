@@ -4,7 +4,7 @@ var firebase = require("../../firebase");
 var firebase_1 = require("../../firebase");
 var auth;
 (function (auth) {
-    var Auth = (function () {
+    var Auth = /** @class */ (function () {
         function Auth() {
         }
         Auth.prototype.onAuthStateChanged = function (handler) {
@@ -23,6 +23,7 @@ var auth;
                 })
                     .catch(function (err) {
                     reject({
+                        // code: "",
                         message: err
                     });
                 });
@@ -43,6 +44,7 @@ var auth;
                     resolve();
                 }, (function (err) {
                     reject({
+                        // code: "",
                         message: err
                     });
                 }));
@@ -63,15 +65,22 @@ var auth;
                     resolve();
                 }, (function (err) {
                     reject({
+                        // code: "",
                         message: err
                     });
                 }));
             });
         };
         Auth.prototype.createUserWithEmailAndPassword = function (email, password) {
-            return firebase.createUser({
-                email: email,
-                password: password
+            var _this = this;
+            return new Promise(function (resolve, reject) {
+                firebase.createUser({
+                    email: email,
+                    password: password
+                }).then(function (user) {
+                    _this.currentUser = user;
+                    resolve(user);
+                }).catch(function (err) { return reject(err); });
             });
         };
         Auth.prototype.signInAnonymously = function () {
@@ -85,6 +94,7 @@ var auth;
                     resolve();
                 }, (function (err) {
                     reject({
+                        // code: "",
                         message: err
                     });
                 }));

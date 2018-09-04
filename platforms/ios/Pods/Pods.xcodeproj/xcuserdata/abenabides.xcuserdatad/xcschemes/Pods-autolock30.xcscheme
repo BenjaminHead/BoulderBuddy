@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A521615BD118CC52C8C06EF8E8EF0FDD"
+               BlueprintIdentifier = "AB2AD66DF4ACE06C1654976D62ECE270"
                BlueprintName = "Pods-autolock30"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "Pods-autolock30.framework">

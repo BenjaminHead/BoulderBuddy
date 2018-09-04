@@ -1,6 +1,5 @@
 # NativeScript Firebase plugin
 
-[![Build Status][build-status]][build-url]
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
 [![Twitter Follow][twitter-image]][twitter-url]
@@ -22,10 +21,11 @@
 * [Remote Config](docs/REMOTECONFIG.md)
 * [Cloud Messaging](docs/MESSAGING.md)
 * [Storage](docs/STORAGE.md)
-* [Crash Reporting](docs/CRASHREPORTING.md)
+* [Crash Reporting / Crashlytics](docs/CRASHREPORTING.md)
 * [Analytics](docs/ANALYTICS.md)
 * [Invites and Dynamic Links](docs/INVITES_DYNAMICLINKS.md)
 * [AdMob](docs/ADMOB.md)
+* [ML Kit](docs/ML_KIT.md)
 
 ## Prerequisites
 Head on over to [https://console.firebase.google.com/](https://console.firebase.google.com/) and sign up for a free account.
@@ -50,6 +50,10 @@ tns plugin add nativescript-plugin-firebase
 
 This will launch an install script which will guide you through installing additional components.
 Check the doc links above to see what's what. You can always change your choices later.
+
+> Using [NativeScript SideKick](https://www.nativescript.org/nativescript-sidekick)? Then the aforementioned install script
+will not (be able to) run. In that case, running the app for Android will result in [this issue](https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues/829#issuecomment-409870671).
+To fix that, see [this comment](https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues/829#issuecomment-409855611).
 
 ### Config
 If you choose to save your config during the installation, the supported options may be saved in the `firebase.nativescript.json` at the root of your app.
@@ -117,6 +121,31 @@ firebase.init({
     console.log(`firebase.init error: ${error}`);
   }
 );
+```
+
+#### Angular
+Because of the specifics of the angular bootstrap it is best to initalize firebase once the angular application is running. For example your main compoment's `ngOnInit` method:
+```js
+const firebase = require("nativescript-plugin-firebase");
+
+@Component({
+    // ...
+})
+export class AppComponent implements OnInit {
+  ngOnInit() {
+    firebase.init({
+      // Optionally pass in properties for database, authentication and cloud messaging,
+      // see their respective docs.
+    }).then(
+      instance => {
+        console.log("firebase.init done");
+      },
+      error => {
+        console.log(`firebase.init error: ${error}`);
+      }
+    );
+  }
+}
 ```
 
 ## Known issues on iOS
@@ -221,21 +250,21 @@ Update your local Android SDKs:
 Just run `$ANDROID_HOME/tools/bin/sdkmanager --update` from a command prompt
 or launch the SDK manager from Android Studio, expand `Extras` and install any pending updates.
 
-#### Found play-services:10.A.B, but version 11.X.Y is needed..
+#### Found play-services:A.C.D, but version B.X.Y is needed..
 Update your Android bits like the issue above and reinstall the android platform in your project.
 
 #### `include.gradle`: Failed to apply plugin .. For input string: "+"
 You probably have another plugin depending on Google Play Services (Google Maps, perhaps).
 We need to pin to a specific play services version to play nice with others, so open `app/App_Resources/Android/app.gradle` and add:
 
-```
+```js
 android {  
   // other stuff here
 
   project.ext {
-    googlePlayServicesVersion = "11.8.0"
+    googlePlayServicesVersion = "15.0.0"
   }
 }
 ```
 
-Where `"11.8.0"` is best set to the same value as the `firebaseVersion` value in [this file](https://github.com/EddyVerbruggen/nativescript-plugin-firebase/blob/master/src/platforms/android/include.gradle).
+Where `"15.0.0"` is best set to the same value as the `googlePlayServicesVersion` value in [this file](https://github.com/EddyVerbruggen/nativescript-plugin-firebase/blob/48a99ccd2a0f590c37080b1a252173ea9b996e9f/publish/scripts/installer.js#L540).

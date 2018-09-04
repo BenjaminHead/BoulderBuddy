@@ -1,75 +1,56 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var firebase_common_1 = require("./firebase-common");
-var application = require("tns-core-modules/application");
-var applicationSettings = require("tns-core-modules/application-settings");
-var utils = require("tns-core-modules/utils/utils");
-var types = require("tns-core-modules/utils/types");
-var platform = require("tns-core-modules/platform");
-var enums_1 = require("tns-core-modules/ui/enums");
-firebase_common_1.firebase._messagingConnected = null;
-firebase_common_1.firebase._pendingNotifications = [];
-firebase_common_1.firebase._receivedPushTokenCallback = null;
+var firebaseMessaging = require("./messaging/messaging");
+var application = require("tns-core-modules/application/application");
+var utils_1 = require("tns-core-modules/utils/utils");
+var platform_1 = require("tns-core-modules/platform/platform");
+var enums_1 = require("tns-core-modules/ui/enums/enums");
+var utils_2 = require("./utils");
 firebase_common_1.firebase._gIDAuthentication = null;
 firebase_common_1.firebase._cachedInvitation = null;
 firebase_common_1.firebase._cachedDynamicLink = null;
 firebase_common_1.firebase._configured = false;
-var invokeOnRunLoop = (function () {
-    var runloop = CFRunLoopGetMain();
-    return function (func) {
-        CFRunLoopPerformBlock(runloop, kCFRunLoopDefaultMode, func);
-        CFRunLoopWakeUp(runloop);
-    };
-})();
-firebase_common_1.firebase._addObserver = function (eventName, callback) {
-    var queue = utils.ios.getter(NSOperationQueue, NSOperationQueue.mainQueue);
-    return utils.ios.getter(NSNotificationCenter, NSNotificationCenter.defaultCenter).addObserverForNameObjectQueueUsingBlock(eventName, null, queue, callback);
-};
-var handleRemoteNotification = function (app, userInfo) {
-    var userInfoJSON = firebase_common_1.firebase.toJsObject(userInfo);
-    var aps = userInfo.objectForKey("aps");
-    if (aps !== null) {
-        var alrt = aps.objectForKey("alert");
-        if (alrt !== null && alrt.objectForKey) {
-            userInfoJSON.title = alrt.objectForKey("title");
-            userInfoJSON.body = alrt.objectForKey("body");
-        }
+var DocumentSnapshot = /** @class */ (function (_super) {
+    __extends(DocumentSnapshot, _super);
+    function DocumentSnapshot(snapshot) {
+        var _this = _super.call(this, snapshot.documentID, snapshot.exists, utils_2.firebaseUtils.toJsObject(snapshot.data())) || this;
+        _this.ios = snapshot;
+        return _this;
     }
-    firebase_common_1.firebase._pendingNotifications.push(userInfoJSON);
-    userInfoJSON.foreground = app.applicationState === 0;
-    if (firebase_common_1.firebase._receivedNotificationCallback !== null) {
-        firebase_common_1.firebase._processPendingNotifications();
-    }
-};
-function addBackgroundRemoteNotificationHandler(appDelegate) {
-    if (typeof (FIRMessaging) !== "undefined") {
-        appDelegate.prototype.applicationDidReceiveRemoteNotificationFetchCompletionHandler = function (app, notification, completionHandler) {
-            if (FIRAuth.auth().canHandleNotification(notification)) {
-                completionHandler(1);
-                return;
-            }
-            completionHandler(0);
-            handleRemoteNotification(app, notification);
-        };
-    }
-}
+    return DocumentSnapshot;
+}(firebase_common_1.DocumentSnapshot));
+// Note that FIRApp.configure must be called only once, but not here (see https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues/564)
+firebase_common_1.firebase.authStateListener = null;
+firebase_common_1.firebase.addOnMessageReceivedCallback = firebaseMessaging.addOnMessageReceivedCallback;
+firebase_common_1.firebase.addOnPushTokenReceivedCallback = firebaseMessaging.addOnPushTokenReceivedCallback;
+firebase_common_1.firebase.unregisterForPushNotifications = firebaseMessaging.unregisterForPushNotifications;
+firebase_common_1.firebase.getCurrentPushToken = firebaseMessaging.getCurrentPushToken;
+firebase_common_1.firebase.registerForInteractivePush = firebaseMessaging.registerForInteractivePush;
+firebase_common_1.firebase.subscribeToTopic = firebaseMessaging.subscribeToTopic;
+firebase_common_1.firebase.unsubscribeFromTopic = firebaseMessaging.unsubscribeFromTopic;
+firebase_common_1.firebase.areNotificationsEnabled = firebaseMessaging.areNotificationsEnabled;
 firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
+    // we need the launchOptions for this one so it's a bit hard to use the UIApplicationDidFinishLaunchingNotification pattern we're using for other things
     appDelegate.prototype.applicationDidFinishLaunchingWithOptions = function (application, launchOptions) {
         if (!firebase_common_1.firebase._configured) {
             firebase_common_1.firebase._configured = true;
             FIRApp.configure();
         }
+        // If the app was terminated and the iOS is launching it in result of push notification tapped by the user, this will hold the notification data.
         if (launchOptions && typeof (FIRMessaging) !== "undefined") {
             var remoteNotification = launchOptions.objectForKey(UIApplicationLaunchOptionsRemoteNotificationKey);
             if (remoteNotification) {
-                handleRemoteNotification(application, remoteNotification);
+                firebaseMessaging.handleRemoteNotification(application, remoteNotification);
             }
         }
+        // Firebase Facebook authentication
         if (typeof (FBSDKApplicationDelegate) !== "undefined") {
             FBSDKApplicationDelegate.sharedInstance().applicationDidFinishLaunchingWithOptions(application, launchOptions);
         }
         return true;
     };
+    // there's no notification event to hook into for this one, so using the appDelegate
     if (typeof (FBSDKApplicationDelegate) !== "undefined" || typeof (GIDSignIn) !== "undefined" || typeof (FIRInvites) !== "undefined" || typeof (FIRDynamicLink) !== "undefined") {
         appDelegate.prototype.applicationOpenURLSourceApplicationAnnotation = function (application, url, sourceApplication, annotation) {
             var result = false;
@@ -97,7 +78,7 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
                     console.log(">>> dynamicLink.url.absoluteString: " + dynamicLink.url.absoluteString);
                     firebase_common_1.firebase._cachedDynamicLink = {
                         url: dynamicLink.url.absoluteString,
-                        matchConfidence: dynamicLink.matchConfidence,
+                        // matchConfidence: dynamicLink.matchConfidence,
                         minimumAppVersion: dynamicLink.minimumAppVersion
                     };
                     result = true;
@@ -124,14 +105,14 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
                         if (firebase_common_1.firebase._dynamicLinkCallback) {
                             firebase_common_1.firebase._dynamicLinkCallback({
                                 url: dynamicLink.url.absoluteString,
-                                matchConfidence: dynamicLink.matchConfidence,
+                                // matchConfidence: dynamicLink.matchConfidence,
                                 minimumAppVersion: dynamicLink.minimumAppVersion
                             });
                         }
                         else {
                             firebase_common_1.firebase._cachedDynamicLink = {
                                 url: dynamicLink.url.absoluteString,
-                                matchConfidence: dynamicLink.matchConfidence,
+                                // matchConfidence: dynamicLink.matchConfidence,
                                 minimumAppVersion: dynamicLink.minimumAppVersion
                             };
                         }
@@ -146,6 +127,7 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
         appDelegate.prototype.applicationContinueUserActivityRestorationHandler = function (application, userActivity, restorationHandler) {
             var result = false;
             if (userActivity.webpageURL) {
+                // check for an email-link-login flow
                 var fAuth_1 = FIRAuth.auth();
                 if (fAuth_1.isSignInWithEmailLink(userActivity.webpageURL.absoluteString)) {
                     var rememberedEmail_1 = firebase_common_1.firebase.getRememberedEmailForEmailLinkLogin();
@@ -153,19 +135,21 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
                         if (fAuth_1.currentUser) {
                             var onCompletionLink = function (result, error) {
                                 if (error) {
+                                    // ignore, and complete the email link sign in flow
                                     fAuth_1.signInWithEmailLinkCompletion(rememberedEmail_1, userActivity.webpageURL.absoluteString, function (authData, error) {
                                         if (!error) {
                                             firebase_common_1.firebase.notifyAuthStateListeners({
                                                 loggedIn: true,
-                                                user: authData.user
+                                                user: toLoginResult(authData.user)
                                             });
                                         }
                                     });
                                 }
                                 else {
+                                    // linking successful, so the user can now log in with either their email address, or however he logged in previously
                                     firebase_common_1.firebase.notifyAuthStateListeners({
                                         loggedIn: true,
-                                        user: result.user
+                                        user: toLoginResult(result.user)
                                     });
                                 }
                             };
@@ -180,7 +164,7 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
                                 else {
                                     firebase_common_1.firebase.notifyAuthStateListeners({
                                         loggedIn: true,
-                                        user: authData.user
+                                        user: toLoginResult(authData.user)
                                     });
                                 }
                             });
@@ -194,14 +178,14 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
                             if (firebase_common_1.firebase._dynamicLinkCallback) {
                                 firebase_common_1.firebase._dynamicLinkCallback({
                                     url: dynamicLink.url.absoluteString,
-                                    matchConfidence: dynamicLink.matchConfidence,
+                                    // matchConfidence: dynamicLink.matchConfidence,
                                     minimumAppVersion: dynamicLink.minimumAppVersion
                                 });
                             }
                             else {
                                 firebase_common_1.firebase._cachedDynamicLink = {
                                     url: dynamicLink.url.absoluteString,
-                                    matchConfidence: dynamicLink.matchConfidence,
+                                    // matchConfidence: dynamicLink.matchConfidence,
                                     minimumAppVersion: dynamicLink.minimumAppVersion
                                 };
                             }
@@ -212,7 +196,9 @@ firebase_common_1.firebase.addAppDelegateMethods = function (appDelegate) {
             return result;
         };
     }
-    addBackgroundRemoteNotificationHandler(appDelegate);
+    if (typeof (FIRMessaging) !== "undefined") {
+        firebaseMessaging.addBackgroundRemoteNotificationHandler(appDelegate);
+    }
 };
 firebase_common_1.firebase.fetchProvidersForEmail = function (email) {
     return new Promise(function (resolve, reject) {
@@ -226,7 +212,7 @@ firebase_common_1.firebase.fetchProvidersForEmail = function (email) {
                     reject(error.localizedDescription);
                 }
                 else {
-                    resolve(firebase_common_1.firebase.toJsObject(providerNSArray));
+                    resolve(utils_2.firebaseUtils.toJsObject(providerNSArray));
                 }
             });
         }
@@ -248,45 +234,12 @@ firebase_common_1.firebase.fetchSignInMethodsForEmail = function (email) {
                     reject(error.localizedDescription);
                 }
                 else {
-                    resolve(firebase_common_1.firebase.toJsObject(methodsNSArray));
+                    resolve(utils_2.firebaseUtils.toJsObject(methodsNSArray));
                 }
             });
         }
         catch (ex) {
             console.log("Error in firebase.fetchSignInMethodsForEmail: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.getCurrentPushToken = function () {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            resolve(FIRMessaging.messaging().FCMToken);
-        }
-        catch (ex) {
-            console.log("Error in firebase.getCurrentPushToken: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.addOnMessageReceivedCallback = function (callback) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            firebase_common_1.firebase._receivedNotificationCallback = callback;
-            firebase_common_1.firebase._registerForRemoteNotifications();
-            firebase_common_1.firebase._processPendingNotifications();
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.addOnMessageReceivedCallback: " + ex);
             reject(ex);
         }
     });
@@ -299,6 +252,7 @@ firebase_common_1.firebase.addOnDynamicLinkReceivedCallback = function (callback
                 return;
             }
             firebase_common_1.firebase._dynamicLinkCallback = callback;
+            // if the app was launched from a dynamic link, process it now
             if (firebase_common_1.firebase._cachedDynamicLink !== null) {
                 callback(firebase_common_1.firebase._cachedDynamicLink);
                 firebase_common_1.firebase._cachedDynamicLink = null;
@@ -311,157 +265,13 @@ firebase_common_1.firebase.addOnDynamicLinkReceivedCallback = function (callback
         }
     });
 };
-firebase_common_1.firebase.addOnPushTokenReceivedCallback = function (callback) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            firebase_common_1.firebase._receivedPushTokenCallback = callback;
-            if (firebase_common_1.firebase._pushToken) {
-                callback(firebase_common_1.firebase._pushToken);
-            }
-            firebase_common_1.firebase._registerForRemoteNotifications();
-            firebase_common_1.firebase._processPendingNotifications();
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.addOnPushTokenReceivedCallback: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.unregisterForPushNotifications = function () {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            utils.ios.getter(UIApplication, UIApplication.sharedApplication).unregisterForRemoteNotifications();
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.unregisterForPushNotifications: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase._processPendingNotifications = function () {
-    var app = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
-    if (!app) {
-        application.on("launch", function () {
-            firebase_common_1.firebase._processPendingNotifications();
-        });
-        return;
-    }
-    if (firebase_common_1.firebase._receivedNotificationCallback !== null) {
-        for (var p in firebase_common_1.firebase._pendingNotifications) {
-            var userInfoJSON = firebase_common_1.firebase._pendingNotifications[p];
-            if (userInfoJSON.aps && userInfoJSON.aps.alert) {
-                userInfoJSON.title = userInfoJSON.aps.alert.title;
-                userInfoJSON.body = userInfoJSON.aps.alert.body;
-            }
-            userInfoJSON.data = userInfoJSON;
-            userInfoJSON.aps = undefined;
-            firebase_common_1.firebase._receivedNotificationCallback(userInfoJSON);
-        }
-        firebase_common_1.firebase._pendingNotifications = [];
-        app.applicationIconBadgeNumber = 0;
-    }
-};
-firebase_common_1.firebase._messagingConnectWithCompletion = function () {
-    return new Promise(function (resolve, reject) {
-        FIRMessaging.messaging().connectWithCompletion(function (error) {
-            if (error) {
-                return reject(error);
-            }
-            firebase_common_1.firebase._messagingConnected = true;
-            resolve();
-        });
-    });
-};
-firebase_common_1.firebase._onTokenRefreshNotification = function (token) {
-    firebase_common_1.firebase._pushToken = token;
-    if (firebase_common_1.firebase._receivedPushTokenCallback) {
-        firebase_common_1.firebase._receivedPushTokenCallback(token);
-    }
-    firebase_common_1.firebase._messagingConnectWithCompletion();
-};
-firebase_common_1.firebase._registerForRemoteNotificationsRanThisSession = false;
-firebase_common_1.firebase._registerForRemoteNotifications = function () {
-    var app = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
-    if (!app) {
-        application.on("launch", function () {
-            firebase_common_1.firebase._registerForRemoteNotifications();
-        });
-        return;
-    }
-    if (firebase_common_1.firebase._registerForRemoteNotificationsRanThisSession) {
-    }
-    firebase_common_1.firebase._registerForRemoteNotificationsRanThisSession = true;
-    if (parseInt(platform.device.osVersion) >= 10) {
-        var authorizationOptions = 4 | 2 | 1;
-        var curNotCenter = utils.ios.getter(UNUserNotificationCenter, UNUserNotificationCenter.currentNotificationCenter);
-        curNotCenter.requestAuthorizationWithOptionsCompletionHandler(authorizationOptions, function (granted, error) {
-            if (!error) {
-                if (app === null) {
-                    app = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
-                }
-                if (app !== null) {
-                    invokeOnRunLoop(function () {
-                        app.registerForRemoteNotifications();
-                    });
-                }
-            }
-            else {
-                console.log("Error requesting push notification auth: " + error);
-            }
-        });
-        firebase_common_1.firebase._userNotificationCenterDelegate = UNUserNotificationCenterDelegateImpl.new().initWithCallback(function (unnotification) {
-            var userInfo = unnotification.request.content.userInfo;
-            var userInfoJSON = firebase_common_1.firebase.toJsObject(userInfo);
-            userInfoJSON.foreground = true;
-            firebase_common_1.firebase._pendingNotifications.push(userInfoJSON);
-            if (firebase_common_1.firebase._receivedNotificationCallback !== null) {
-                firebase_common_1.firebase._processPendingNotifications();
-            }
-        });
-        curNotCenter.delegate = firebase_common_1.firebase._userNotificationCenterDelegate;
-        firebase_common_1.firebase._firebaseRemoteMessageDelegate = FIRMessagingDelegateImpl.new().initWithCallback(function (appDataDictionary) {
-            var userInfoJSON = firebase_common_1.firebase.toJsObject(appDataDictionary);
-            firebase_common_1.firebase._pendingNotifications.push(userInfoJSON);
-            var asJs = firebase_common_1.firebase.toJsObject(appDataDictionary.objectForKey("notification"));
-            if (asJs) {
-                userInfoJSON.title = asJs.title;
-                userInfoJSON.body = asJs.body;
-            }
-            var app = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
-            if (app.applicationState === 0) {
-                userInfoJSON.foreground = true;
-                if (firebase_common_1.firebase._receivedNotificationCallback !== null) {
-                    firebase_common_1.firebase._processPendingNotifications();
-                }
-            }
-            else {
-                userInfoJSON.foreground = false;
-            }
-        });
-        FIRMessaging.messaging().remoteMessageDelegate = firebase_common_1.firebase._firebaseRemoteMessageDelegate;
-    }
-    else {
-        var notificationTypes = 4 | 1 | 2 | 1;
-        var notificationSettings = UIUserNotificationSettings.settingsForTypesCategories(notificationTypes, null);
-        invokeOnRunLoop(function () {
-            app.registerForRemoteNotifications();
-        });
-        app.registerUserNotificationSettings(notificationSettings);
-    }
-};
+if (typeof (FIRMessaging) !== "undefined") {
+    firebaseMessaging.prepAppDelegate();
+}
 function getAppDelegate() {
+    // Play nice with other plugins by not completely ignoring anything already added to the appdelegate
     if (application.ios.delegate === undefined) {
-        var UIApplicationDelegateImpl = (function (_super) {
+        var UIApplicationDelegateImpl = /** @class */ (function (_super) {
             __extends(UIApplicationDelegateImpl, _super);
             function UIApplicationDelegateImpl() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -473,108 +283,14 @@ function getAppDelegate() {
     }
     return application.ios.delegate;
 }
-function prepAppDelegate() {
-    if (typeof (FIRMessaging) !== "undefined") {
-        firebase_common_1.firebase._addObserver("com.firebase.iid.notif.refresh-token", function (notification) { return firebase_common_1.firebase._onTokenRefreshNotification(notification.object); });
-        firebase_common_1.firebase._addObserver(UIApplicationDidFinishLaunchingNotification, function (appNotification) {
-            if (applicationSettings.getBoolean("registered", false)) {
-                firebase_common_1.firebase._registerForRemoteNotifications();
-            }
-        });
-        firebase_common_1.firebase._addObserver(UIApplicationDidBecomeActiveNotification, function (appNotification) {
-            firebase_common_1.firebase._processPendingNotifications();
-            if (!firebase_common_1.firebase._messagingConnected) {
-                firebase_common_1.firebase._messagingConnectWithCompletion();
-            }
-        });
-        firebase_common_1.firebase._addObserver(UIApplicationDidEnterBackgroundNotification, function (appNotification) {
-            if (firebase_common_1.firebase._messagingConnected) {
-                FIRMessaging.messaging().disconnect();
-            }
-        });
-        firebase_common_1.firebase._addObserver(UIApplicationWillEnterForegroundNotification, function (appNotification) {
-            if (firebase_common_1.firebase._messagingConnected !== null) {
-                FIRMessaging.messaging().connectWithCompletion(function (error) {
-                    if (!error) {
-                        firebase_common_1.firebase._messagingConnected = true;
-                    }
-                });
-            }
-        });
-    }
-    firebase_common_1.firebase.addAppDelegateMethods(getAppDelegate());
-}
-prepAppDelegate();
-firebase_common_1.firebase.toJsObject = function (objCObj) {
-    if (objCObj === null || typeof objCObj !== "object") {
-        return objCObj;
-    }
-    var node, key, i, l, oKeyArr = objCObj.allKeys;
-    if (oKeyArr === undefined) {
-        node = [];
-        for (i = 0, l = objCObj.count; i < l; i++) {
-            key = objCObj.objectAtIndex(i);
-            node.push(firebase_common_1.firebase.toJsObject(key));
-        }
-    }
-    else {
-        node = {};
-        for (i = 0, l = oKeyArr.count; i < l; i++) {
-            key = oKeyArr.objectAtIndex(i);
-            var val = objCObj.valueForKey(key);
-            if (val === null) {
-                node[key] = null;
-                continue;
-            }
-            switch (types.getClass(val)) {
-                case 'NSArray':
-                case 'NSMutableArray':
-                    node[key] = firebase_common_1.firebase.toJsObject(val);
-                    break;
-                case 'NSDictionary':
-                case 'NSMutableDictionary':
-                    node[key] = firebase_common_1.firebase.toJsObject(val);
-                    break;
-                case 'String':
-                    node[key] = String(val);
-                    break;
-                case 'Boolean':
-                    node[key] = val;
-                    break;
-                case 'Number':
-                case 'NSDecimalNumber':
-                    node[key] = Number(String(val));
-                    break;
-                case 'Date':
-                    node[key] = new Date(val);
-                    break;
-                case 'FIRDocumentReference':
-                    var path = val.path;
-                    var lastSlashIndex = path.lastIndexOf("/");
-                    node[key] = firebase_common_1.firebase.firestore._getDocumentReference(val, path.substring(0, lastSlashIndex), path.substring(lastSlashIndex + 1));
-                    break;
-                case 'FIRGeoPoint':
-                    node[key] = {
-                        latitude: val.latitude,
-                        longitude: val.longitude
-                    };
-                    break;
-                default:
-                    console.log("Please report this at https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues: iOS toJsObject is missing a converter for class '" + types.getClass(val) + "'. Casting to String as a fallback.");
-                    node[key] = String(val);
-            }
-        }
-    }
-    return node;
-};
+firebase_common_1.firebase.addAppDelegateMethods(getAppDelegate());
 firebase_common_1.firebase.getCallbackData = function (type, snapshot) {
     return {
         type: type,
         key: snapshot.key,
-        value: firebase_common_1.firebase.toJsObject(snapshot.value)
+        value: utils_2.firebaseUtils.toJsObject(snapshot.value)
     };
 };
-firebase_common_1.firebase.authStateListener = null;
 firebase_common_1.firebase.init = function (arg) {
     return new Promise(function (resolve, reject) {
         if (firebase_common_1.firebase.initialized) {
@@ -583,6 +299,7 @@ firebase_common_1.firebase.init = function (arg) {
         firebase_common_1.firebase.initialized = true;
         try {
             try {
+                // this is only available when the Realtime DB Pod is loaded
                 if (typeof (FIRServerValue) !== "undefined") {
                     firebase_common_1.firebase.ServerValue = {
                         TIMESTAMP: FIRServerValue.timestamp()
@@ -592,9 +309,11 @@ firebase_common_1.firebase.init = function (arg) {
             catch (ignore) {
             }
             arg = arg || {};
+            // if deeplinks are used, then for this scheme to work the use must have added the bundle as a scheme to their plist (this is in our docs)
             if (FIROptions.defaultOptions() !== null) {
-                FIROptions.defaultOptions().deepLinkURLScheme = utils.ios.getter(NSBundle, NSBundle.mainBundle).bundleIdentifier;
+                FIROptions.defaultOptions().deepLinkURLScheme = utils_1.ios.getter(NSBundle, NSBundle.mainBundle).bundleIdentifier;
             }
+            FIRAnalyticsConfiguration.sharedInstance().setAnalyticsCollectionEnabled(arg.analyticsCollectionEnabled || false);
             if (!firebase_common_1.firebase._configured) {
                 firebase_common_1.firebase._configured = true;
                 FIRApp.configure();
@@ -605,14 +324,19 @@ firebase_common_1.firebase.init = function (arg) {
                 }
             }
             if (typeof (FIRFirestore) !== "undefined") {
+                // Firestore has offline persistence enabled by default
                 if (arg.persist === false) {
                     var fIRFirestoreSettings = FIRFirestoreSettings.new();
                     fIRFirestoreSettings.persistenceEnabled = false;
+                    fIRFirestoreSettings.timestampsInSnapshotsEnabled = true;
                     FIRFirestore.firestore().settings = fIRFirestoreSettings;
                 }
             }
             if (arg.iOSEmulatorFlush) {
                 try {
+                    // Attempt to sign out before initializing, useful in case previous
+                    // project token is cached which leads to following type of error:
+                    // "[FirebaseDatabase] Authentication failed: invalid_token ..."
                     FIRAuth.auth().signOut();
                 }
                 catch (signOutErr) {
@@ -628,6 +352,7 @@ firebase_common_1.firebase.init = function (arg) {
                 };
                 FIRAuth.auth().addAuthStateDidChangeListener(firebase_common_1.firebase.authStateListener);
             }
+            // Listen to auth state changes
             if (!firebase_common_1.firebase.authStateListener) {
                 firebase_common_1.firebase.authStateListener = function (auth, user) {
                     firebase_common_1.firebase.notifyAuthStateListeners({
@@ -637,28 +362,25 @@ firebase_common_1.firebase.init = function (arg) {
                 };
                 FIRAuth.auth().addAuthStateDidChangeListener(firebase_common_1.firebase.authStateListener);
             }
+            // Firebase DynamicLink
             if (arg.onDynamicLinkCallback !== undefined) {
                 firebase_common_1.firebase.addOnDynamicLinkReceivedCallback(arg.onDynamicLinkCallback);
             }
+            // Facebook Auth
             if (typeof (FBSDKAppEvents) !== "undefined") {
                 FBSDKAppEvents.activateApp();
             }
+            // Firebase notifications (FCM)
             if (typeof (FIRMessaging) !== "undefined") {
-                if (arg.onMessageReceivedCallback !== undefined || arg.onPushTokenReceivedCallback !== undefined) {
-                    if (arg.onMessageReceivedCallback !== undefined) {
-                        firebase_common_1.firebase.addOnMessageReceivedCallback(arg.onMessageReceivedCallback);
-                    }
-                    if (arg.onPushTokenReceivedCallback !== undefined) {
-                        firebase_common_1.firebase.addOnPushTokenReceivedCallback(arg.onPushTokenReceivedCallback);
-                    }
-                }
+                firebaseMessaging.init(arg);
             }
+            // Firebase storage
             if (arg.storageBucket) {
                 if (typeof (FIRStorage) === "undefined") {
                     reject("Uncomment Storage in the plugin's Podfile first");
                     return;
                 }
-                firebase_common_1.firebase.storage = FIRStorage.storage().referenceForURL(arg.storageBucket);
+                firebase_common_1.firebase.storageBucket = FIRStorage.storage().referenceForURL(arg.storageBucket);
             }
             resolve(typeof (FIRDatabase) !== "undefined" ? FIRDatabase.database().reference() : undefined);
         }
@@ -668,83 +390,8 @@ firebase_common_1.firebase.init = function (arg) {
         }
     });
 };
-firebase_common_1.firebase.analytics.logEvent = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (arg.key === undefined) {
-                reject("Argument 'key' is missing");
-                return;
-            }
-            var dic = NSMutableDictionary.new();
-            if (arg.parameters !== undefined) {
-                for (var p in arg.parameters) {
-                    var param = arg.parameters[p];
-                    if (param.value !== undefined) {
-                        dic.setObjectForKey(param.value, param.key);
-                    }
-                }
-            }
-            FIRAnalytics.logEventWithNameParameters(arg.key, dic);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.analytics.logEvent: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.analytics.setUserId = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (arg.userId === undefined) {
-                reject("Argument 'userId' is missing");
-                return;
-            }
-            FIRAnalytics.setUserID(arg.userId);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.analytics.setUserId: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.analytics.setUserProperty = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (arg.key === undefined) {
-                reject("Argument 'key' is missing");
-                return;
-            }
-            if (arg.value === undefined) {
-                reject("Argument 'value' is missing");
-                return;
-            }
-            FIRAnalytics.setUserPropertyStringForName(arg.value, arg.key);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.analytics.setUserProperty: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.analytics.setScreenName = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (arg.screenName === undefined) {
-                reject("Argument 'screenName' is missing");
-                return;
-            }
-            FIRAnalytics.setScreenNameScreenClass(arg.screenName, null);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.analytics.setScreenName: " + ex);
-            reject(ex);
-        }
-    });
-};
+// helps global app behavior (ie: orientation handling)
+firebase_common_1.firebase.admob.bannerOptions = null;
 firebase_common_1.firebase.admob.showBanner = function (arg) {
     return new Promise(function (resolve, reject) {
         try {
@@ -756,8 +403,9 @@ firebase_common_1.firebase.admob.showBanner = function (arg) {
                 firebase_common_1.firebase.admob.adView.removeFromSuperview();
                 firebase_common_1.firebase.admob.adView = null;
             }
-            firebase_common_1.firebase.admob.defaults.view = utils.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController.view;
+            firebase_common_1.firebase.admob.defaults.view = utils_1.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController.view;
             var settings = firebase_common_1.firebase.merge(arg, firebase_common_1.firebase.admob.defaults);
+            firebase_common_1.firebase.admob.bannerOptions = settings;
             var view = settings.view;
             var bannerType = firebase_common_1.firebase.admob._getBannerType(settings.size);
             var adWidth = bannerType.size.width === 0 ? view.frame.size.width : bannerType.size.width;
@@ -774,6 +422,7 @@ firebase_common_1.firebase.admob.showBanner = function (arg) {
                     testDevices.push(kGADSimulatorID);
                 }
                 catch (ignore) {
+                    // can happen on a real device
                 }
                 if (settings.iosTestDeviceIds) {
                     testDevices = testDevices.concat(settings.iosTestDeviceIds);
@@ -783,16 +432,16 @@ firebase_common_1.firebase.admob.showBanner = function (arg) {
             if (settings.keywords !== undefined) {
                 adRequest.keywords = settings.keywords;
             }
-            firebase_common_1.firebase.admob.adView.rootViewController = utils.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController;
+            firebase_common_1.firebase.admob.adView.rootViewController = utils_1.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController;
+            // var statusbarFrame = iOSUtils.getter(UIApplication, UIApplication.sharedApplication).statusBarFrame;
             firebase_common_1.firebase.admob.adView.loadRequest(adRequest);
+            // TODO consider listening to delegate features like 'ad loaded' (Android resolves when the banner is actually showing)
+            // adView.delegate = self;
             view.addSubview(firebase_common_1.firebase.admob.adView);
-            application.on(application.orientationChangedEvent, function (data) {
-                if (firebase_common_1.firebase.admob.adView !== null) {
-                    firebase_common_1.firebase.admob.hideBanner().then(function (res) {
-                        firebase_common_1.firebase.admob.createBanner(arg);
-                    });
-                }
-            });
+            // support rotation events
+            // tear down first if this had been called already to avoid multiple event bindings
+            application.off(application.orientationChangedEvent, firebase_common_1.firebase.admob.orientationHandler);
+            application.on(application.orientationChangedEvent, firebase_common_1.firebase.admob.orientationHandler);
             resolve();
         }
         catch (ex) {
@@ -800,6 +449,20 @@ firebase_common_1.firebase.admob.showBanner = function (arg) {
             reject(ex);
         }
     });
+};
+firebase_common_1.firebase.admob.orientationHandler = function (data) {
+    if (firebase_common_1.firebase.admob.adView !== null) {
+        firebase_common_1.firebase.admob.hideBanner().then(function (res) {
+            try {
+                firebase_common_1.firebase.admob.showBanner(firebase_common_1.firebase.admob.bannerOptions || firebase_common_1.firebase.admob.defaults);
+            }
+            catch (err) {
+                console.log("Error in orientationHandler - firebase.admob.showBanner: " + err);
+            }
+        }, function (err) {
+            console.log("Error in orientationHandler - firebase.admob.hideBanner: " + err);
+        });
+    }
 };
 firebase_common_1.firebase.admob.showInterstitial = function (arg) {
     return new Promise(function (resolve, reject) {
@@ -810,17 +473,20 @@ firebase_common_1.firebase.admob.showInterstitial = function (arg) {
             }
             var settings = firebase_common_1.firebase.merge(arg, firebase_common_1.firebase.admob.defaults);
             firebase_common_1.firebase.admob.interstitialView = GADInterstitial.alloc().initWithAdUnitID(settings.iosInterstitialId);
+            // with interstitials you MUST wait for the ad to load before showing it, so requiring this delegate
             var delegate_1 = GADInterstitialDelegateImpl.new().initWithCallback(function (ad, error) {
                 if (error) {
-                    reject(error);
+                    reject(error.localizedDescription);
                 }
                 else {
-                    firebase_common_1.firebase.admob.interstitialView.presentFromRootViewController(utils.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController);
+                    // now we can safely show it
+                    firebase_common_1.firebase.admob.interstitialView.presentFromRootViewController(utils_1.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController);
                     resolve();
                 }
                 CFRelease(delegate_1);
                 delegate_1 = undefined;
             });
+            // we're leaving the app to switch to Google's OAuth screen, so making sure this is retained
             CFRetain(delegate_1);
             firebase_common_1.firebase.admob.interstitialView.delegate = delegate_1;
             var adRequest = GADRequest.request();
@@ -830,6 +496,7 @@ firebase_common_1.firebase.admob.showInterstitial = function (arg) {
                     testDevices.push(kGADSimulatorID);
                 }
                 catch (ignore) {
+                    // can happen on a real device
                 }
                 if (settings.iosTestDeviceIds) {
                     testDevices = testDevices.concat(settings.iosTestDeviceIds);
@@ -848,6 +515,7 @@ firebase_common_1.firebase.admob.hideBanner = function () {
     return new Promise(function (resolve, reject) {
         try {
             if (firebase_common_1.firebase.admob.adView !== null) {
+                // adView.delegate = null;
                 firebase_common_1.firebase.admob.adView.removeFromSuperview();
                 firebase_common_1.firebase.admob.adView = null;
             }
@@ -860,35 +528,45 @@ firebase_common_1.firebase.admob.hideBanner = function () {
     });
 };
 firebase_common_1.firebase.admob._getBannerType = function (size) {
+    // see nativescript-admob's iOS sourcecode for why we're not using SDK-provided constants here
     if (size === firebase_common_1.firebase.admob.AD_SIZE.BANNER) {
+        // return kGADAdSizeBanner;
         return { "size": { "width": 320, "height": 50 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.LARGE_BANNER) {
+        // return kGADAdSizeLargeBanner;
         return { "size": { "width": 320, "height": 100 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.MEDIUM_RECTANGLE) {
+        // return kGADAdSizeMediumRectangle;
         return { "size": { "width": 300, "height": 250 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.FULL_BANNER) {
+        // return kGADAdSizeFullBanner;
         return { "size": { "width": 468, "height": 60 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.LEADERBOARD) {
+        // return kGADAdSizeLeaderboard;
         return { "size": { "width": 728, "height": 90 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.SKYSCRAPER) {
+        // return kGADAdSizeSkyscraper;
         return { "size": { "width": 120, "height": 600 }, "flags": 0 };
     }
     else if (size === firebase_common_1.firebase.admob.AD_SIZE.SMART_BANNER || size === firebase_common_1.firebase.admob.AD_SIZE.FLUID) {
-        var orientation_1 = utils.ios.getter(UIDevice, UIDevice.currentDevice).orientation;
-        var isIPad = platform.device.deviceType === enums_1.DeviceType.Tablet;
-        if (orientation_1 === 1 || orientation_1 === 2) {
+        var orientation_1 = utils_1.ios.getter(UIDevice, UIDevice.currentDevice).orientation;
+        var isIPad = platform_1.device.deviceType === enums_1.DeviceType.Tablet;
+        if (orientation_1 === 1 /* Portrait */ || orientation_1 === 2 /* PortraitUpsideDown */) {
+            // return kGADAdSizeSmartBannerPortrait;
             return { "size": { "width": 0, "height": 0, "smartHeight": isIPad ? 90 : 50 }, "flags": 18 };
         }
         else {
+            // return kGADAdSizeSmartBannerLandscape;
             return { "size": { "width": 0, "height": 0, "smartHeight": isIPad ? 90 : 32 }, "flags": 26 };
         }
     }
     else {
+        // return kGADAdSizeInvalid;
         return { "size": { "width": -1, "height": -1 }, "flags": 0 };
     }
 };
@@ -903,7 +581,9 @@ firebase_common_1.firebase.getRemoteConfig = function (arg) {
                 reject("Argument 'properties' is missing");
                 return;
             }
+            // Get a Remote Config object instance
             var firebaseRemoteConfig_1 = FIRRemoteConfig.remoteConfig();
+            // Enable developer mode to allow for frequent refreshes of the cache
             firebaseRemoteConfig_1.configSettings = new FIRRemoteConfigSettings({ developerModeEnabled: arg.developerMode || false });
             var dic = NSMutableDictionary.new();
             for (var p in arg.properties) {
@@ -914,18 +594,19 @@ firebase_common_1.firebase.getRemoteConfig = function (arg) {
             }
             firebaseRemoteConfig_1.setDefaults(dic);
             var onCompletion = function (remoteConfigFetchStatus, error) {
-                if (remoteConfigFetchStatus === 1 ||
-                    remoteConfigFetchStatus === 3) {
+                if (remoteConfigFetchStatus === 1 /* Success */ ||
+                    remoteConfigFetchStatus === 3 /* Throttled */) {
                     var activated = firebaseRemoteConfig_1.activateFetched();
                     var result = {
                         lastFetch: firebaseRemoteConfig_1.lastFetchTime,
-                        throttled: remoteConfigFetchStatus === 3,
+                        throttled: remoteConfigFetchStatus === 3 /* Throttled */,
                         properties: {}
                     };
                     for (var p in arg.properties) {
                         var prop = arg.properties[p];
                         var key = prop.key;
                         var value = firebaseRemoteConfig_1.configValueForKey(key).stringValue;
+                        // we could have the user pass in the type but this seems easier to use
                         result.properties[key] = firebase_common_1.firebase.strongTypeify(value);
                     }
                     resolve(result);
@@ -934,6 +615,7 @@ firebase_common_1.firebase.getRemoteConfig = function (arg) {
                     reject(error.localizedDescription);
                 }
             };
+            // default 12 hours, just like the SDK does
             var expirationDuration = arg.cacheExpirationSeconds || 43200;
             firebaseRemoteConfig_1.fetchWithExpirationDurationCompletionHandler(expirationDuration, onCompletion);
         }
@@ -999,6 +681,7 @@ firebase_common_1.firebase.logout = function (arg) {
     return new Promise(function (resolve, reject) {
         try {
             FIRAuth.auth().signOut();
+            // also disconnect from Google otherwise ppl can't connect with a different account
             if (typeof (GIDSignIn) !== "undefined") {
                 GIDSignIn.sharedInstance().disconnect();
             }
@@ -1013,34 +696,51 @@ firebase_common_1.firebase.logout = function (arg) {
         }
     });
 };
-function toLoginResult(user) {
+function toLoginResult(user, additionalUserInfo) {
     if (!user) {
-        return false;
+        return null;
     }
     var providers = [];
-    for (var i = 0, l = user.providerData.count; i < l; i++) {
-        var firUserInfo = user.providerData.objectAtIndex(i);
-        var pid = firUserInfo.valueForKey("providerID");
-        if (pid === 'facebook.com' && typeof (FBSDKAccessToken) !== "undefined") {
-            var fbCurrentAccessToken = FBSDKAccessToken.currentAccessToken();
-            providers.push({ id: pid, token: fbCurrentAccessToken ? fbCurrentAccessToken.tokenString : null });
-        }
-        else {
-            providers.push({ id: pid });
+    if (user.providerData) {
+        for (var i = 0, l = user.providerData.count; i < l; i++) {
+            var firUserInfo = user.providerData.objectAtIndex(i);
+            var pid = firUserInfo.valueForKey("providerID");
+            // the app may have dropped Facebook support, so check if the native class is still there
+            if (pid === 'facebook.com' && typeof (FBSDKAccessToken) !== "undefined") { // FIRFacebookAuthProviderID
+                var fbCurrentAccessToken = FBSDKAccessToken.currentAccessToken();
+                providers.push({ id: pid, token: fbCurrentAccessToken ? fbCurrentAccessToken.tokenString : null });
+            }
+            else {
+                providers.push({ id: pid });
+            }
         }
     }
-    return {
+    var loginResult = {
         uid: user.uid,
         anonymous: user.anonymous,
         isAnonymous: user.anonymous,
+        // provider: user.providerID, // always 'Firebase'
         providers: providers,
         profileImageURL: user.photoURL ? user.photoURL.absoluteString : null,
         email: user.email,
         emailVerified: user.emailVerified,
         name: user.displayName,
         phoneNumber: user.phoneNumber,
-        refreshToken: user.refreshToken
+        refreshToken: user.refreshToken,
+        metadata: {
+            creationTimestamp: user.metadata.creationDate,
+            lastSignInTimestamp: user.metadata.lastSignInDate
+        }
     };
+    if (additionalUserInfo) {
+        loginResult.additionalUserInfo = {
+            providerId: additionalUserInfo.providerID,
+            username: additionalUserInfo.username,
+            isNewUser: additionalUserInfo.newUser,
+            profile: utils_2.firebaseUtils.toJsObject(additionalUserInfo.profile)
+        };
+    }
+    return loginResult;
 }
 firebase_common_1.firebase.getAuthToken = function (arg) {
     return new Promise(function (resolve, reject) {
@@ -1060,7 +760,7 @@ firebase_common_1.firebase.getAuthToken = function (arg) {
                         resolve(token);
                     }
                 };
-                user.getTokenForcingRefreshCompletion(arg.forceRefresh, onCompletion);
+                user.getIDTokenForcingRefreshCompletion(arg.forceRefresh, onCompletion);
             }
             else {
                 reject("Log in first");
@@ -1075,18 +775,19 @@ firebase_common_1.firebase.getAuthToken = function (arg) {
 firebase_common_1.firebase.login = function (arg) {
     return new Promise(function (resolve, reject) {
         try {
-            var onCompletion_1 = function (user, error) {
+            var onCompletionWithAuthResult_1 = function (authResult, error) {
                 if (error) {
+                    // also disconnect from Google otherwise ppl can't connect with a different account
                     if (typeof (GIDSignIn) !== "undefined") {
                         GIDSignIn.sharedInstance().disconnect();
                     }
                     reject(error.localizedDescription);
                 }
                 else {
-                    resolve(toLoginResult(user));
+                    resolve(toLoginResult(authResult && authResult.user, authResult && authResult.additionalUserInfo));
                     firebase_common_1.firebase.notifyAuthStateListeners({
                         loggedIn: true,
-                        user: user
+                        user: toLoginResult(authResult.user)
                     });
                 }
             };
@@ -1097,7 +798,7 @@ firebase_common_1.firebase.login = function (arg) {
             }
             firebase_common_1.firebase.moveLoginOptionsToObjects(arg);
             if (arg.type === firebase_common_1.firebase.LoginType.ANONYMOUS) {
-                fAuth_2.signInAnonymouslyWithCompletion(onCompletion_1);
+                fAuth_2.signInAnonymouslyWithCompletion(onCompletionWithAuthResult_1);
             }
             else if (arg.type === firebase_common_1.firebase.LoginType.PASSWORD) {
                 if (!arg.passwordOptions || !arg.passwordOptions.email || !arg.passwordOptions.password) {
@@ -1106,19 +807,21 @@ firebase_common_1.firebase.login = function (arg) {
                 }
                 var fIRAuthCredential_1 = FIREmailAuthProvider.credentialWithEmailPassword(arg.passwordOptions.email, arg.passwordOptions.password);
                 if (fAuth_2.currentUser) {
-                    var onCompletionLink = function (user, error) {
+                    // link credential, note that you only want to do this if this user doesn't already use fb as an auth provider
+                    var onCompletionLink = function (authData, error) {
                         if (error) {
+                            // ignore, as this one was probably already linked, so just return the user
                             log("--- linking error: " + error.localizedDescription);
-                            fAuth_2.signInWithCredentialCompletion(fIRAuthCredential_1, onCompletion_1);
+                            fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_1, onCompletionWithAuthResult_1);
                         }
                         else {
-                            onCompletion_1(user);
+                            onCompletionWithAuthResult_1(authData, error);
                         }
                     };
-                    fAuth_2.currentUser.linkWithCredentialCompletion(fIRAuthCredential_1, onCompletionLink);
+                    fAuth_2.currentUser.linkAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_1, onCompletionLink);
                 }
                 else {
-                    fAuth_2.signInWithEmailPasswordCompletion(arg.passwordOptions.email, arg.passwordOptions.password, onCompletion_1);
+                    fAuth_2.signInWithEmailPasswordCompletion(arg.passwordOptions.email, arg.passwordOptions.password, onCompletionWithAuthResult_1);
                 }
             }
             else if (arg.type === firebase_common_1.firebase.LoginType.EMAIL_LINK) {
@@ -1131,7 +834,9 @@ firebase_common_1.firebase.login = function (arg) {
                     return;
                 }
                 var firActionCodeSettings = FIRActionCodeSettings.new();
+                // This 'continue URL' is what's emailed to the receiver, and the domain must be whitelisted in the Firebase console
                 firActionCodeSettings.URL = NSURL.URLWithString(arg.emailLinkOptions.url);
+                // The sign-in operation has to always be completed in the app.
                 firActionCodeSettings.handleCodeInApp = true;
                 firActionCodeSettings.setIOSBundleID(arg.emailLinkOptions.iOS ? arg.emailLinkOptions.iOS.bundleId : NSBundle.mainBundle.bundleIdentifier);
                 firActionCodeSettings.setAndroidPackageNameInstallIfNotAvailableMinimumVersion(arg.emailLinkOptions.android ? arg.emailLinkOptions.android.packageName : NSBundle.mainBundle.bundleIdentifier, arg.emailLinkOptions.android ? arg.emailLinkOptions.android.installApp || false : false, arg.emailLinkOptions.android ? arg.emailLinkOptions.android.minimumVersion || "1" : "1");
@@ -1140,16 +845,19 @@ firebase_common_1.firebase.login = function (arg) {
                         reject(error.localizedDescription);
                         return;
                     }
+                    // The link was successfully sent.
+                    // Save the email locally so you don't need to ask the user for it again if they open the link on the same device.
                     firebase_common_1.firebase.rememberEmailForEmailLinkLogin(arg.emailLinkOptions.email);
                     resolve();
                 });
             }
             else if (arg.type === firebase_common_1.firebase.LoginType.PHONE) {
+                // https://firebase.google.com/docs/auth/ios/phone-auth
                 if (!arg.phoneOptions || !arg.phoneOptions.phoneNumber) {
                     reject("Auth type PHONE requires a 'phoneOptions.phoneNumber' argument");
                     return;
                 }
-                FIRPhoneAuthProvider.provider().verifyPhoneNumberCompletion(arg.phoneOptions.phoneNumber, function (verificationID, error) {
+                FIRPhoneAuthProvider.provider().verifyPhoneNumberUIDelegateCompletion(arg.phoneOptions.phoneNumber, null, function (verificationID, error) {
                     if (error) {
                         reject(error.localizedDescription);
                         return;
@@ -1157,18 +865,19 @@ firebase_common_1.firebase.login = function (arg) {
                     firebase_common_1.firebase.requestPhoneAuthVerificationCode(function (userResponse) {
                         var fIRAuthCredential = FIRPhoneAuthProvider.provider().credentialWithVerificationIDVerificationCode(verificationID, userResponse);
                         if (fAuth_2.currentUser) {
-                            var onCompletionLink = function (user, error) {
+                            var onCompletionLink = function (authData, error) {
                                 if (error) {
-                                    fAuth_2.signInWithCredentialCompletion(fIRAuthCredential, onCompletion_1);
+                                    // ignore, as this one was probably already linked, so just return the user
+                                    fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionWithAuthResult_1);
                                 }
                                 else {
-                                    onCompletion_1(user);
+                                    onCompletionWithAuthResult_1(authData, error);
                                 }
                             };
-                            fAuth_2.currentUser.linkWithCredentialCompletion(fIRAuthCredential, onCompletionLink);
+                            fAuth_2.currentUser.linkAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionLink);
                         }
                         else {
-                            fAuth_2.signInWithCredentialCompletion(fIRAuthCredential, onCompletion_1);
+                            fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionWithAuthResult_1);
                         }
                     }, arg.phoneOptions.verificationPrompt);
                 });
@@ -1179,12 +888,12 @@ firebase_common_1.firebase.login = function (arg) {
                     return;
                 }
                 if (arg.customOptions.token) {
-                    fAuth_2.signInWithCustomTokenCompletion(arg.customOptions.token, onCompletion_1);
+                    fAuth_2.signInAndRetrieveDataWithCustomTokenCompletion(arg.customOptions.token, onCompletionWithAuthResult_1);
                 }
                 else if (arg.customOptions.tokenProviderFn) {
                     arg.customOptions.tokenProviderFn()
                         .then(function (token) {
-                        fAuth_2.signInWithCustomTokenCompletion(token, onCompletion_1);
+                        fAuth_2.signInAndRetrieveDataWithCustomTokenCompletion(token, onCompletionWithAuthResult_1);
                     }, function (error) {
                         reject(error);
                     });
@@ -1204,30 +913,37 @@ firebase_common_1.firebase.login = function (arg) {
                         reject("login cancelled");
                     }
                     else {
+                        // headless facebook auth
+                        // var fIRAuthCredential = FIRFacebookAuthProvider.credentialWithAccessToken(fbSDKLoginManagerLoginResult.token.tokenString);
                         var fIRAuthCredential_2 = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString);
                         if (fAuth_2.currentUser) {
-                            var onCompletionLink = function (user, error) {
+                            // link credential, note that you only want to do this if this user doesn't already use fb as an auth provider
+                            var onCompletionLink = function (authData, error) {
                                 if (error) {
+                                    // ignore, as this one was probably already linked, so just return the user
                                     log("--- linking error: " + error.localizedDescription);
-                                    fAuth_2.signInWithCredentialCompletion(fIRAuthCredential_2, onCompletion_1);
+                                    fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_2, onCompletionWithAuthResult_1);
                                 }
                                 else {
-                                    onCompletion_1(user);
+                                    onCompletionWithAuthResult_1(authData);
                                 }
                             };
-                            fAuth_2.currentUser.linkWithCredentialCompletion(fIRAuthCredential_2, onCompletionLink);
+                            fAuth_2.currentUser.linkAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_2, onCompletionLink);
                         }
                         else {
-                            fAuth_2.signInWithCredentialCompletion(fIRAuthCredential_2, onCompletion_1);
+                            fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_2, onCompletionWithAuthResult_1);
                         }
                     }
                 };
+                // this requires you to set the appid and customurlscheme in app_resources/.plist
                 var fbSDKLoginManager = FBSDKLoginManager.new();
+                // fbSDKLoginManager.loginBehavior = FBSDKLoginBehavior.Web;
                 var scope = ["public_profile", "email"];
                 if (arg.facebookOptions && arg.facebookOptions.scope) {
                     scope = arg.facebookOptions.scope;
                 }
-                fbSDKLoginManager.logInWithReadPermissionsFromViewControllerHandler(scope, null, onFacebookCompletion);
+                fbSDKLoginManager.logInWithReadPermissionsFromViewControllerHandler(scope, null, // the viewcontroller param can be null since by default topmost is taken
+                onFacebookCompletion);
             }
             else if (arg.type === firebase_common_1.firebase.LoginType.GOOGLE) {
                 if (typeof (GIDSignIn) === "undefined") {
@@ -1235,28 +951,33 @@ firebase_common_1.firebase.login = function (arg) {
                     return;
                 }
                 var sIn = GIDSignIn.sharedInstance();
-                sIn.uiDelegate = application.ios.rootController;
+                // allow custom controller for variety of use cases
+                sIn.uiDelegate = arg.ios && arg.ios.controller ? arg.ios.controller : application.ios.rootController;
                 sIn.clientID = FIRApp.defaultApp().options.clientID;
                 if (arg.googleOptions && arg.googleOptions.hostedDomain) {
                     sIn.hostedDomain = arg.googleOptions.hostedDomain;
                 }
                 var delegate_2 = GIDSignInDelegateImpl.new().initWithCallback(function (user, error) {
                     if (error === null) {
+                        // Get a Google ID token and Google access token from the GIDAuthentication object and exchange them for a Firebase credential
                         firebase_common_1.firebase._gIDAuthentication = user.authentication;
                         var fIRAuthCredential_3 = FIRGoogleAuthProvider.credentialWithIDTokenAccessToken(firebase_common_1.firebase._gIDAuthentication.idToken, firebase_common_1.firebase._gIDAuthentication.accessToken);
+                        // Finally, authenticate with Firebase using the credential
                         if (fAuth_2.currentUser) {
+                            // link credential, note that you only want to do this if this user doesn't already use Google as an auth provider
                             var onCompletionLink = function (user, error) {
                                 if (error) {
-                                    fAuth_2.signInWithCredentialCompletion(fIRAuthCredential_3, onCompletion_1);
+                                    // ignore, as this one was probably already linked, so just return the user
+                                    fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_3, onCompletionWithAuthResult_1);
                                 }
                                 else {
-                                    onCompletion_1(user);
+                                    onCompletionWithAuthResult_1(user);
                                 }
                             };
-                            fAuth_2.currentUser.linkWithCredentialCompletion(fIRAuthCredential_3, onCompletionLink);
+                            fAuth_2.currentUser.linkAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_3, onCompletionLink);
                         }
                         else {
-                            fAuth_2.signInWithCredentialCompletion(fIRAuthCredential_3, onCompletion_1);
+                            fAuth_2.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential_3, onCompletionWithAuthResult_1);
                         }
                     }
                     else {
@@ -1417,20 +1138,19 @@ firebase_common_1.firebase.changePassword = function (arg) {
 firebase_common_1.firebase.createUser = function (arg) {
     return new Promise(function (resolve, reject) {
         try {
-            var onCompletion = function (user, error) {
+            var onCompletion = function (authResult, error) {
                 if (error) {
                     reject(error.localizedDescription);
                 }
                 else {
-                    resolve({
-                        key: user.uid
-                    });
+                    resolve(toLoginResult(authResult.user, authResult.additionalUserInfo));
                 }
             };
             if (!arg.email || !arg.password) {
                 reject("Creating a user requires an email and password argument");
             }
             else {
+                // instance.createUserPasswordWithValueCompletionBlock(arg.email, arg.password, onCompletion);
                 FIRAuth.auth().createUserWithEmailPasswordCompletion(arg.email, arg.password, onCompletion);
             }
         }
@@ -1504,16 +1224,16 @@ firebase_common_1.firebase.updateProfile = function (arg) {
 };
 firebase_common_1.firebase._addObservers = function (to, updateCallback) {
     var listeners = [];
-    listeners.push(to.observeEventTypeWithBlock(0, function (snapshot) {
+    listeners.push(to.observeEventTypeWithBlock(0 /* ChildAdded */, function (snapshot) {
         updateCallback(firebase_common_1.firebase.getCallbackData('ChildAdded', snapshot));
     }));
-    listeners.push(to.observeEventTypeWithBlock(1, function (snapshot) {
+    listeners.push(to.observeEventTypeWithBlock(1 /* ChildRemoved */, function (snapshot) {
         updateCallback(firebase_common_1.firebase.getCallbackData('ChildRemoved', snapshot));
     }));
-    listeners.push(to.observeEventTypeWithBlock(2, function (snapshot) {
+    listeners.push(to.observeEventTypeWithBlock(2 /* ChildChanged */, function (snapshot) {
         updateCallback(firebase_common_1.firebase.getCallbackData('ChildChanged', snapshot));
     }));
-    listeners.push(to.observeEventTypeWithBlock(3, function (snapshot) {
+    listeners.push(to.observeEventTypeWithBlock(3 /* ChildMoved */, function (snapshot) {
         updateCallback(firebase_common_1.firebase.getCallbackData('ChildMoved', snapshot));
     }));
     return listeners;
@@ -1550,7 +1270,7 @@ firebase_common_1.firebase.addValueEventListener = function (updateCallback, pat
     return new Promise(function (resolve, reject) {
         try {
             var where = path === undefined ? FIRDatabase.database().reference() : FIRDatabase.database().reference().childByAppendingPath(path);
-            var listener = where.observeEventTypeWithBlockWithCancelBlock(4, function (snapshot) {
+            var listener = where.observeEventTypeWithBlockWithCancelBlock(4 /* Value */, function (snapshot) {
                 updateCallback(firebase_common_1.firebase.getCallbackData('ValueChanged', snapshot));
             }, function (firebaseError) {
                 updateCallback({
@@ -1572,7 +1292,7 @@ firebase_common_1.firebase.getValue = function (path) {
     return new Promise(function (resolve, reject) {
         try {
             var where = path === undefined ? FIRDatabase.database().reference() : FIRDatabase.database().reference().childByAppendingPath(path);
-            var listener = where.observeSingleEventOfTypeWithBlockWithCancelBlock(4, function (snapshot) {
+            var listener = where.observeSingleEventOfTypeWithBlockWithCancelBlock(4 /* Value */, function (snapshot) {
                 resolve(firebase_common_1.firebase.getCallbackData('ValueChanged', snapshot));
             }, function (firebaseError) {
                 reject(firebaseError.localizedDescription);
@@ -1603,10 +1323,9 @@ firebase_common_1.firebase.removeEventListeners = function (listeners, path) {
 firebase_common_1.firebase.push = function (path, val) {
     return new Promise(function (resolve, reject) {
         try {
-            var ref = FIRDatabase.database().reference().childByAppendingPath(path).childByAutoId();
-            ref.setValue(val);
-            resolve({
-                key: ref.key
+            var ref_1 = FIRDatabase.database().reference().childByAppendingPath(path).childByAutoId();
+            ref_1.setValueWithCompletionBlock(val, function (error, dbRef) {
+                error ? reject(error.localizedDescription) : resolve({ key: ref_1.key });
             });
         }
         catch (ex) {
@@ -1618,8 +1337,9 @@ firebase_common_1.firebase.push = function (path, val) {
 firebase_common_1.firebase.setValue = function (path, val) {
     return new Promise(function (resolve, reject) {
         try {
-            FIRDatabase.database().reference().childByAppendingPath(path).setValue(val);
-            resolve();
+            FIRDatabase.database().reference().childByAppendingPath(path).setValueWithCompletionBlock(val, function (error, dbRef) {
+                error ? reject(error.localizedDescription) : resolve();
+            });
         }
         catch (ex) {
             console.log("Error in firebase.setValue: " + ex);
@@ -1631,16 +1351,19 @@ firebase_common_1.firebase.update = function (path, val) {
     return new Promise(function (resolve, reject) {
         try {
             if (typeof val === "object") {
-                FIRDatabase.database().reference().childByAppendingPath(path).updateChildValues(val);
+                FIRDatabase.database().reference().childByAppendingPath(path).updateChildValuesWithCompletionBlock(val, function (error, dbRef) {
+                    error ? reject(error.localizedDescription) : resolve();
+                });
             }
             else {
                 var lastPartOfPath = path.lastIndexOf("/");
                 var pathPrefix = path.substring(0, lastPartOfPath);
                 var pathSuffix = path.substring(lastPartOfPath + 1);
                 var updateObject = '{"' + pathSuffix + '" : "' + val + '"}';
-                FIRDatabase.database().reference().childByAppendingPath(pathPrefix).updateChildValues(JSON.parse(updateObject));
+                FIRDatabase.database().reference().childByAppendingPath(pathPrefix).updateChildValuesWithCompletionBlock(JSON.parse(updateObject), function (error, dbRef) {
+                    error ? reject(error.localizedDescription) : resolve();
+                });
             }
-            resolve();
         }
         catch (ex) {
             console.log("Error in firebase.update: " + ex);
@@ -1653,6 +1376,7 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
         try {
             var where = path === undefined ? FIRDatabase.database().reference() : FIRDatabase.database().reference().childByAppendingPath(path);
             var query = void 0;
+            // orderBy
             if (options.orderBy.type === firebase_common_1.firebase.QueryOrderByType.KEY) {
                 query = where.queryOrderedByKey();
             }
@@ -1673,7 +1397,13 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
                 reject("Invalid orderBy.type, use constants like firebase.QueryOrderByType.VALUE");
                 return;
             }
+            // range
             if (options.range && options.range.type) {
+                // https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues/319
+                // if (options.range.value === undefined || options.range.value === null) {
+                //   reject("Please set range.value");
+                //   return;
+                // }
                 if (options.range.type === firebase_common_1.firebase.QueryRangeType.START_AT) {
                     query = query.queryStartingAtValue(options.range.value);
                 }
@@ -1688,6 +1418,7 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
                     return;
                 }
             }
+            // ranges
             if (options.ranges) {
                 for (var i = 0; i < options.ranges.length; i++) {
                     var range = options.ranges[i];
@@ -1710,6 +1441,7 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
                     }
                 }
             }
+            // limit
             if (options.limit && options.limit.type) {
                 if (options.limit.value === undefined || options.limit.value === null) {
                     reject("Please set limit.value");
@@ -1727,9 +1459,10 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
                 }
             }
             if (options.singleEvent) {
-                query.observeSingleEventOfTypeWithBlock(4, function (snapshot) {
+                query.observeSingleEventOfTypeWithBlock(4 /* Value */, function (snapshot) {
                     if (updateCallback)
                         updateCallback(firebase_common_1.firebase.getCallbackData('ValueChanged', snapshot));
+                    // resolve promise with data in case of single event, see https://github.com/EddyVerbruggen/nativescript-plugin-firebase/issues/126
                     resolve(firebase_common_1.firebase.getCallbackData('ValueChanged', snapshot));
                 });
             }
@@ -1749,8 +1482,9 @@ firebase_common_1.firebase.query = function (updateCallback, path, options) {
 firebase_common_1.firebase.remove = function (path) {
     return new Promise(function (resolve, reject) {
         try {
-            FIRDatabase.database().reference().childByAppendingPath(path).setValue(null);
-            resolve();
+            FIRDatabase.database().reference().childByAppendingPath(path).setValueWithCompletionBlock(null, function (error, dbRef) {
+                error ? reject(error.localizedDescription) : resolve();
+            });
         }
         catch (ex) {
             console.log("Error in firebase.remove: " + ex);
@@ -1758,203 +1492,27 @@ firebase_common_1.firebase.remove = function (path) {
         }
     });
 };
-function getStorageRef(reject, arg) {
-    if (typeof (FIRStorage) === "undefined") {
-        reject("Uncomment Storage in the plugin's Podfile first");
-        return;
-    }
-    if (!arg.remoteFullPath) {
-        reject("remoteFullPath is mandatory");
-        return;
-    }
-    return arg.bucket ? FIRStorage.storage().referenceForURL(arg.bucket) : firebase_common_1.firebase.storage;
-}
-firebase_common_1.firebase.uploadFile = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            var onCompletion = function (metadata, error) {
-                if (error) {
-                    reject(error.localizedDescription);
-                }
-                else {
-                    resolve({
-                        name: metadata.name,
-                        url: metadata.downloadURL() ? metadata.downloadURL().absoluteString : null,
-                        contentType: metadata.contentType,
-                        created: metadata.timeCreated,
-                        updated: metadata.updated,
-                        bucket: metadata.bucket,
-                        size: metadata.size
-                    });
-                }
-            };
-            var storageRef = getStorageRef(reject, arg);
-            if (!storageRef) {
-                return;
-            }
-            var fIRStorageReference = storageRef.child(arg.remoteFullPath);
-            var fIRStorageUploadTask = null;
-            if (arg.localFile) {
-                if (typeof (arg.localFile) !== "object") {
-                    reject("localFile argument must be a File object; use file-system module to create one");
-                    return;
-                }
-                fIRStorageUploadTask = fIRStorageReference.putFileMetadataCompletion(NSURL.fileURLWithPath(arg.localFile.path), null, onCompletion);
-            }
-            else if (arg.localFullPath) {
-                fIRStorageUploadTask = fIRStorageReference.putFileMetadataCompletion(NSURL.fileURLWithPath(arg.localFullPath), null, onCompletion);
-            }
-            else {
-                reject("One of localFile or localFullPath is required");
-                return;
-            }
-            if (fIRStorageUploadTask !== null) {
-                var fIRStorageHandle = fIRStorageUploadTask.observeStatusHandler(2, function (snapshot) {
-                    if (!snapshot.error && typeof (arg.onProgress) === "function") {
-                        arg.onProgress({
-                            fractionCompleted: snapshot.progress.fractionCompleted,
-                            percentageCompleted: Math.round(snapshot.progress.fractionCompleted * 100)
-                        });
-                    }
-                });
-            }
-        }
-        catch (ex) {
-            console.log("Error in firebase.uploadFile: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.downloadFile = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            var onCompletion = function (url, error) {
-                console.log(">>> download complete, error: " + error);
-                if (error) {
-                    reject(error.localizedDescription);
-                }
-                else {
-                    resolve(url.absoluteString);
-                }
-            };
-            var storageRef = getStorageRef(reject, arg);
-            if (!storageRef) {
-                return;
-            }
-            var fIRStorageReference = storageRef.child(arg.remoteFullPath);
-            var localFilePath = void 0;
-            if (arg.localFile) {
-                if (typeof (arg.localFile) !== "object") {
-                    reject("localFile argument must be a File object; use file-system module to create one");
-                    return;
-                }
-                localFilePath = arg.localFile.path;
-            }
-            else if (arg.localFullPath) {
-                localFilePath = arg.localFullPath;
-            }
-            else {
-                reject("One of localFile or localFullPath is required");
-                return;
-            }
-            var localFileUrl = NSURL.fileURLWithPath(localFilePath);
-            var fIRStorageDownloadTask = fIRStorageReference.writeToFileCompletion(localFileUrl, onCompletion);
-        }
-        catch (ex) {
-            console.log("Error in firebase.downloadFile: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.getDownloadUrl = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            var onCompletion = function (url, error) {
-                if (error) {
-                    reject(error.localizedDescription);
-                }
-                else {
-                    resolve(url.absoluteString);
-                }
-            };
-            var storageRef = getStorageRef(reject, arg);
-            if (!storageRef) {
-                return;
-            }
-            var fIRStorageReference = storageRef.child(arg.remoteFullPath);
-            fIRStorageReference.downloadURLWithCompletion(onCompletion);
-        }
-        catch (ex) {
-            console.log("Error in firebase.getDownloadUrl: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.deleteFile = function (arg) {
-    return new Promise(function (resolve, reject) {
-        try {
-            var onCompletion = function (error) {
-                if (error) {
-                    reject(error.localizedDescription);
-                }
-                else {
-                    resolve();
-                }
-            };
-            var storageRef = getStorageRef(reject, arg);
-            if (!storageRef) {
-                return;
-            }
-            var fIRStorageFileRef = storageRef.child(arg.remoteFullPath);
-            fIRStorageFileRef.deleteWithCompletion(onCompletion);
-        }
-        catch (ex) {
-            console.log("Error in firebase.deleteFile: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.subscribeToTopic = function (topicName) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            if (topicName.indexOf("/topics/") === -1) {
-                topicName = "/topics/" + topicName;
-            }
-            FIRMessaging.messaging().subscribeToTopic(topicName);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.subscribeToTopic: " + ex);
-            reject(ex);
-        }
-    });
-};
-firebase_common_1.firebase.unsubscribeFromTopic = function (topicName) {
-    return new Promise(function (resolve, reject) {
-        try {
-            if (typeof (FIRMessaging) === "undefined") {
-                reject("Enable FIRMessaging in Podfile first");
-                return;
-            }
-            if (topicName.indexOf("/topics/") === -1) {
-                topicName = "/topics/" + topicName;
-            }
-            FIRMessaging.messaging().unsubscribeFromTopic(topicName);
-            resolve();
-        }
-        catch (ex) {
-            console.log("Error in firebase.unsubscribeFromTopic: " + ex);
-            reject(ex);
-        }
-    });
-};
 firebase_common_1.firebase.sendCrashLog = function (arg) {
     return new Promise(function (resolve, reject) {
         try {
+            // TODO generate typings again and see if 'FIRCrashLog' is available
+            /*
+            if (typeof(FIRCrashLog) === "undefined") {
+              reject("Make sure 'Firebase/Crash' is in the plugin's Podfile - and if it is there's currently a problem with this Pod which is outside out span of control :(");
+              return;
+            }
+      
+            if (!arg.message) {
+              reject("The mandatory 'message' argument is missing");
+              return;
+            }
+      
+            if (arg.showInConsole) {
+              FIRCrashNSLog(arg.message);
+            } else {
+              FIRCrashLog(arg.message);
+            }
+            */
             resolve();
         }
         catch (ex) {
@@ -1974,26 +1532,36 @@ firebase_common_1.firebase.invites.sendInvitation = function (arg) {
                 reject("The mandatory 'message' or 'title' argument is missing");
                 return;
             }
+            // note that this returns the wrong type, so need to use 'performSelector' below
             var inviteDialog = FIRInvites.inviteDialog();
+            // A message hint for the dialog. Note this manifests differently depending on the
+            // received invitation type. For example, in an email invite this appears as the subject.
+            // inviteDialog.setMessage(arg.message);
             inviteDialog.performSelectorWithObject("setMessage:", arg.message);
+            // Title for the dialog, this is what the user sees before sending the invites.
+            // inviteDialog.setTitle(arg.title);
             inviteDialog.performSelectorWithObject("setTitle:", arg.title);
             if (arg.deepLink) {
+                // inviteDialog.setDeepLink(arg.deeplink);
                 inviteDialog.performSelectorWithObject("setDeepLink:", arg.deeplink);
             }
             if (arg.callToActionText) {
+                // inviteDialog.setCallToActionText(arg.callToActionText);
                 inviteDialog.performSelectorWithObject("setCallToActionText:", arg.callToActionText);
             }
             if (arg.customImage) {
+                // inviteDialog.setCustomImage(arg.customImage);
                 inviteDialog.performSelectorWithObject("setCustomImage:", arg.customImage);
             }
             if (arg.androidClientID) {
                 var targetApplication = FIRInvitesTargetApplication.new();
                 targetApplication.androidClientID = arg.androidClientID;
+                // inviteDialog.setOtherPlatformsTargetApplication(targetApplication);
                 inviteDialog.performSelectorWithObject("setOtherPlatformsTargetApplication:", targetApplication);
             }
             var delegate_3 = FIRInviteDelegateImpl.new().initWithCallback(function (invitationIds, error) {
                 if (error === null) {
-                    var ids = firebase_common_1.firebase.toJsObject(invitationIds);
+                    var ids = utils_2.firebaseUtils.toJsObject(invitationIds);
                     resolve({
                         count: invitationIds.count,
                         invitationIds: ids
@@ -2005,8 +1573,11 @@ firebase_common_1.firebase.invites.sendInvitation = function (arg) {
                 CFRelease(delegate_3);
                 delegate_3 = undefined;
             });
+            // This opens the contact picker UI, so making sure this is retained
             CFRetain(delegate_3);
+            // inviteDialog.setInviteDelegate(delegate);
             inviteDialog.performSelectorWithObject("setInviteDelegate:", delegate_3);
+            // inviteDialog.open();
             inviteDialog.performSelector("open");
         }
         catch (ex) {
@@ -2036,6 +1607,74 @@ firebase_common_1.firebase.invites.getInvitation = function () {
         }
     });
 };
+firebase_common_1.firebase.firestore.WriteBatch = function (nativeWriteBatch) {
+    var FirestoreWriteBatch = /** @class */ (function () {
+        function FirestoreWriteBatch() {
+            var _this = this;
+            this.set = function (documentRef, data, options) {
+                fixSpecialFields(data);
+                nativeWriteBatch.setDataForDocumentMerge(data, documentRef.ios, options && options.merge);
+                return _this;
+            };
+            this.update = function (documentRef, data) {
+                fixSpecialFields(data);
+                nativeWriteBatch.updateDataForDocument(data, documentRef.ios);
+                return _this;
+            };
+            this.delete = function (documentRef) {
+                nativeWriteBatch.deleteDocument(documentRef.ios);
+                return _this;
+            };
+        }
+        FirestoreWriteBatch.prototype.commit = function () {
+            return new Promise(function (resolve, reject) {
+                nativeWriteBatch.commitWithCompletion(function (error) {
+                    error ? reject(error.localizedDescription) : resolve();
+                });
+            });
+        };
+        return FirestoreWriteBatch;
+    }());
+    return new FirestoreWriteBatch();
+};
+firebase_common_1.firebase.firestore.batch = function () {
+    return new firebase_common_1.firebase.firestore.WriteBatch(FIRFirestore.firestore().batch());
+};
+firebase_common_1.firebase.firestore.Transaction = function (nativeTransaction) {
+    var FirestoreTransaction = /** @class */ (function () {
+        function FirestoreTransaction() {
+            var _this = this;
+            this.get = function (documentRef) {
+                var docSnapshot = nativeTransaction.getDocumentError(documentRef.ios);
+                return new DocumentSnapshot(docSnapshot);
+            };
+            this.set = function (documentRef, data, options) {
+                fixSpecialFields(data);
+                nativeTransaction.setDataForDocumentMerge(data, documentRef.ios, options && options.merge);
+                return _this;
+            };
+            this.update = function (documentRef, data) {
+                fixSpecialFields(data);
+                nativeTransaction.updateDataForDocument(data, documentRef.ios);
+                return _this;
+            };
+            this.delete = function (documentRef) {
+                nativeTransaction.deleteDocument(documentRef.ios);
+                return _this;
+            };
+        }
+        return FirestoreTransaction;
+    }());
+    return new FirestoreTransaction();
+};
+firebase_common_1.firebase.firestore.runTransaction = function (updateFunction) {
+    return new Promise(function (resolve, reject) {
+        FIRFirestore.firestore().runTransactionWithBlockCompletion(function (nativeTransaction, err) {
+            var tx = new firebase_common_1.firebase.firestore.Transaction(nativeTransaction);
+            return updateFunction(tx);
+        }, function (result, error) { return error ? reject(error.localizedDescription) : resolve(); });
+    });
+};
 firebase_common_1.firebase.firestore.collection = function (collectionPath) {
     try {
         if (typeof (FIRFirestore) === "undefined") {
@@ -2051,7 +1690,11 @@ firebase_common_1.firebase.firestore.collection = function (collectionPath) {
             where: function (fieldPath, opStr, value) { return firebase_common_1.firebase.firestore.where(collectionPath, fieldPath, opStr, value); },
             orderBy: function (fieldPath, directionStr) { return firebase_common_1.firebase.firestore.orderBy(collectionPath, fieldPath, directionStr, fIRCollectionReference_1); },
             limit: function (limit) { return firebase_common_1.firebase.firestore.limit(collectionPath, limit, fIRCollectionReference_1); },
-            onSnapshot: function (callback) { return firebase_common_1.firebase.firestore.onCollectionSnapshot(fIRCollectionReference_1, callback); }
+            onSnapshot: function (callback) { return firebase_common_1.firebase.firestore.onCollectionSnapshot(fIRCollectionReference_1, callback); },
+            startAfter: function (document) { return firebase_common_1.firebase.firestore.startAfter(collectionPath, document, fIRCollectionReference_1); },
+            startAt: function (document) { return firebase_common_1.firebase.firestore.startAt(collectionPath, document, fIRCollectionReference_1); },
+            endAt: function (document) { return firebase_common_1.firebase.firestore.endAt(collectionPath, document, fIRCollectionReference_1); },
+            endBefore: function (document) { return firebase_common_1.firebase.firestore.endBefore(collectionPath, document, fIRCollectionReference_1); },
         };
     }
     catch (ex) {
@@ -2061,10 +1704,14 @@ firebase_common_1.firebase.firestore.collection = function (collectionPath) {
 };
 firebase_common_1.firebase.firestore.onDocumentSnapshot = function (docRef, callback) {
     var listener = docRef.addSnapshotListener(function (snapshot, error) {
-        callback(new firebase_common_1.DocumentSnapshot(snapshot.documentID, snapshot.exists, firebase_common_1.firebase.toJsObject(snapshot.data())));
+        if (!error && snapshot) {
+            callback(new DocumentSnapshot(snapshot));
+        }
     });
+    // There's a bug resulting this function to be undefined..
     if (listener.remove === undefined) {
         return function () {
+            // .. so we're just ignoring anything received from the server (until the callback is set again when 'onSnapshot' is invoked).
             callback = function () {
             };
         };
@@ -2075,17 +1722,22 @@ firebase_common_1.firebase.firestore.onDocumentSnapshot = function (docRef, call
 };
 firebase_common_1.firebase.firestore.onCollectionSnapshot = function (colRef, callback) {
     var listener = colRef.addSnapshotListener(function (snapshot, error) {
+        if (error || !snapshot) {
+            return;
+        }
         var docSnapshots = [];
         for (var i = 0, l = snapshot.documents.count; i < l; i++) {
             var document_1 = snapshot.documents.objectAtIndex(i);
-            docSnapshots.push(new firebase_common_1.DocumentSnapshot(document_1.documentID, true, firebase_common_1.firebase.toJsObject(document_1.data())));
+            docSnapshots.push(new DocumentSnapshot(document_1));
         }
         var snap = new firebase_common_1.QuerySnapshot();
         snap.docSnapshots = docSnapshots;
         callback(snap);
     });
+    // There's a bug resulting in this function to be undefined..
     if (listener.remove === undefined) {
         return function () {
+            // .. so we're just ignoring anything received from the server (until the callback is set again when 'onSnapshot' is invoked).
             callback = function () {
             };
         };
@@ -2096,6 +1748,7 @@ firebase_common_1.firebase.firestore.onCollectionSnapshot = function (colRef, ca
 };
 firebase_common_1.firebase.firestore._getDocumentReference = function (fIRDocumentReference, collectionPath, documentPath) {
     return {
+        discriminator: "docRef",
         id: fIRDocumentReference.documentID,
         collection: function (cp) { return firebase_common_1.firebase.firestore.collection(collectionPath + "/" + documentPath + "/" + cp); },
         set: function (data, options) { return firebase_common_1.firebase.firestore.set(collectionPath, fIRDocumentReference.documentID, data, options); },
@@ -2137,6 +1790,7 @@ firebase_common_1.firebase.firestore.add = function (collectionPath, document) {
                 }
                 else {
                     resolve({
+                        discriminator: "docRef",
                         id: fIRDocumentReference_1.documentID,
                         collection: function (cp) { return firebase_common_1.firebase.firestore.collection(cp); },
                         set: function (data, options) { return firebase_common_1.firebase.firestore.set(collectionPath, fIRDocumentReference_1.documentID, data, options); },
@@ -2161,11 +1815,12 @@ firebase_common_1.firebase.firestore.set = function (collectionPath, documentPat
                 reject("Make sure 'Firebase/Firestore' is in the plugin's Podfile");
                 return;
             }
+            fixSpecialFields(document);
             var docRef = FIRFirestore.firestore()
                 .collectionWithPath(collectionPath)
                 .documentWithPath(documentPath);
             if (options && options.merge) {
-                docRef.setDataOptionsCompletion(document, FIRSetOptions.merge(), function (error) {
+                docRef.setDataMergeCompletion(document, true, function (error) {
                     if (error) {
                         reject(error.localizedDescription);
                     }
@@ -2191,6 +1846,31 @@ firebase_common_1.firebase.firestore.set = function (collectionPath, documentPat
         }
     });
 };
+function fixSpecialFields(item) {
+    for (var k in item) {
+        if (item.hasOwnProperty(k)) {
+            item[k] = fixSpecialField(item[k]);
+        }
+    }
+}
+function fixSpecialField(item) {
+    if (item === "SERVER_TIMESTAMP") {
+        return FIRFieldValue.fieldValueForServerTimestamp();
+    }
+    else if (item instanceof firebase_common_1.GeoPoint) {
+        var geo = item;
+        return new FIRGeoPoint({
+            latitude: geo.latitude,
+            longitude: geo.longitude
+        });
+    }
+    else if (firebase_common_1.isDocumentReference(item)) {
+        return item.ios;
+    }
+    else {
+        return item;
+    }
+}
 firebase_common_1.firebase.firestore.update = function (collectionPath, documentPath, document) {
     return new Promise(function (resolve, reject) {
         try {
@@ -2198,6 +1878,7 @@ firebase_common_1.firebase.firestore.update = function (collectionPath, document
                 reject("Make sure 'Firebase/Firestore' is in the plugin's Podfile");
                 return;
             }
+            fixSpecialFields(document);
             var docRef = FIRFirestore.firestore()
                 .collectionWithPath(collectionPath)
                 .documentWithPath(documentPath);
@@ -2259,7 +1940,7 @@ firebase_common_1.firebase.firestore.getCollection = function (collectionPath) {
                     var docSnapshots = [];
                     for (var i = 0, l = snapshot.documents.count; i < l; i++) {
                         var document_2 = snapshot.documents.objectAtIndex(i);
-                        docSnapshots.push(new firebase_common_1.DocumentSnapshot(document_2.documentID, true, firebase_common_1.firebase.toJsObject(document_2.data())));
+                        docSnapshots.push(new DocumentSnapshot(document_2));
                     }
                     var snap = new firebase_common_1.QuerySnapshot();
                     snap.docSnapshots = docSnapshots;
@@ -2292,7 +1973,7 @@ firebase_common_1.firebase.firestore.getDocument = function (collectionPath, doc
                 }
                 else {
                     var exists = snapshot.exists;
-                    resolve(new firebase_common_1.DocumentSnapshot(exists ? snapshot.documentID : null, exists, firebase_common_1.firebase.toJsObject(snapshot.data())));
+                    resolve(new DocumentSnapshot(snapshot));
                 }
             });
         }
@@ -2310,11 +1991,10 @@ firebase_common_1.firebase.firestore._getQuery = function (collectionPath, query
                     reject(error.localizedDescription);
                 }
                 else {
-                    console.log(">> .where, snapshot: " + snapshot);
                     var docSnapshots = [];
                     for (var i = 0, l = snapshot.documents.count; i < l; i++) {
                         var document_3 = snapshot.documents.objectAtIndex(i);
-                        docSnapshots.push(new firebase_common_1.DocumentSnapshot(document_3.documentID, true, firebase_common_1.firebase.toJsObject(document_3.data())));
+                        docSnapshots.push(new DocumentSnapshot(document_3));
                     }
                     var snap = new firebase_common_1.QuerySnapshot();
                     snap.docSnapshots = docSnapshots;
@@ -2325,7 +2005,11 @@ firebase_common_1.firebase.firestore._getQuery = function (collectionPath, query
         where: function (fp, os, v) { return firebase_common_1.firebase.firestore.where(collectionPath, fp, os, v, query); },
         orderBy: function (fp, directionStr) { return firebase_common_1.firebase.firestore.orderBy(collectionPath, fp, directionStr, query); },
         limit: function (limit) { return firebase_common_1.firebase.firestore.limit(collectionPath, limit, query); },
-        onSnapshot: function (callback) { return firebase_common_1.firebase.firestore.onCollectionSnapshot(query, callback); }
+        onSnapshot: function (callback) { return firebase_common_1.firebase.firestore.onCollectionSnapshot(query, callback); },
+        startAfter: function (document) { return firebase_common_1.firebase.firestore.startAfter(collectionPath, document, query); },
+        startAt: function (document) { return firebase_common_1.firebase.firestore.startAt(collectionPath, document, query); },
+        endAt: function (document) { return firebase_common_1.firebase.firestore.endAt(collectionPath, document, query); },
+        endBefore: function (document) { return firebase_common_1.firebase.firestore.endBefore(collectionPath, document, query); },
     };
 };
 firebase_common_1.firebase.firestore.where = function (collectionPath, fieldPath, opStr, value, query) {
@@ -2335,6 +2019,7 @@ firebase_common_1.firebase.firestore.where = function (collectionPath, fieldPath
             return null;
         }
         query = query || FIRFirestore.firestore().collectionWithPath(collectionPath);
+        value = fixSpecialField(value);
         if (opStr === "<") {
             query = query.queryWhereFieldIsLessThan(fieldPath, value);
         }
@@ -2349,6 +2034,9 @@ firebase_common_1.firebase.firestore.where = function (collectionPath, fieldPath
         }
         else if (opStr === ">") {
             query = query.queryWhereFieldIsGreaterThan(fieldPath, value);
+        }
+        else if (opStr === "array-contains") {
+            query = query.queryWhereFieldArrayContains(fieldPath, value);
         }
         else {
             console.log("Illegal argument for opStr: " + opStr);
@@ -2369,28 +2057,19 @@ firebase_common_1.firebase.firestore.limit = function (collectionPath, limit, qu
     query = query.queryLimitedTo(limit);
     return firebase_common_1.firebase.firestore._getQuery(collectionPath, query);
 };
-var UNUserNotificationCenterDelegateImpl = (function (_super) {
-    __extends(UNUserNotificationCenterDelegateImpl, _super);
-    function UNUserNotificationCenterDelegateImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    UNUserNotificationCenterDelegateImpl.new = function () {
-        if (UNUserNotificationCenterDelegateImpl.ObjCProtocols.length === 0 && typeof (UNUserNotificationCenterDelegate) !== "undefined") {
-            UNUserNotificationCenterDelegateImpl.ObjCProtocols.push(UNUserNotificationCenterDelegate);
-        }
-        return _super.new.call(this);
-    };
-    UNUserNotificationCenterDelegateImpl.prototype.initWithCallback = function (callback) {
-        this.callback = callback;
-        return this;
-    };
-    UNUserNotificationCenterDelegateImpl.prototype.userNotificationCenterWillPresentNotificationWithCompletionHandler = function (center, notification, completionHandler) {
-        this.callback(notification);
-    };
-    UNUserNotificationCenterDelegateImpl.ObjCProtocols = [];
-    return UNUserNotificationCenterDelegateImpl;
-}(NSObject));
-var FIRInviteDelegateImpl = (function (_super) {
+firebase_common_1.firebase.firestore.startAt = function (collectionPath, document, query) {
+    return firebase_common_1.firebase.firestore._getQuery(collectionPath, query.queryStartingAtDocument(document.ios));
+};
+firebase_common_1.firebase.firestore.startAfter = function (collectionPath, document, query) {
+    return firebase_common_1.firebase.firestore._getQuery(collectionPath, query.queryStartingAfterDocument(document.ios));
+};
+firebase_common_1.firebase.firestore.endAt = function (collectionPath, document, query) {
+    return firebase_common_1.firebase.firestore._getQuery(collectionPath, query.queryEndingAtDocument(document.ios));
+};
+firebase_common_1.firebase.firestore.endBefore = function (collectionPath, document, query) {
+    return firebase_common_1.firebase.firestore._getQuery(collectionPath, query.queryEndingBeforeDocument(document.ios));
+};
+var FIRInviteDelegateImpl = /** @class */ (function (_super) {
     __extends(FIRInviteDelegateImpl, _super);
     function FIRInviteDelegateImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -2411,35 +2090,7 @@ var FIRInviteDelegateImpl = (function (_super) {
     FIRInviteDelegateImpl.ObjCProtocols = [];
     return FIRInviteDelegateImpl;
 }(NSObject));
-var FIRMessagingDelegateImpl = (function (_super) {
-    __extends(FIRMessagingDelegateImpl, _super);
-    function FIRMessagingDelegateImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FIRMessagingDelegateImpl.new = function () {
-        if (FIRMessagingDelegateImpl.ObjCProtocols.length === 0 && typeof (FIRMessagingDelegate) !== "undefined") {
-            FIRMessagingDelegateImpl.ObjCProtocols.push(FIRMessagingDelegate);
-        }
-        return _super.new.call(this);
-    };
-    FIRMessagingDelegateImpl.prototype.initWithCallback = function (callback) {
-        this.callback = callback;
-        return this;
-    };
-    FIRMessagingDelegateImpl.prototype.applicationReceivedRemoteMessage = function (remoteMessage) {
-        this.callback(remoteMessage.appData);
-    };
-    FIRMessagingDelegateImpl.prototype.messagingDidReceiveMessage = function (messaging, remoteMessage) {
-        this.callback(remoteMessage.appData);
-    };
-    FIRMessagingDelegateImpl.prototype.messagingDidRefreshRegistrationToken = function (messaging, fcmToken) {
-        console.log(">> fcmToken refreshed: " + fcmToken);
-        firebase_common_1.firebase._onTokenRefreshNotification(fcmToken);
-    };
-    FIRMessagingDelegateImpl.ObjCProtocols = [];
-    return FIRMessagingDelegateImpl;
-}(NSObject));
-var GADInterstitialDelegateImpl = (function (_super) {
+var GADInterstitialDelegateImpl = /** @class */ (function (_super) {
     __extends(GADInterstitialDelegateImpl, _super);
     function GADInterstitialDelegateImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -2463,7 +2114,7 @@ var GADInterstitialDelegateImpl = (function (_super) {
     GADInterstitialDelegateImpl.ObjCProtocols = [];
     return GADInterstitialDelegateImpl;
 }(NSObject));
-var GIDSignInDelegateImpl = (function (_super) {
+var GIDSignInDelegateImpl = /** @class */ (function (_super) {
     __extends(GIDSignInDelegateImpl, _super);
     function GIDSignInDelegateImpl() {
         return _super !== null && _super.apply(this, arguments) || this;

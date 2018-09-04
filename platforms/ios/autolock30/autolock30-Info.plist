@@ -19,10 +19,12 @@
     </array>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>Need location always.</string>
+    <key>NSCameraUsageDescription</key>
+    <string> </string>
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Autolock</string>
+    <string>BoulderBuddy</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -63,7 +65,7 @@
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
     <key>CFBundleIdentifier</key>
-    <string>com.amora</string>
+    <string>com.boulderbuddy</string>
     <key>CFBundleURLTypes</key>
     <array>
       <dict>
@@ -71,7 +73,7 @@
         <string>Editor</string>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>comamora</string>
+          <string>comboulderbuddy</string>
         </array>
       </dict>
     </array>

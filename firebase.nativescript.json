@@ -4,11 +4,14 @@
     "firestore": false,
     "realtimedb": true,
     "remote_config": false,
-    "messaging": true,
+    "messaging": false,
+    "crashlytics": false,
     "crash_reporting": false,
     "storage": false,
     "facebook_auth": false,
     "google_auth": false,
     "admob": false,
-    "invites": false
+    "invites": false,
+    "dynamic_links": false,
+    "ml_kit": false
 }

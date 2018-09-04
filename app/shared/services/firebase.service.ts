@@ -89,6 +89,23 @@ export class FirebaseService implements OnInit {
             })
     }
 
+    checkForDuplicates(boulder, area) {
+        return Firebase.getValue('/boulders/' + area + '/' + boulder.name)
+            .then((result)=>{
+                console.log("Returned boulder data", result);
+                for (let key in result) {
+                    if(!result.hasOwnProperty(key)) continue;
+                    let obj = result[key];
+                    console.log("Boulder is...", obj);
+                    if(obj.problems) {
+                        console.log(obj.problems);
+                    }
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
+    }
+
     sendTripInfo(trip) {
         this.getUserKey().then((result) => {
             this.user.uid = result;

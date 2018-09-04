@@ -30,7 +30,7 @@ export class ListComponent implements OnInit {
 
     startTracking() {
         BackgroundGeolocation.configure({
-            url: 'https://amora-2cc4c.firebaseio.com/trips',
+            url: 'https://boulderbuddy-62d91.firebaseio.com/trips',
             httpRootProperty: '.',
             desiredAccuracy: 0,
             distanceFilter: 5,

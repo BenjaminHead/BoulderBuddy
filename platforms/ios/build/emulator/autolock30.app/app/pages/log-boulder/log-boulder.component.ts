@@ -28,12 +28,13 @@ export class LogBoulderComponent implements OnInit {
     stackLayout;
     directions = new Directions;
     location;
-    tripData;
-    recentTrip;
     user;
+    area;
+    recentlyAdded;
 
     coords = false;
     boulder = {
+        name: '',
         location: '',
         problems: []
     };
@@ -99,6 +100,7 @@ export class LogBoulderComponent implements OnInit {
     addProblem(){
         this.boulder.problems.push(this.problem);
         console.log("Boulder problems", this.boulder.problems);
+        this.recentlyAdded = this.problem.name;
     }
 
     // getDirections() {
@@ -135,7 +137,9 @@ export class LogBoulderComponent implements OnInit {
     // }
 
     logBoulder() {
+        this.boulder.location = this.location;
         console.log("Boulder before assignments", this.boulder);
+        this.firebaseService.sendBoulderInfo(this.boulder, this.area);
     }
 
     // navigate() {

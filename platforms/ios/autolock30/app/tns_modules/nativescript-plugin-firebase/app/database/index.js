@@ -4,11 +4,11 @@ var firebase = require("../../firebase");
 var NextPushId_1 = require("./util/NextPushId");
 var database;
 (function (database) {
-    var Query = (function () {
+    var Query = /** @class */ (function () {
         function Query(path) {
             this.path = path;
         }
-        Query.prototype.on = function (eventType, callback, cancelCallbackOrContext, context) {
+        Query.prototype.on = function (eventType /* TODO use */, callback, cancelCallbackOrContext, context) {
             var _this = this;
             var onValueEvent = function (result) {
                 if (result.error) {
@@ -27,10 +27,11 @@ var database;
                 if (!Query.registeredListeners.has(_this.path)) {
                     Query.registeredListeners.set(_this.path, []);
                 }
-                Query.registeredListeners.get(_this.path).push(result.listeners);
+                Query.registeredListeners.set(_this.path, Query.registeredListeners.get(_this.path).concat(result.listeners));
             }, function (error) {
                 console.log("firebase.database().on error: " + error);
             });
+            // remember the callbacks as we may need them for 'query' events
             if (!Query.registeredCallbacks.has(this.path)) {
                 Query.registeredCallbacks.set(this.path, []);
             }
@@ -39,17 +40,8 @@ var database;
         };
         Query.prototype.off = function (eventType, callback, context) {
             var _this = this;
-            console.log("firebase.database().off: " + eventType);
-            console.log("firebase.database().off this.registeredListeners: " + Query.registeredListeners);
-            console.log("firebase.database().off this.path: " + this.path);
             if (Query.registeredListeners.has(this.path)) {
-                console.log("firebase.database().off !has");
-                firebase.removeEventListeners(Query.registeredListeners.get(this.path), this.path).then(function (result) {
-                    Query.registeredListeners.delete(_this.path);
-                    console.log("firebase.database().off success");
-                }, function (error) {
-                    console.log("firebase.database().off error: " + error);
-                });
+                firebase.removeEventListeners(Query.registeredListeners.get(this.path), this.path).then(function (result) { return Query.registeredListeners.delete(_this.path); }, function (error) { return console.log("firebase.database().off error: " + error); });
             }
             Query.registeredCallbacks.delete(this.path);
             return null;
@@ -119,7 +111,7 @@ var database;
         return Query;
     }());
     database.Query = Query;
-    var Reference = (function (_super) {
+    var Reference = /** @class */ (function (_super) {
         __extends(Reference, _super);
         function Reference() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -141,12 +133,14 @@ var database;
         });
         Reference.prototype.set = function (value, onComplete) {
             var _this = this;
+            // return firebase.setValue(this.path, value);
             return new Promise(function (resolve, reject) {
                 firebase.setValue(_this.path, value).then(function () {
                     onComplete && onComplete(null);
                     resolve(null);
                 }).catch(function (err) {
                     onComplete && onComplete(err);
+                    // TODO we should extends the default Error object for better compatibility
                     reject(err);
                 });
             });
@@ -154,9 +148,25 @@ var database;
         Reference.prototype.child = function (path) {
             return new Reference(this.path ? this.path + "/" + path : path);
         };
+        /*
+        private getServerTime(): number {
+          const offsetNode = this.infoData_.getNode(
+              new Path('.info/serverTimeOffset')
+          );
+          const offset = (offsetNode.val() as number) || 0;
+          return new Date().getTime() + offset;
+        }
+        */
         Reference.prototype.push = function (value, onComplete) {
+            // note that it would be better to use server time here, but no biggy
+            // const now = this.getServerTime();
             var now = new Date().getTime();
             var name = NextPushId_1.nextPushId(now);
+            // push() returns a ThennableReference whose promise is fulfilled with a regular Reference.
+            // We use child() to create handles to two different references. The first is turned into a
+            // ThennableReference below by adding then() and catch() methods and is used as the
+            // return value of push(). The second remains a regular Reference and is used as the fulfilled
+            // value of the first ThennableReference.
             var thennablePushRef = this.child(name);
             var pushRef = this.child(name);
             var promise;
@@ -189,9 +199,14 @@ var database;
         return Reference;
     }(Query));
     database.Reference = Reference;
-    var Database = (function () {
+    var Database = /** @class */ (function () {
         function Database() {
         }
+        // private authStateChangedHandler;
+        // public onAuthStateChanged(handler: (user: User) => void): void {
+        //   this.authStateChangedHandler = handler;
+        //   console.log(">> added onAuthStateChanged handler");
+        // };
         Database.prototype.ref = function (path) {
             return new Reference(path);
         };

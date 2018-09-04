@@ -138,8 +138,9 @@ export class LogBoulderComponent implements OnInit {
 
     logBoulder() {
         this.boulder.location = this.location;
-        console.log("Boulder before assignments", this.boulder);
+        console.log("Boulder before assignments", this.boulder.problems);
         this.firebaseService.sendBoulderInfo(this.boulder, this.area);
+        this.firebaseService.checkForDuplicates(this.boulder, this.area);
     }
 
     // navigate() {
