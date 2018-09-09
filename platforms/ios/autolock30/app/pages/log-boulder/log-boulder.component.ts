@@ -99,6 +99,7 @@ export class LogBoulderComponent implements OnInit {
         this.boulder.problems = [];
         this.problem.grade = '';
         this.problem.name = '';
+        this.recentlyAdded = '';
     }
 
     logBoulder() {

@@ -19,8 +19,8 @@
           <file leaf-file-name="firebase.service.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="341">
-                  <caret line="104" column="57" selection-start-line="104" selection-start-column="57" selection-end-line="104" selection-end-column="57" />
+                <state relative-caret-position="390">
+                  <caret line="103" column="63" lean-forward="true" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
                   <folding>
                     <element signature="e#0#58#0" expanded="true" />
                   </folding>
@@ -172,8 +172,8 @@
           <file leaf-file-name="log-boulder.component.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/pages/log-boulder/log-boulder.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="615">
-                  <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+                <state relative-caret-position="419">
+                  <caret line="106" column="39" lean-forward="true" selection-start-line="106" selection-start-column="39" selection-end-line="106" selection-end-column="39" />
                   <folding>
                     <element signature="e#0#50#0" expanded="true" />
                   </folding>
@@ -266,8 +266,8 @@
         <option value="$PROJECT_DIR$/shared/trip/trip.service.ts" />
         <option value="$PROJECT_DIR$/main.ts" />
         <option value="$PROJECT_DIR$/pages/log-boulder/log-boulder.html" />
-        <option value="$PROJECT_DIR$/shared/services/firebase.service.ts" />
         <option value="$PROJECT_DIR$/pages/log-boulder/log-boulder.component.ts" />
+        <option value="$PROJECT_DIR$/shared/services/firebase.service.ts" />
       </list>
     </option>
   </component>
@@ -458,12 +458,12 @@
       <workItem from="1532836051326" duration="2598000" />
       <workItem from="1533425954428" duration="728000" />
       <workItem from="1533429381276" duration="20190000" />
-      <workItem from="1535226196294" duration="22242000" />
+      <workItem from="1535226196294" duration="24165000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="367131000" />
+    <option name="totallyTimeSpent" value="369054000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="946" extended-state="6" />
@@ -896,27 +896,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pages/thanks/thanks.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="62" column="31" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="104" column="57" selection-start-line="104" selection-start-column="57" selection-end-line="104" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="153">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pages/log-boulder/log-boulder.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+        <state relative-caret-position="419">
+          <caret line="106" column="39" lean-forward="true" selection-start-line="106" selection-start-column="39" selection-end-line="106" selection-end-column="39" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/services/firebase.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="103" column="63" lean-forward="true" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
