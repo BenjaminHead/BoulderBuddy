@@ -90,6 +90,7 @@ export class FirebaseService implements OnInit {
     }
 
     checkForDuplicates(boulder, area) {
+        let validName = false;
         return Firebase.getValue('/boulders/' + area + '/' + boulder.name)
             .then((result)=>{
                 console.log("Returned boulder data", result);
@@ -97,10 +98,22 @@ export class FirebaseService implements OnInit {
                     if(!result.hasOwnProperty(key)) continue;
                     let obj = result[key];
                     console.log("Boulder is...", obj);
-                    console.log("Zero...", obj[0])
-                    console.log ("Dot problems", obj.problems);
                     if(obj.problems) {
                         console.log(obj.problems);
+                        for (let i = 0; i < boulder.problems.length; i++) {
+                            let submittedProblem = boulder.problems[i];
+                            console.log("Subbed problem", submittedProblem.name);
+                            for (let x = 0; x < obj.problems.length; x++) {
+                                if (obj.problems[x].name === submittedProblem.name) {
+                                    console.log("Comparing to...", obj.problems[x].name)
+                                    validName = false;
+                                    return validName;
+                                } else {
+                                    validName = true;
+                                    return validName;
+                                }
+                            }
+                        }
                     }
                 }
             }).catch((error)=>{

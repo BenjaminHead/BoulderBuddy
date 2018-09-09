@@ -6,6 +6,7 @@
     <TextField hint="Grade" [(ngModel)]="problem.grade"></TextField>
     <TextField hint="Name" [(ngModel)]="problem.name"></TextField>
     <Button class="submit-button" text="Add Problem" (tap)="addProblem()"></Button>
+    <Button class="submit-button" text="Clear Problems" (tap)="clearProblems()"></Button>
     <Button class="submit-button" text="Submit Boulder" class="submit-button" (tap)="logBoulder()"></Button>
     <StackLauout *ngIf="recentlyAdded">
         <Label text="Recently Added"></Label>

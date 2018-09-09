@@ -68,10 +68,6 @@ export class LogBoulderComponent implements OnInit {
         // });
     }
 
-    // onTouch(){
-    //     this.screenTouched = true;
-    // }
-
     setLatLong() {
         this.latLong = getCurrentLocation({desiredAccuracy: 3}).then(function(loc){
             if (loc) {
@@ -91,10 +87,6 @@ export class LogBoulderComponent implements OnInit {
             this.location = result;
             console.log("Current Location", this.location)
         })
-        // getCurrentLocation({desiredAccuracy: 3}).then((loc)=>{
-        //     console.log("Current location", loc);
-        //     this.location = loc;
-        // })
     }
 
     addProblem(){
@@ -103,60 +95,30 @@ export class LogBoulderComponent implements OnInit {
         this.recentlyAdded = this.problem.name;
     }
 
-    // getDirections() {
-    //     this.directions.navigate({
-    //         from: { // optional, default 'current location'
-    //             address: this.toDestination
-    //         },
-    //         to: [{ // if an Array is passed (as in this example), the last item is the destination, the addresses in between are 'waypoints'.
-    //             address: this.fromDestination
-    //         }],
-    //         ios: {
-    //             preferGoogleMaps: true, // If the Google Maps app is installed, use that one instead of Apple Maps, because it supports waypoints. Default true.
-    //             allowGoogleMapsWeb: true // If waypoints are passed in and Google Maps is not installed, you can either open Apple Maps and the first waypoint is used as the to-address (the rest is ignored), or you can open Google Maps on web so all waypoints are shown (set this property to true). Default false.
-    //         }
-    //     }).then(() => {
-    //         console.log("Maps app launched.");
-    //     }, error => {
-    //         console.log(error);
-    //     });
-    // }
-
-    // sendTripData(){
-    //     if(!this.fromDestination){
-    //         this.coords = true;
-    //         this.fromDestination = this.locOnLock;
-    //     }
-    //     if(!this.toDestination){
-    //         this.coords = true;
-    //         this.toDestination = this.locOnArrival;
-    //     }
-    //     this.tripService.setConfigUrl(this.fromDestination, this.toDestination, this.coords);
-    //     // this.tripService.setFirebaseTripUrl();
-    //     this.tripData = this.tripService.showConfigResponse();
-    // }
-
-    logBoulder() {
-        this.boulder.location = this.location;
-        console.log("Boulder before assignments", this.boulder.problems);
-        this.firebaseService.sendBoulderInfo(this.boulder, this.area);
-        this.firebaseService.checkForDuplicates(this.boulder, this.area);
+    clearProblems(){
+        this.boulder.problems = [];
+        this.problem.grade = '';
+        this.problem.name = '';
     }
 
-    // navigate() {
-    //     this.router.navigate(["/navigation"]);
-    // }
-
-    // arrived() {
-    //     if(!this.fromDestination || this.fromDestination === '') {
-    //         this.setLatLong().then((result)=>{
-    //             this.locOnArrival = result;
-    //             console.log("Location on arrival", result);
-    //             this.sendTripData();
-    //         });
-    //     } else {
-    //         this.sendTripData();
-    //     }
-    //     this.router.navigate(["/thanks"]);
-    // }
+    logBoulder() {
+        if(!this.boulder.problems) {
+            alert("Log some boulders");
+        } else {
+            this.boulder.location = this.location;
+            console.log("Boulder before assignments", this.boulder.problems);
+            this.firebaseService.checkForDuplicates(this.boulder, this.area)
+                .then((result)=>{
+                    console.log("True or false?", result)
+                    if (result === true) {
+                        console.log("True", result);
+                        this.firebaseService.sendBoulderInfo(this.boulder, this.area);
+                    } else {
+                        alert("Duplicate name detected");
+                    }
+                }).catch((error)=>{
+                console.log(error)
+            })
+        }
+    }
 }
